@@ -7,7 +7,14 @@ using Delver.CamelCup;
 namespace Delver.CamelCup
 {
     public static class CamelHelper
-    {
+    {        
+        public static void Echo(string str)
+        {
+            if (true) {
+                Console.WriteLine(str);
+            }
+        }
+
         public static List<CamelColor> GetLeadingOrder(this GameState gameState) 
         {
             return gameState.Camels.OrderByDescending(x => x.Location).ThenByDescending(x => x.Height).Select(x => x.CamelColor).ToList();

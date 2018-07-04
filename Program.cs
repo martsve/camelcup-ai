@@ -12,16 +12,9 @@ namespace Delver.CamelCup
 {
     class Program
     {
-        static TimeSpan MaxComputeTimePerAction = TimeSpan.FromMilliseconds(1000);
-        static TimeSpan MaxComputeTimePerGame = TimeSpan.FromMilliseconds(1000);
-
-        static void DebugWrite(string str) 
-        {
-            if (true) {
-                Console.WriteLine(str);
-                Console.WriteLine("--------------------------");
-            }
-        }
+        const double timeScalingFactor = 1.0;
+        static TimeSpan MaxComputeTimePerAction = TimeSpan.FromMilliseconds(10 * timeScalingFactor);
+        static TimeSpan MaxComputeTimePerGame = TimeSpan.FromMilliseconds(1000 * timeScalingFactor);
 
         static void Main(string[] args)
         {         
@@ -41,13 +34,13 @@ namespace Delver.CamelCup
             var game = new CamelCupGame(Players, startPos);
 
             game.StartGame();
-            DebugWrite(game.ToString());
+            CamelHelper.Echo(game.ToString() + "\n--------------------------");
             
             while (!game.IsComplete())
             {
                 game.MoveNextPlayer();
 
-                DebugWrite(game.ToString());
+                CamelHelper.Echo(game.ToString() + "\n--------------------------");
                 Console.ReadLine();
             }
 

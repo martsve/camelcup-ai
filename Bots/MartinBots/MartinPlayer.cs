@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading;
 using Delver.CamelCup;
 
 namespace Delver.CamelCup.MartinBots
@@ -21,6 +22,7 @@ namespace Delver.CamelCup.MartinBots
 
         public PlayerAction GetAction(GameState gameState)
         {
+            for (int i = 0; i < 1000; i++) { Thread.Sleep(1); }
             var leaders = gameState.GetLeadingOrder();
             var bestBets = gameState.BettingCards.Free().OrderByDescending(x => x.Value).ThenBy(x => leaders.IndexOf(x.CamelColor));
             var bestBet = bestBets.FirstOrDefault();

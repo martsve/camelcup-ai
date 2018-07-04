@@ -20,6 +20,8 @@ namespace Delver.CamelCup
 
         private List<Player> Players { get; set; }        
 
+        private RulesEngine RulesEngine = new RulesEngine();
+
         public CamelCupGame(List<Player> players, Dictionary<CamelColor, int> startingPositions) 
         {
             Players = players;
@@ -35,6 +37,7 @@ namespace Delver.CamelCup
             for (int i = 0; i < Players.Count; i++) 
             {
                 var player = Players[i];
+                player.Reset(i);
                 player.PerformAction(x => x.StartNewGame(i, GameId, playerNames, gameStateClone));
             }
         }
@@ -59,15 +62,12 @@ namespace Delver.CamelCup
 
         public void MoveGame(int player, PlayerAction action)
         {
-            Echo($"\n > {player} performs {action.CamelAction} ({action.CamelColor}/{action.TrapLocation})\n  ");
+            var valid = RulesEngine.Validate(GameState, player, action);
 
-            /* Main game logic */
-        }
-
-        private void Echo(string str)
-        {
-            if (true) {
-                Console.WriteLine(str);
+            if (valid) 
+            {
+                CamelHelper.Echo($"\n > {player} performs {action.CamelAction} ({action.CamelColor}/{action.TrapLocation})\n  ");
+                RulesEngine.Iterate(GameState, player, action);
             }
         }
 
