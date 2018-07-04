@@ -51,6 +51,7 @@ namespace Delver.CamelCup
             }            
 
             Console.ReadLine();
+            
         }
 
         private static Dictionary<CamelColor, int> GetRandomStartingPositions() 

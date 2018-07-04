@@ -119,7 +119,8 @@ namespace Delver.CamelCup
 
             List<string> spaces = new List<string>();
 
-            for (int i = 0; i < BoardSize; i++) {
+            var maxLoc = Math.Max(BoardSize, Camels.Max(x => x.Location + 1));
+            for (int i = 0; i < maxLoc; i++) {
                 spaces.Add($"{i:00}:");
             }
 
@@ -133,6 +134,9 @@ namespace Delver.CamelCup
             {
                 spaces[camel.Location] += $" {camel.CamelColor}";
             }
+
+            if (maxLoc > BoardSize)
+                spaces.Insert(BoardSize, "~~~~~~~~~~~~~~~~");
 
             return string.Join("\n", bets) + string.Join("\n", spaces);
         }
