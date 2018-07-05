@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Delver.CamelCup;
+using Delver.CamelCup.External;
 
 namespace Delver.CamelCup.MartinBots
 {
@@ -44,6 +44,10 @@ namespace Delver.CamelCup.MartinBots
         {
         }
 
+        public void Winners(List<int> winners, GameState gameState)
+        {
+        }
+        
         public PlayerAction GetAction(GameState gameState)
         {
             var leaders = gameState.GetLeadingOrder();
@@ -52,7 +56,7 @@ namespace Delver.CamelCup.MartinBots
             {
                 case CamelAction.PickCard:
 
-                    var bestBets = gameState.BettingCards.Free().OrderByDescending(x => x.Value).ThenBy(x => leaders.IndexOf(x.CamelColor));
+                    var bestBets = gameState.BettingCards.Where(x => x.IsFree).OrderByDescending(x => x.Value).ThenBy(x => leaders.IndexOf(x.CamelColor));
                     var bestBet = bestBets.FirstOrDefault();
 
                     if (bestBet != null) 

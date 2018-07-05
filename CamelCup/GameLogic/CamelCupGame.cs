@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-using Newtonsoft.Json;
-
-using Delver.CamelCup.MartinBots;
-using System.Diagnostics;
+using Delver.CamelCup.External;
 
 namespace Delver.CamelCup
 {
@@ -15,7 +13,7 @@ namespace Delver.CamelCup
     {
         public Guid GameId { get; } = Guid.NewGuid();
 
-        public GameState GameState { get; set; }
+        public ImplementedGameState GameState { get; set; }
 
         public int CurrentPlayer { get; set; }
 
@@ -29,13 +27,13 @@ namespace Delver.CamelCup
         {
             Players = players;
             CurrentPlayer = 0;
-            GameState = new GameState(Players.Count, startingPositions);
+            GameState = new ImplementedGameState(Players.Count, startingPositions);
         }
 
         public void StartGame() 
         {
             var playerNames = Players.Select(x => x.Name).ToArray();
-            var gameStateClone = GameState.Clone();
+            var gameStateClone = GameState.Clone(true);
 
             for (int i = 0; i < Players.Count; i++) 
             {
@@ -64,12 +62,12 @@ namespace Delver.CamelCup
 
         public void MoveNextPlayer()
         {
-            PlayerAction action = new PlayerAction();
+            ImplementedPlayerAction action = new ImplementedPlayerAction();
 
             if (!Players[CurrentPlayer].Disqualified) {
                 Attempt(() => {
-                    var clone = GameState.Clone();
-                    Players[CurrentPlayer].PerformAction(x => action = x.GetAction(clone));                    
+                    var gameStateClone = GameState.Clone(true);
+                    Players[CurrentPlayer].PerformAction(x => action = new ImplementedPlayerAction(x.GetAction(gameStateClone)));
                 });
             }
 
@@ -78,9 +76,9 @@ namespace Delver.CamelCup
             foreach (var player in Players) 
             {
                 Attempt(() => {
-                    var clone = GameState.Clone();
+                    var gameStateClone = GameState.Clone(true);
                     var actionClone = action.Clone();
-                    player.PerformAction(x => x.InformAboutAction(CurrentPlayer, actionClone, clone));
+                    player.PerformAction(x => x.InformAboutAction(CurrentPlayer, actionClone, gameStateClone));
                 });
             }
 
@@ -91,7 +89,15 @@ namespace Delver.CamelCup
 
             if (IsComplete())
             {
-                RulesEngine.ScoreGame(GameState);
+                foreach (var player in Players) 
+                {
+                    RulesEngine.ScoreGame(GameState);
+                    var winners = RulesEngine.GetWinners(GameState);
+                    Attempt(() => {
+                        var gameStateClone = GameState.Clone(true);
+                        player.PerformAction(x => x.Winners(winners, gameStateClone));
+                    });
+                }
             }
 
             if (GameState.RemainingDice.Any()) 
@@ -109,7 +115,7 @@ namespace Delver.CamelCup
             StartingPlayer = (StartingPlayer + 1) % Players.Count;
             CurrentPlayer = StartingPlayer;
             GameState.RemainingDice = CamelHelper.GetAllCamelColors();
-            GameState.BettingCards = BettingCard.GetAllBettingCards();
+            GameState.BettingCards = ImplementedBettingCard.GetAllBettingCards();
 
             foreach (var playerTrapPair in GameState.Traps)
                 playerTrapPair.Value.Location = -1;            
@@ -139,6 +145,7 @@ namespace Delver.CamelCup
             catch (PlayerLoseesException ex) {
                 Trace.WriteLine($"Game {GameId}: Player {ex.PlayerId} loses the game to Exception/Timeout");
                 Players[ex.PlayerId].Disqualified = true;
+                GameState.Money[ex.PlayerId] = 0;
             }
         }
 

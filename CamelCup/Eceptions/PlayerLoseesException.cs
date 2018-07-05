@@ -4,10 +4,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-using Newtonsoft.Json;
-
-using Delver.CamelCup.MartinBots;
-
 namespace Delver.CamelCup
 {
     class PlayerLoseesException : Exception 

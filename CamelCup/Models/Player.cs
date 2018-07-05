@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using Newtonsoft.Json;
 
-using Delver.CamelCup.MartinBots;
+using Delver.CamelCup.External;
 
 namespace Delver.CamelCup
 {
@@ -17,6 +17,8 @@ namespace Delver.CamelCup
         public string Name { get; set; }
 
         public bool Disqualified = false;
+
+        public int Wins { get; set; }
 
         public ICamelCupPlayer PlayerInterface { get; set; }
 

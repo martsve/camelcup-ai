@@ -6,54 +6,21 @@ using System.Threading.Tasks;
 
 using Newtonsoft.Json;
 
-using Delver.CamelCup.MartinBots;
+using Delver.CamelCup.External;
 
 namespace Delver.CamelCup
 {
-    public interface ICamelCupPlayer 
+    public class ImplementedGameState : GameState
     {
-        string GetPlayerName();
-
-        void StartNewGame(int playerId, Guid gameId, string[] players, GameState gameState);
-
-        void InformAboutAction(int player, PlayerAction action, GameState gameState);
-
-        PlayerAction GetAction(GameState gameState);
-
-        void Save();
-
-        void Load();
-    }
-
-    public class GameState 
-    {
-        public int CurrentPlayer { get; set; } = 0;
-
-        public int BoardSize;
-
-        public List<Camel> Camels { get; set; } = new List<Camel>();
-
-        public Dictionary<int, Trap> Traps { get; set; } = new Dictionary<int, Trap>();
-
-        public Dictionary<int, int> Money { get; set; } = new Dictionary<int, int>();
-
-        public List<BettingCard> BettingCards = new List<BettingCard>();
-
-        public List<GameEndBet> WinnerBets = new List<GameEndBet>();
-
-        public List<GameEndBet> LoserBets = new List<GameEndBet>();
-
-        public List<CamelColor> RemainingDice = new List<CamelColor>();
-
-        public GameState() 
+        public ImplementedGameState() : base()
         {
 
         }
 
-        public GameState(int players, Dictionary<CamelColor, int> startingPositions,  int boardSize = 16, int startingMoney = 3)
+        public ImplementedGameState(int players, Dictionary<CamelColor, int> startingPositions,  int boardSize = 16, int startingMoney = 3) : this()
         {
             RemainingDice = CamelHelper.GetAllCamelColors();
-            BettingCards = BettingCard.GetAllBettingCards();
+            BettingCards = ImplementedBettingCard.GetAllBettingCards();
 
             BoardSize = boardSize;
 
@@ -144,87 +111,5 @@ namespace Delver.CamelCup
 
             return string.Join("\n", bets) + string.Join("\n", spaces);
         }
-    }
-
-    public class GameEndBet 
-    {
-        public int Player { get; set; }
-
-        public CamelColor? CamelColor { get; set; }
-    }
-
-    public class BettingCard 
-    {
-        public CamelColor CamelColor { get; set; }
-
-        public int Value { get; set; }
-
-        public int Owner { get; set; }
-
-        public bool IsFree => Owner == -1;
-
-        public static List<BettingCard> GetAllBettingCards() 
-        {
-            var result = new List<BettingCard>();
-            foreach (var color in CamelHelper.GetAllCamelColors())
-            {
-                foreach (var val in new[] { 5, 3, 2 })
-                    result.Add(new BettingCard() {
-                        CamelColor = color,
-                        Value = val,
-                        Owner = -1
-                    });
-            }
-
-            return result;
-        }
-    }
-
-    public class Camel
-    {
-        public CamelColor CamelColor { get; set; }
-
-        public int Location { get; set; }
-
-        public int Height { get; set; }
-    }
-
-    public class Trap
-    {
-        public int Move { get; set; } = 0;
-        public int Location { get; set; } = -1;
-    }
-
-    public class PlayerAction 
-    {
-        public CamelAction CamelAction { get; set; }
-        public int Value { get; set; }
-        public CamelColor Color { get; set; }
-
-        public PlayerAction Clone() 
-        {
-            var serialized = JsonConvert.SerializeObject(this);
-            return JsonConvert.DeserializeObject<PlayerAction>(serialized);
-        }
-    }
-
-    public enum CamelAction
-     {
-        NoAction,
-        ThrowDice,
-        PickCard,
-        PlacePlussTrap,
-        PlaceNegativeTrap,
-        SecretBetOnWinner,
-        SecretBetOnLoser
-    }
-
-    public enum CamelColor
-    {
-        Red,
-        Blue,
-        Green,
-        Orange,
-        Yellow
     }
 }

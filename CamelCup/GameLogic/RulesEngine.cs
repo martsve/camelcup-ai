@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-using Newtonsoft.Json;
+using Delver.CamelCup.External;
 
 namespace Delver.CamelCup
 {
@@ -135,7 +135,8 @@ namespace Delver.CamelCup
                 }
                 else
                 {
-                    state.Money[bet.Owner] -= 1;
+                    if (state.Money[bet.Owner] > 0)
+                        state.Money[bet.Owner] -= 1;
                 }
             }
         }
@@ -154,7 +155,8 @@ namespace Delver.CamelCup
                 }
                 else
                 {
-                    state.Money[card.Player] -= 1;
+                    if (state.Money[card.Player] > 0)
+                        state.Money[card.Player] -= 1;
                 }
             }
 
@@ -170,22 +172,21 @@ namespace Delver.CamelCup
                 }
                 else
                 {
-                    state.Money[card.Player] -= 1;
+                    if (state.Money[card.Player] > 0)
+                        state.Money[card.Player] -= 1;
                 }
             }
 
         }
-
-        private Random rnd = new Random();
-        private void ThrowDice(GameState gameState, PlayerAction action) 
+        
+        public List<int> GetWinners(GameState state)
         {
-            var index = rnd.Next(0, gameState.RemainingDice.Count);
-            var color = gameState.RemainingDice[index];
-            var value = rnd.Next(1, 4);
+            var max = state.Money.OrderByDescending(x => x.Value).First().Value;
+            return state.Money.Where(x => x.Value == max).Select(x => x.Key).ToList();
+        }
 
-            action.Color = color;
-            action.Value = value;
-
+        public void MoveCamel(GameState gameState, CamelColor color, int value) 
+        {
             gameState.RemainingDice.Remove(color);
 
             var mainCamel = gameState.Camels.First(x => x.CamelColor == color);
@@ -210,6 +211,19 @@ namespace Delver.CamelCup
             camelStack.ForEach(x => x.Location = newLocation);
 
             ResetStackHeigh(gameState.Camels);
+        }
+
+        private Random rnd = new Random();
+        private void ThrowDice(GameState gameState, PlayerAction action) 
+        {
+            var index = rnd.Next(0, gameState.RemainingDice.Count);
+            var color = gameState.RemainingDice[index];
+            var value = rnd.Next(1, 4);
+
+            action.Color = color;
+            action.Value = value;
+
+            MoveCamel(gameState, color, value);
         }
 
         private void ResetStackHeigh(List<Camel> camels)

@@ -6,11 +6,11 @@ using Delver.CamelCup.External;
 
 namespace Delver.CamelCup.MartinBots
 {
-    public class MartinPlayer : ICamelCupPlayer
+    public class SmartMartinPlayer : ICamelCupPlayer
     {
         public string GetPlayerName()
         {
-            return "5'er-Martin";
+            return "Smart 5'er-Martin";
         }
 
         public void StartNewGame(int playerId, Guid gameId, string[] players, GameState gameState)
@@ -27,13 +27,19 @@ namespace Delver.CamelCup.MartinBots
 
         public PlayerAction GetAction(GameState gameState)
         {
-            var leaders = gameState.GetLeadingOrder();
-            var bestBets = gameState.BettingCards.Where(x => x.IsFree).OrderByDescending(x => x.Value).ThenBy(x => leaders.IndexOf(x.CamelColor)).ToList();
-            var bestBet = bestBets.FirstOrDefault();
+            var endStates = gameState.GetAllCamelEndStates(2);
+            CamelHelper.Echo("EndStates: " + endStates.Count);
+            var probability = CamelHelper.GetWinningProbability(endStates);
+            var bettingCards = gameState.BettingCards
+                .GroupBy(x => x.CamelColor)
+                .ToDictionary(x => x.Key, y => y.Where(x => x.IsFree).Select(x => x.Value).DefaultIfEmpty(0).Max());
 
-            if (bestBet != null && bestBet.Value > 2) 
+            var bets = probability.ToDictionary(x => x.Key, x => x.Value * bettingCards[x.Key]);
+            var bestBet = bets.OrderByDescending(x => x.Value).First();
+
+            if (bestBet.Value > 0) 
             {
-                return new PlayerAction() { CamelAction = CamelAction.PickCard, Color = bestBet.CamelColor };
+                return new PlayerAction() { CamelAction = CamelAction.PickCard, Color = bestBet.Key };
             }
 
             return new PlayerAction() { CamelAction = CamelAction.ThrowDice };

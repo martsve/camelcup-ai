@@ -1,5 +1,6 @@
 using System;
-using Delver.CamelCup;
+using System.Collections.Generic;
+using Delver.CamelCup.External;
 
 namespace Delver.CamelCup.MartinBots
 {
@@ -15,6 +16,10 @@ namespace Delver.CamelCup.MartinBots
         }
 
         public void InformAboutAction(int player, PlayerAction action, GameState gameState)
+        {
+        }
+
+        public void Winners(List<int> winners, GameState gameState)
         {
         }
 

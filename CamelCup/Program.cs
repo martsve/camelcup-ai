@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 using Delver.CamelCup.MartinBots;
+using Delver.CamelCup.External;
 
 namespace Delver.CamelCup
 {
@@ -16,14 +17,19 @@ namespace Delver.CamelCup
         static TimeSpan MaxComputeTimePerAction = TimeSpan.FromMilliseconds(1000 * timeScalingFactor);
         static TimeSpan MaxComputeTimePerGame = TimeSpan.FromMilliseconds(1000 * timeScalingFactor);
 
+        static Player PlayerFactory(ICamelCupPlayer player) 
+        {
+            return new Player(player, MaxComputeTimePerAction, MaxComputeTimePerGame);
+        }
+
         static void Main(string[] args)
         {         
             List<Player> Players = new List<Player>() 
             {
-                new Player(new DiceThrower(), MaxComputeTimePerAction, MaxComputeTimePerGame),
-                new Player(new MartinPlayer(), MaxComputeTimePerAction, MaxComputeTimePerGame),
-                new Player(new RandomBot(), MaxComputeTimePerAction, MaxComputeTimePerGame),
-                new Player(new IllegalBot(), MaxComputeTimePerAction, MaxComputeTimePerGame)
+                PlayerFactory(new DiceThrower()),
+                PlayerFactory(new MartinPlayer()),
+                PlayerFactory(new RandomBot()),
+                PlayerFactory(new SmartMartinPlayer())
             };
             
             foreach (var player in Players)
@@ -31,33 +37,47 @@ namespace Delver.CamelCup
                 player.PerformAction(x => x.Load());
             }
 
-            var startPos = GetRandomStartingPositions();
-            var game = new CamelCupGame(Players, startPos);
-
-            game.StartGame();
-            CamelHelper.Echo(game.ToString() + "\n--------------------------");
-            
-            while (!game.IsComplete())
+            for (int i = 0; i < 1000; i++)
             {
-                game.MoveNextPlayer();
+                var startPos = GetRandomStartingPositions();
+                var randomPlayerOrder = GetRandomPlayerOrder(Players);
+                var game = new CamelCupGame(randomPlayerOrder, startPos);
 
-                CamelHelper.Echo(game.ToString() + "\n--------------------------");
-                Console.ReadLine();
-            }
+                game.StartGame();
 
-            foreach (var player in Players)
+                while (!game.IsComplete())
+                {
+                    game.MoveNextPlayer();
+                }
+
+                foreach (var winner in CamelHelper.GetWinners(game.GameState).Select(x => randomPlayerOrder[x]))
+                {
+                    winner.Wins++;
+                }
+
+                Console.WriteLine($"Game #{i} finished");
+            } 
+
+            var title = "Player";
+            Console.WriteLine($"{title,-32} Wins");
+            foreach (var player in Players.OrderByDescending(x => x.Wins))
             {
-                player.PerformAction(x => x.Save());
-            }            
-
-            Console.ReadLine();
+                Console.WriteLine($"{player.Name,-32} {player.Wins}");
+            }    
             
+            Console.ReadLine();       
         }
 
         private static Dictionary<CamelColor, int> GetRandomStartingPositions() 
         {
-            var rnd =  new Random();
+            var rnd = new Random();
             return CamelHelper.GetAllCamelColors().ToDictionary(x => x, x => rnd.Next(0, 2));
+        }
+
+        private static List<Player> GetRandomPlayerOrder(List<Player> players)
+        {
+            var rnd = new Random();
+            return players.OrderBy(x => rnd.Next()).ToList();
         }
     }
 }
