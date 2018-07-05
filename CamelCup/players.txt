@@ -1,0 +1,4 @@
+Delver.CamelCup.MartinBots.MartinPlayer
+Delver.CamelCup.MartinBots.DiceThrower
+Delver.CamelCup.MartinBots.RandomBot
+Delver.CamelCup.MartinBots.HeatmapPluss

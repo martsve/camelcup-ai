@@ -10,5 +10,10 @@ namespace Delver.CamelCup.External
     {
         public int Move { get; set; }
         public int Location { get; set; } = -1;
+
+        public Trap Clone()
+        {
+            return new Trap() { Move = Move, Location = Location };
+        }
     }
 }

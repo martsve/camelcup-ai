@@ -75,8 +75,8 @@ namespace Delver.CamelCup.MartinBots
                     }
                     break;
 
-                case CamelAction.PlaceNegativeTrap:
-                    return new PlayerAction() { CamelAction = CamelAction.PlaceNegativeTrap, Value = rnd.Next(0, gameState.BoardSize) };
+                case CamelAction.PlaceMinusTrap:
+                    return new PlayerAction() { CamelAction = CamelAction.PlaceMinusTrap, Value = rnd.Next(0, gameState.BoardSize) };
 
                 case CamelAction.PlacePlussTrap:
                     var plussLoc = GetRandomTrapPlace(gameState, true);
@@ -109,7 +109,7 @@ namespace Delver.CamelCup.MartinBots
             {
                 { CamelAction.ThrowDice, 3 },
                 { CamelAction.PickCard, 5 },
-                { CamelAction.PlaceNegativeTrap, useMinusTrap ? 1 : 0 },
+                { CamelAction.PlaceMinusTrap, useMinusTrap ? 1 : 0 },
                 { CamelAction.PlacePlussTrap, usePlusTrap ? 1 : 0 },
                 { CamelAction.SecretBetOnLoser, betOnLoser ? 1 : 0 },
                 { CamelAction.SecretBetOnWinner, betOnWinner ? 1 : 0 },

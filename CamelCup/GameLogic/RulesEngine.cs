@@ -29,7 +29,7 @@ namespace Delver.CamelCup
                 return false;
             }
 
-            else if (action.CamelAction == CamelAction.PlaceNegativeTrap)
+            else if (action.CamelAction == CamelAction.PlaceMinusTrap)
             { 
                 if (action.Value < 1 || action.Value >= gameState.BoardSize) 
                     return false;
@@ -94,7 +94,7 @@ namespace Delver.CamelCup
                 action.Value = card.Value;
             }
 
-            else if (action.CamelAction == CamelAction.PlaceNegativeTrap)
+            else if (action.CamelAction == CamelAction.PlaceMinusTrap)
             { 
                 gameState.Traps[playerId].Location = action.Value;
                 gameState.Traps[playerId].Move = -1;

@@ -35,7 +35,7 @@ namespace Delver.CamelCup.External
                 CurrentPlayer = CurrentPlayer,
                 BoardSize = BoardSize,
                 Camels = Camels.Select(x => x.Clone()).ToList(),
-                Traps = Traps,
+                Traps = Traps.ToDictionary(x => x.Key, x => x.Value.Clone()),
                 Money = Money.ToDictionary(x => x.Key, x => x.Value),
                 RemainingDice = RemainingDice.ToList()
             };

@@ -28,7 +28,7 @@ namespace Delver.CamelCup.MartinBots
         public PlayerAction GetAction(GameState gameState)
         {
             var endStates = gameState.GetAllCamelEndStates(2);
-            CamelHelper.Echo("EndStates: " + endStates.Count);
+
             var probability = CamelHelper.GetWinningProbability(endStates);
             var bettingCards = gameState.BettingCards
                 .GroupBy(x => x.CamelColor)

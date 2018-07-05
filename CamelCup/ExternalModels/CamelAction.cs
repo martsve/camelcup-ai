@@ -12,7 +12,7 @@ namespace Delver.CamelCup.External
         ThrowDice,
         PickCard,
         PlacePlussTrap,
-        PlaceNegativeTrap,
+        PlaceMinusTrap,
         SecretBetOnWinner,
         SecretBetOnLoser
     }

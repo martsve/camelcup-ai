@@ -20,6 +20,16 @@ namespace Delver.CamelCup.MartinBots
 
         private static Random rnd = new Random();
 
+        public RandomBot()
+        {
+            name = $"RandomBot #{0}";
+
+            usePlusTrap = true;
+            useMinusTrap = true;
+            betOnWinner = true;
+            betOnLoser = true;
+        }
+
         public RandomBot(int num = 1, bool usePlusTrap = true, bool useMinusTrap = true, bool betOnWinner = true, bool betOnLoser = true)
         {
             name = $"RandomBot #{num}";
@@ -83,10 +93,10 @@ namespace Delver.CamelCup.MartinBots
                     }
                     break;
 
-                case CamelAction.PlaceNegativeTrap:
+                case CamelAction.PlaceMinusTrap:
                     var minusLoc = GetRandomTrapPlace(gameState, false);
                     if (minusLoc > -1) {
-                        return new PlayerAction() { CamelAction = CamelAction.PlaceNegativeTrap, Value = minusLoc };
+                        return new PlayerAction() { CamelAction = CamelAction.PlaceMinusTrap, Value = minusLoc };
                     }
                     break;
 
@@ -121,7 +131,7 @@ namespace Delver.CamelCup.MartinBots
             {
                 { CamelAction.ThrowDice, 3 },
                 { CamelAction.PickCard, 5 },
-                { CamelAction.PlaceNegativeTrap, useMinusTrap ? 1 : 0 },
+                { CamelAction.PlaceMinusTrap, useMinusTrap ? 1 : 0 },
                 { CamelAction.PlacePlussTrap, usePlusTrap ? 1 : 0 },
                 { CamelAction.SecretBetOnLoser, betOnLoser ? 1 : 0 },
                 { CamelAction.SecretBetOnWinner, betOnWinner ? 1 : 0 },

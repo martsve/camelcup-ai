@@ -37,6 +37,7 @@ namespace Delver.CamelCup
         public void Reset(int playerId) 
         {
             this.playerId = playerId;
+            Disqualified = false;
             ComputationTime = TimeSpan.FromMilliseconds(0);
         }
 

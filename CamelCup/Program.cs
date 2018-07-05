@@ -8,11 +8,13 @@ using Newtonsoft.Json;
 
 using Delver.CamelCup.MartinBots;
 using Delver.CamelCup.External;
+using System.IO;
 
 namespace Delver.CamelCup
 {
     class Program
     {
+        const bool StepTrough = false;
         const double timeScalingFactor = 1.0;
         static TimeSpan MaxComputeTimePerAction = TimeSpan.FromMilliseconds(1000 * timeScalingFactor);
         static TimeSpan MaxComputeTimePerGame = TimeSpan.FromMilliseconds(1000 * timeScalingFactor);
@@ -24,18 +26,22 @@ namespace Delver.CamelCup
 
         static void Main(string[] args)
         {         
-            List<Player> Players = new List<Player>() 
+            var lines = File.ReadAllLines("players.txt").Where(x => x.Trim().Length > 0).ToList();
+            var interfaces = lines.Select(x => PlayerInterfaceFactory.CreateByName(x));
+
+            foreach (var playerInterface in interfaces.Where(x => x == null)) 
             {
-                PlayerFactory(new DiceThrower()),
-                PlayerFactory(new MartinPlayer()),
-                PlayerFactory(new RandomBot()),
-                PlayerFactory(new SmartMartinPlayer())
-            };
+                throw new Exception($"Unable to create object");
+            }
+
+            List<Player> Players = interfaces.Select(x => PlayerFactory(x)).ToList();
             
             foreach (var player in Players)
             {
                 player.PerformAction(x => x.Load());
             }
+
+            CamelHelper.StepTrough = StepTrough;
 
             for (int i = 0; i < 1000; i++)
             {
@@ -48,6 +54,8 @@ namespace Delver.CamelCup
                 while (!game.IsComplete())
                 {
                     game.MoveNextPlayer();
+                    CamelHelper.Echo(game.ToString());
+                    CamelHelper.Pause();
                 }
 
                 foreach (var winner in CamelHelper.GetWinners(game.GameState).Select(x => randomPlayerOrder[x]))

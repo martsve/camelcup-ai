@@ -8,9 +8,17 @@ namespace Delver.CamelCup
 {
     public static class CamelHelper
     {        
+        public static bool StepTrough { get; set; }
         public static void Echo(string str)
         {
-            // Console.WriteLine(str);
+            if (StepTrough)
+                Console.WriteLine(str);
+        }
+
+        public static void Pause()
+        {
+            if (StepTrough)
+                Console.ReadLine();
         }
 
         public static List<CamelColor> GetLeadingOrder(this GameState gameState) 
@@ -21,6 +29,20 @@ namespace Delver.CamelCup
         public static List<CamelColor> GetAllCamelColors()
         {
             return Enum.GetValues(typeof(CamelColor)).Cast<CamelColor>().ToList();
+        }
+
+        public static bool IsValidTrapSpace(this GameState gameState, int player, int location)
+        {
+            if (gameState.Camels.Any(x => x.Location == location))
+                return false;
+
+            if (gameState.Traps.Any(x => x.Value.Location == location || x.Value.Location - 1 == location || x.Value.Location + 1 == location))
+                return false;
+
+            if (location <= 0 || location >= gameState.BoardSize)
+                return false;
+
+            return true;
         }
 
         public static List<int> GetFreeTrapSpaces(this GameState gameState, int player, bool positive, int maxLookahead = 3)
@@ -87,7 +109,26 @@ namespace Delver.CamelCup
             return result;
         }
 
-        public static List<GameState> GetAllCamelEndStates(this GameState gameState, int depth = 5) 
+        public static Dictionary<int, double> GetHeatMap(List<GameState> endStates)
+        {
+            var result = new Dictionary<int, double>();
+            var boardSize = endStates.First().BoardSize;
+            for (int i = 0; i < boardSize + 3; i++)
+            {
+                result[i] = 0;
+            }
+
+            double N = endStates.Count();
+            foreach (var state in endStates)
+            {
+                foreach (var camel in state.Camels)
+                    result[camel.Location] += 1 / N;
+            }
+            
+            return result;
+        }
+
+        public static List<GameState> GetAllCamelEndStates(this GameState gameState, int depth = 5, bool includeAllStates = false) 
         {
             var result = new List<GameState>();
             var engine = new RulesEngine();
@@ -97,11 +138,13 @@ namespace Delver.CamelCup
                 {
                     var newState = gameState.Clone();
                     engine.MoveCamel(newState, dice, i);
-                    if (!newState.RemainingDice.Any()) {
+                    if (!newState.RemainingDice.Any() || newState.Camels.Any(x => x.Location >= newState.BoardSize)) {
                         result.Add(newState);
                     }
                     else if (depth > 0) {
-                        result.AddRange(GetAllCamelEndStates(newState, depth - 1));
+                        if (includeAllStates)
+                            result.Add(newState);
+                        result.AddRange(GetAllCamelEndStates(newState, depth - 1, includeAllStates));
                     } 
                     else if (depth == 0)  {
                         result.Add(newState);
