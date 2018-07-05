@@ -20,7 +20,13 @@ namespace Delver.CamelCup
 
             else if (action.CamelAction == CamelAction.PickCard)
             { 
-                return gameState.BettingCards.Where(x => x.IsFree && x.CamelColor == action.Color).Any();
+                var bet = gameState.BettingCards.Where(x => x.IsFree && x.CamelColor == action.Color).FirstOrDefault();
+
+                if (bet != null) {
+                    return true;
+                }
+                
+                return false;
             }
 
             else if (action.CamelAction == CamelAction.PlaceNegativeTrap)

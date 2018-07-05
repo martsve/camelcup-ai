@@ -23,7 +23,7 @@ namespace Delver.CamelCup.MartinBots
         public PlayerAction GetAction(GameState gameState)
         {
             var leaders = gameState.GetLeadingOrder();
-            var bestBets = gameState.BettingCards.Free().OrderByDescending(x => x.Value).ThenBy(x => leaders.IndexOf(x.CamelColor));
+            var bestBets = gameState.BettingCards.Where(x => x.IsFree).OrderByDescending(x => x.Value).ThenBy(x => leaders.IndexOf(x.CamelColor)).ToList();
             var bestBet = bestBets.FirstOrDefault();
 
             if (bestBet != null && bestBet.Value > 2) 

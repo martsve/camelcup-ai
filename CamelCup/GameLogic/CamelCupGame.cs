@@ -68,7 +68,8 @@ namespace Delver.CamelCup
 
             if (!Players[CurrentPlayer].Disqualified) {
                 Attempt(() => {
-                    Players[CurrentPlayer].PerformAction(x => action = x.GetAction(GameState.Clone()));                    
+                    var clone = GameState.Clone();
+                    Players[CurrentPlayer].PerformAction(x => action = x.GetAction(clone));                    
                 });
             }
 
@@ -77,7 +78,9 @@ namespace Delver.CamelCup
             foreach (var player in Players) 
             {
                 Attempt(() => {
-                    player.PerformAction(x => x.InformAboutAction(CurrentPlayer, action.Clone(), GameState.Clone()));
+                    var clone = GameState.Clone();
+                    var actionClone = action.Clone();
+                    player.PerformAction(x => x.InformAboutAction(CurrentPlayer, actionClone, clone));
                 });
             }
 

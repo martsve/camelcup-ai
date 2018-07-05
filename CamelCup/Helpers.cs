@@ -35,9 +35,9 @@ namespace Delver.CamelCup
             var min = gameState.Camels.Min(x => x.Location) + 1;
             var max = gameState.Camels.Max(x => x.Location) + 3;
 
-            if (min <= 1) 
+            if (min < 1) 
             {
-                min = 2;
+                min = 1;
             }
 
             if (max >= gameState.BoardSize) 
@@ -49,21 +49,21 @@ namespace Delver.CamelCup
 
             foreach (var camel in gameState.Camels)
             {
-                freeLocations.RemoveAll(x => x == camel.Location);
+                freeLocations.Remove(camel.Location);
             }
 
             int expectedMove = positive ? 1 : -1;
-            foreach (var playerTrapPair in gameState.Traps)
+            foreach (var playerTrapPair in gameState.Traps.Where(x => x.Value.Location > -1))
             {
-                freeLocations.RemoveAll(x => x == playerTrapPair.Value.Location - 1);
-                freeLocations.RemoveAll(x => x == playerTrapPair.Value.Location + 1);
+                freeLocations.Remove(playerTrapPair.Value.Location - 1);
+                freeLocations.Remove(playerTrapPair.Value.Location + 1);
 
                 if (playerTrapPair.Key == player && expectedMove != playerTrapPair.Value.Move)
                 {
                     continue;
                 }
                 
-                freeLocations.RemoveAll(x => x == playerTrapPair.Value.Location);
+                freeLocations.Remove(playerTrapPair.Value.Location);
             }
 
             return freeLocations;

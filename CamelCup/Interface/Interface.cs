@@ -37,13 +37,13 @@ namespace Delver.CamelCup
 
         public Dictionary<int, int> Money { get; set; } = new Dictionary<int, int>();
 
-        public List<BettingCard> BettingCards = BettingCard.GetAllBettingCards();
+        public List<BettingCard> BettingCards = new List<BettingCard>();
 
         public List<GameEndBet> WinnerBets = new List<GameEndBet>();
 
         public List<GameEndBet> LoserBets = new List<GameEndBet>();
 
-        public List<CamelColor> RemainingDice = CamelHelper.GetAllCamelColors();
+        public List<CamelColor> RemainingDice = new List<CamelColor>();
 
         public GameState() 
         {
@@ -52,6 +52,9 @@ namespace Delver.CamelCup
 
         public GameState(int players, Dictionary<CamelColor, int> startingPositions,  int boardSize = 16, int startingMoney = 3)
         {
+            RemainingDice = CamelHelper.GetAllCamelColors();
+            BettingCards = BettingCard.GetAllBettingCards();
+
             BoardSize = boardSize;
 
             for (int i = 0; i < players; i++)
@@ -83,6 +86,7 @@ namespace Delver.CamelCup
             if (sanitizeBets)
             {
                 clone.WinnerBets.ForEach(x => x.CamelColor = null);
+                clone.LoserBets.ForEach(x => x.CamelColor = null);
             }
 
             return clone;
@@ -155,7 +159,7 @@ namespace Delver.CamelCup
 
         public int Value { get; set; }
 
-        public int Owner { get; set; } = -1;
+        public int Owner { get; set; }
 
         public bool IsFree => Owner == -1;
 
@@ -167,7 +171,8 @@ namespace Delver.CamelCup
                 foreach (var val in new[] { 5, 3, 2 })
                     result.Add(new BettingCard() {
                         CamelColor = color,
-                        Value = val
+                        Value = val,
+                        Owner = -1
                     });
             }
 
