@@ -12,7 +12,7 @@ using System.IO;
 
 namespace Delver.CamelCup
 {
-    class CamelRunner
+    public class CamelRunner
     {
         public TimeSpan MaxComputeTimePerAction { get; set; }
         public TimeSpan MaxComputeTimePerGame { get; set; }

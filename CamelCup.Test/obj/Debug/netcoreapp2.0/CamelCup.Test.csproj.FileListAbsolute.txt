@@ -1,0 +1,15 @@
+D:\Workspace\camelup\CamelCup.Test\obj\Debug\netcoreapp2.0\CamelCup.Test.csproj.CoreCompileInputs.cache
+D:\Workspace\camelup\CamelCup.Test\obj\Debug\netcoreapp2.0\CamelCup.Test.AssemblyInfoInputs.cache
+D:\Workspace\camelup\CamelCup.Test\obj\Debug\netcoreapp2.0\CamelCup.Test.AssemblyInfo.cs
+D:\Workspace\camelup\CamelCup.Test\bin\Debug\netcoreapp2.0\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll
+D:\Workspace\camelup\CamelCup.Test\bin\Debug\netcoreapp2.0\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.Interface.dll
+D:\Workspace\camelup\CamelCup.Test\bin\Debug\netcoreapp2.0\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.dll
+D:\Workspace\camelup\CamelCup.Test\bin\Debug\netcoreapp2.0\CamelCup.Test.deps.json
+D:\Workspace\camelup\CamelCup.Test\bin\Debug\netcoreapp2.0\CamelCup.Test.runtimeconfig.json
+D:\Workspace\camelup\CamelCup.Test\bin\Debug\netcoreapp2.0\CamelCup.Test.runtimeconfig.dev.json
+D:\Workspace\camelup\CamelCup.Test\bin\Debug\netcoreapp2.0\CamelCup.Test.dll
+D:\Workspace\camelup\CamelCup.Test\bin\Debug\netcoreapp2.0\CamelCup.Test.pdb
+D:\Workspace\camelup\CamelCup.Test\bin\Debug\netcoreapp2.0\camelup.dll
+D:\Workspace\camelup\CamelCup.Test\bin\Debug\netcoreapp2.0\camelup.pdb
+D:\Workspace\camelup\CamelCup.Test\obj\Debug\netcoreapp2.0\CamelCup.Test.dll
+D:\Workspace\camelup\CamelCup.Test\obj\Debug\netcoreapp2.0\CamelCup.Test.pdb
