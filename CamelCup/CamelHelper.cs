@@ -15,6 +15,12 @@ namespace Delver.CamelCup
                 Console.WriteLine(str);
         }
 
+        public static void Echo(CamelCupGame game)
+        {
+            if (StepTrough)
+                Console.WriteLine(game.ToString());
+        }
+
         public static void Pause()
         {
             if (StepTrough)

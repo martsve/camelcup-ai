@@ -9,7 +9,7 @@ using Delver.CamelCup.External;
 
 namespace Delver.CamelCup
 {
-    class CamelCupGame 
+    public class CamelCupGame 
     {
         public Guid GameId { get; } = Guid.NewGuid();
 
@@ -23,11 +23,18 @@ namespace Delver.CamelCup
 
         private RulesEngine RulesEngine = new RulesEngine();
 
-        public CamelCupGame(List<Player> players, Dictionary<CamelColor, int> startingPositions) 
+        public CamelCupGame(List<Player> players, Dictionary<CamelColor, int> startingPositions, int seed = -1) 
         {
             Players = players;
             CurrentPlayer = 0;
             GameState = new ImplementedGameState(Players.Count, startingPositions);
+
+            if (seed == -1) 
+            {
+                seed = unchecked((int)DateTime.Now.Ticks);
+            }
+
+            RulesEngine = new RulesEngine(seed);
         }
 
         public void StartGame() 

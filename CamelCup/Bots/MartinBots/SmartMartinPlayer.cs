@@ -27,7 +27,7 @@ namespace Delver.CamelCup.MartinBots
 
         public PlayerAction GetAction(GameState gameState)
         {
-            var endStates = gameState.GetAllCamelEndStates(2);
+            var endStates = CamelHelper.GetAllCamelEndStates(gameState, 2);
 
             var probability = CamelHelper.GetWinningProbability(endStates);
             var bettingCards = gameState.BettingCards
@@ -37,7 +37,7 @@ namespace Delver.CamelCup.MartinBots
             var bets = probability.ToDictionary(x => x.Key, x => x.Value * bettingCards[x.Key]);
             var bestBet = bets.OrderByDescending(x => x.Value).First();
 
-            if (bestBet.Value > 0) 
+            if (bestBet.Value > 1.0) 
             {
                 return new PlayerAction() { CamelAction = CamelAction.PickCard, Color = bestBet.Key };
             }

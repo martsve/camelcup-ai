@@ -10,7 +10,7 @@ using Delver.CamelCup.External;
 
 namespace Delver.CamelCup
 {
-    class Player 
+    public class Player 
     {
         private int playerId;
 

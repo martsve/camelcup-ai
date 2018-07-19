@@ -40,7 +40,7 @@ namespace Delver.CamelCup
             }
         }
 
-        public List<Camel> GetCamelsInLocation(int location) 
+        private List<Camel> GetCamelsInLocation(int location) 
         {
             return Camels.Where(x => x.Location == location).OrderBy(x => x.Height).ToList();
         }

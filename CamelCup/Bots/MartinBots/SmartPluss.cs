@@ -11,6 +11,11 @@ namespace Delver.CamelCup.MartinBots
         private int Me;
         private static Random rnd = new Random();
 
+        public SmartPluss(int seed = -1)
+        {
+
+        }
+
         public string GetPlayerName()
         {
             return "SmartPluss";
@@ -42,7 +47,7 @@ namespace Delver.CamelCup.MartinBots
                     var newState = gameState.Clone();
                     var newAction = new PlayerAction() { CamelAction = CamelAction.PlacePlussTrap, Value = location };
                     engine.Iterate(newState, Me, newAction);
-                    var endStates = newState.GetAllCamelEndStates(2);
+                    var endStates = CamelHelper.GetAllCamelEndStates(newState, 2);
                     var sum = endStates.Sum(x => x.Money.First(y => y.Key == Me).Value);
                     if (sum > bestSum) {
                         bestSum = sum;

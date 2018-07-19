@@ -10,6 +10,18 @@ namespace Delver.CamelCup
 {
     public class RulesEngine 
     {
+        private Random rnd { get; set; }
+
+        public RulesEngine(int seed = -1)
+        {
+            if (seed == -1) 
+            {
+                seed = unchecked((int)DateTime.Now.Ticks);
+            }
+
+            rnd = new Random(seed);
+        }
+
         public bool Validate(GameState gameState, int playerId, PlayerAction action) 
         {
             if (action.CamelAction == CamelAction.NoAction)
@@ -213,7 +225,6 @@ namespace Delver.CamelCup
             ResetStackHeigh(gameState.Camels);
         }
 
-        private Random rnd = new Random();
         private void ThrowDice(GameState gameState, PlayerAction action) 
         {
             var index = rnd.Next(0, gameState.RemainingDice.Count);
