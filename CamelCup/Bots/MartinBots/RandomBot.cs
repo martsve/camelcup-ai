@@ -18,7 +18,7 @@ namespace Delver.CamelCup.MartinBots
 
         public List<CamelColor> BetCardsRemaining = CamelHelper.GetAllCamelColors();
 
-        private static Random rnd = new Random();
+        private static Random Rnd { get; set; }
 
         public RandomBot()
         {
@@ -28,9 +28,11 @@ namespace Delver.CamelCup.MartinBots
             useMinusTrap = true;
             betOnWinner = true;
             betOnLoser = true;
+
+            Rnd = new Random();
         }
 
-        public RandomBot(int num = 1, bool usePlusTrap = true, bool useMinusTrap = true, bool betOnWinner = true, bool betOnLoser = true)
+        public RandomBot(int num = 1, bool usePlusTrap = true, bool useMinusTrap = true, bool betOnWinner = true, bool betOnLoser = true, int? seed = null)
         {
             name = $"RandomBot #{num}";
 
@@ -38,6 +40,8 @@ namespace Delver.CamelCup.MartinBots
             this.useMinusTrap = useMinusTrap;
             this.betOnWinner = betOnWinner;
             this.betOnLoser = betOnLoser;
+
+            Rnd = new Random(seed ?? Guid.NewGuid().GetHashCode());
         }
 
         public string GetPlayerName()
@@ -121,7 +125,7 @@ namespace Delver.CamelCup.MartinBots
             if (!freeLocations.Any()) {
                 return -1;
             }
-            var loc = rnd.Next(0, freeLocations.Count);
+            var loc = Rnd.Next(0, freeLocations.Count);
             return freeLocations[loc];
         }
 
@@ -138,7 +142,7 @@ namespace Delver.CamelCup.MartinBots
             };
             
             var totalSum = ActionChance.Select(x => x.Value).Sum();
-            var rnd = new Random().NextDouble() * totalSum;
+            var rnd = Rnd.NextDouble() * totalSum;
             var current = 0.0;
             foreach (var pair in ActionChance)
             {

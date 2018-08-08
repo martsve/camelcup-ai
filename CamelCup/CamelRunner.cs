@@ -17,6 +17,8 @@ namespace Delver.CamelCup
         public TimeSpan MaxComputeTimePerAction { get; set; }
         public TimeSpan MaxComputeTimePerGame { get; set; }
 
+        public int Step { get; set; }
+
         private Random rnd;
 
         private List<Player> Players = new List<Player>();
@@ -62,22 +64,24 @@ namespace Delver.CamelCup
             return Players.ToList();
         }
 
-        public CamelCupGame ComputeNewGame()
+        public CamelCupGame ComputeNewGame(int steps = -1)
         {
             var startPos = GetRandomStartingPositions();
-            var randomPlayerOrder = GetRandomPlayerOrder(Players);
-            var game = new CamelCupGame(randomPlayerOrder, startPos, rnd.Next());
+            Players = GetRandomPlayerOrder(Players);
+            var game = new CamelCupGame(Players, startPos, rnd.Next());
 
             game.StartGame();
 
-            while (!game.IsComplete())
+            Step = 0;
+            while (!game.IsComplete() && (steps < 0 || Step < steps))
             {
                 game.MoveNextPlayer();
                 CamelHelper.Echo(game);
                 CamelHelper.Pause();
+                Step++;
             }
 
-            foreach (var winner in CamelHelper.GetWinners(game.GameState).Select(x => randomPlayerOrder[x]))
+            foreach (var winner in CamelHelper.GetWinners(game.GameState).Select(x => Players[x]))
             {
                 winner.Wins++;
             }
@@ -87,7 +91,6 @@ namespace Delver.CamelCup
 
         private Dictionary<CamelColor, int> GetRandomStartingPositions() 
         {
-
             return CamelHelper.GetAllCamelColors().ToDictionary(x => x, x => rnd.Next(0, 2));
         }
 
