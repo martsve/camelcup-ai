@@ -2,6 +2,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Delver.CamelCup;
 using Delver.CamelCup.MartinBots;
 using System.Linq;
+using Delver.CamelCup.External;
 
 namespace CamelCup.Test
 {
@@ -101,8 +102,6 @@ namespace CamelCup.Test
             var players = runner.GetPlayers().ToList();
 
             var gameState = game.GameState;
-            Assert.AreEqual(16, gameState.BoardSize, "board size");
-            Assert.AreEqual(5, gameState.Camels.Count, "camel count");
             
             Assert.AreEqual(82, runner.Step, "game step");
 
