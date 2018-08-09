@@ -125,6 +125,7 @@ namespace Delver.CamelCup.MartinBots
             if (!freeLocations.Any()) {
                 return -1;
             }
+            
             var loc = Rnd.Next(0, freeLocations.Count);
             return freeLocations[loc];
         }

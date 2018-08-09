@@ -44,14 +44,12 @@ namespace Delver.CamelCup.MartinBots
                 var engine = new RulesEngine();
                 var bestSum = 0;
                 foreach (var location in freeLocations) {
-                    var newState = gameState.Clone();
-                    var newAction = new PlayerAction() { CamelAction = CamelAction.PlacePlussTrap, Value = location };
-                    engine.Iterate(newState, Me, newAction);
+                    var newState = new StateBuilder(gameState).Build(new List<StateChange> { new PlussTrapStateChange(Me, location) });
                     var endStates = CamelHelper.GetAllCamelEndStates(newState, 2);
                     var sum = endStates.Sum(x => x.Money.First(y => y.Key == Me).Value);
                     if (sum > bestSum) {
                         bestSum = sum;
-                        bestAction = newAction;
+                        bestAction = new PlayerAction() { CamelAction = CamelAction.PlacePlussTrap, Value = location };
                     }
                 }
             }

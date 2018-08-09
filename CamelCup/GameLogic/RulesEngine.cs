@@ -22,111 +22,78 @@ namespace Delver.CamelCup
             rnd = new Random(seed);
         }
 
-        public bool Validate(GameState gameState, int playerId, PlayerAction action) 
+        public StateChange Getchange(GameState gameState, int playerId, PlayerAction action) 
         {
-            if (action.CamelAction == CamelAction.NoAction)
-                return true;
+            if (action.CamelAction == CamelAction.ThrowDice)
+            {
+                if (!gameState.RemainingDice.Any())
+                {
+                    return null;
+                }
 
-            else if (action.CamelAction == CamelAction.ThrowDice)
-                return true;
+                var index = rnd.Next(0, gameState.RemainingDice.Count);
+                var color = gameState.RemainingDice[index];
+                var value = rnd.Next(1, 4);
 
+                return new DiceThrowStateChange(playerId, color, value);    
+            }
             else if (action.CamelAction == CamelAction.PickCard)
             { 
                 var bet = gameState.BettingCards.Where(x => x.IsFree && x.CamelColor == action.Color).FirstOrDefault();
 
                 if (bet != null) {
-                    return true;
+                    return new PickCardStateChange(playerId, action.Color);
                 }
                 
-                return false;
+                return null;
             }
-
             else if (action.CamelAction == CamelAction.PlaceMinusTrap)
             { 
                 if (action.Value < 1 || action.Value >= gameState.BoardSize) 
-                    return false;
+                    return null;
 
                 if (gameState.Camels.Any(x => x.Location == action.Value))
-                    return false;
+                    return null;
 
                 if (gameState.Traps.Any(x => x.Key == playerId && x.Value.Location == action.Value && x.Value.Move == 1))
-                    return true;
+                    return new PlussTrapStateChange(playerId, action.Value);
 
                 if (gameState.Traps.Any(x => x.Value.Location == action.Value || x.Value.Location - 1 == action.Value || x.Value.Location + 1 == action.Value))
-                    return false;
+                    return null;
 
-                return true;
+                return new MinusTrapStateChange(playerId, action.Value);
             }
-
             else if (action.CamelAction == CamelAction.PlacePlussTrap)
             { 
                 if (action.Value < 1 || action.Value >= gameState.BoardSize) 
-                    return false;
+                    return null;
                     
                 if (gameState.Camels.Any(x => x.Location == action.Value))
-                    return false;
+                    return null;
                 
                 if (gameState.Traps.Any(x => x.Key == playerId && x.Value.Location == action.Value && x.Value.Move == -1))
-                    return true;
+                    return new PlussTrapStateChange(playerId, action.Value);
 
                 if (gameState.Traps.Any(x => x.Value.Location == action.Value || x.Value.Location - 1 == action.Value || x.Value.Location + 1 == action.Value))
-                    return false;
+                    return null;
                 
-                return true;
+                return new PlussTrapStateChange(playerId, action.Value);
             }
-
             else if (action.CamelAction == CamelAction.SecretBetOnLoser || action.CamelAction == CamelAction.SecretBetOnWinner)
             { 
                 if (gameState.WinnerBets.Any(x => x.Player == playerId && x.CamelColor == action.Color))
-                    return false;
+                    return null;
+
                 if (gameState.LoserBets.Any(x => x.Player == playerId && x.CamelColor == action.Color))
-                    return false;
+                    return null;
 
-                return true;
-            }
-
-            return false;
-        }
-
-        public void Iterate(GameState gameState, int playerId, PlayerAction action) 
-        {
-            if (action.CamelAction == CamelAction.NoAction)
-                return;
-
-            if (action.CamelAction == CamelAction.ThrowDice)
-            {
-                gameState.Money[playerId] += 1;
-                ThrowDice(gameState, action);
-            }
-
-            else if (action.CamelAction == CamelAction.PickCard)
-            { 
-                var card = gameState.BettingCards.Where(x => x.IsFree && x.CamelColor == action.Color).OrderByDescending(x => x.Value).First();
-                card.Owner = playerId;
-                action.Value = card.Value;
-            }
-
-            else if (action.CamelAction == CamelAction.PlaceMinusTrap)
-            { 
-                gameState.Traps[playerId].Location = action.Value;
-                gameState.Traps[playerId].Move = -1;
-            }
-
-            else if (action.CamelAction == CamelAction.PlacePlussTrap)
-            { 
-                gameState.Traps[playerId].Location = action.Value;
-                gameState.Traps[playerId].Move = 1; 
-            }
-
-            else if (action.CamelAction == CamelAction.SecretBetOnLoser)
-            {
-                gameState.LoserBets.Add(new GameEndBet() { Player = playerId, CamelColor = action.Color });
+                if (action.CamelAction == CamelAction.SecretBetOnLoser)
+                    return new LoserBetStateChange(playerId, action.Color);
+                else 
+                    return new WinnerBetStateChange(playerId, action.Color);
             }
             
-            else if (action.CamelAction == CamelAction.SecretBetOnWinner)
-            { 
-                gameState.WinnerBets.Add(new GameEndBet() { Player = playerId, CamelColor = action.Color });
-            }
+            return new StateChange(StateAction.NoAction, playerId, CamelColor.Blue, -1);
         }
 
         public void ScoreRound(GameState state)
@@ -195,59 +162,6 @@ namespace Delver.CamelCup
         {
             var max = state.Money.OrderByDescending(x => x.Value).First().Value;
             return state.Money.Where(x => x.Value == max).Select(x => x.Key).ToList();
-        }
-
-        public void MoveCamel(GameState gameState, CamelColor color, int value) 
-        {
-            gameState.RemainingDice.Remove(color);
-
-            var mainCamel = gameState.Camels.First(x => x.CamelColor == color);
-            var camelStack = gameState.Camels.Where(x => x.Location == mainCamel.Location && x.Height >= mainCamel.Height).ToList();
-            camelStack.ForEach(x => x.Height += 500);
-
-            var oldLocation = mainCamel.Location;
-            var newLocation = mainCamel.Location + value;
-
-            var trap = gameState.Traps.FirstOrDefault(x => x.Value.Location == newLocation);
-            if (trap.Value != null) 
-            {
-                gameState.Money[trap.Key] += 1;
-                newLocation += trap.Value.Move;
-
-                if (trap.Value.Move == -1) 
-                {
-                    camelStack.ForEach(x => x.Height -= 1000);
-                }
-            }
-
-            camelStack.ForEach(x => x.Location = newLocation);
-
-            ResetStackHeigh(gameState.Camels);
-        }
-
-        private void ThrowDice(GameState gameState, PlayerAction action) 
-        {
-            var index = rnd.Next(0, gameState.RemainingDice.Count);
-            var color = gameState.RemainingDice[index];
-            var value = rnd.Next(1, 4);
-
-            action.Color = color;
-            action.Value = value;
-
-            MoveCamel(gameState, color, value);
-        }
-
-        private void ResetStackHeigh(List<Camel> camels)
-        {
-            foreach (var group in camels.GroupBy(x => x.Location))
-            {
-                var height = 0;
-                foreach (var camel in group.OrderBy(x => x.Height).ToList())
-                {
-                    camel.Height = height;
-                    height++;
-                }
-            }
         }
     }
 }

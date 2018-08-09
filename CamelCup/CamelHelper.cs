@@ -134,23 +134,30 @@ namespace Delver.CamelCup
             return result;
         }
 
-        public static List<GameState> GetAllCamelEndStates(this GameState gameState, int depth = 5, bool includeAllStates = false) 
+        public static List<GameState> GetAllCamelEndStates(this GameState gameState, int depth = 5, bool includeAllStates = false, List<StateChange> changes = null) 
         {
             var result = new List<GameState>();
             var engine = new RulesEngine();
+
+            if (changes == null)
+            {
+                changes = new List<StateChange>();
+            }
+
             foreach (var dice in gameState.RemainingDice)
             {
                 for (int i = 1; i <= 3; i++)
                 {
-                    var newState = gameState.Clone();
-                    engine.MoveCamel(newState, dice, i);
+                    changes.Add(new DiceThrowStateChange(0, dice, i));
+                    var newState = new StateBuilder(gameState).Build(changes);
+
                     if (!newState.RemainingDice.Any() || newState.Camels.Any(x => x.Location >= newState.BoardSize)) {
                         result.Add(newState);
                     }
                     else if (depth > 0) {
                         if (includeAllStates)
                             result.Add(newState);
-                        result.AddRange(GetAllCamelEndStates(newState, depth - 1, includeAllStates));
+                        result.AddRange(GetAllCamelEndStates(newState, depth - 1, includeAllStates, changes));
                     } 
                     else if (depth == 0)  {
                         result.Add(newState);
