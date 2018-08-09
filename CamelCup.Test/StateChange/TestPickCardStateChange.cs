@@ -16,7 +16,7 @@ namespace CamelCup.Test
             var startingPositions = TestHelper.ConvertToStartingPositions(1, 1, 1, 2, 2);
             var gamestate = new ImplementedGameState(2, startingPositions, 16, 3);
             var change = new PickCardStateChange(0, CamelColor.Blue);            
-            new StateBuilder(gamestate).Apply(change);
+            gamestate.Apply(change);
 
             var owner = gamestate.BettingCards.Where(x => x.Value == 5).ToDictionary(x => x.CamelColor, x => x.Owner);
 
@@ -34,8 +34,8 @@ namespace CamelCup.Test
             var startingPositions = TestHelper.ConvertToStartingPositions(1, 1, 1, 2, 2);
             var gamestate = new ImplementedGameState(2, startingPositions, 16, 3);
             var change = new PickCardStateChange(0, CamelColor.Blue);            
-            new StateBuilder(gamestate).Apply(change);
-            new StateBuilder(gamestate).Apply(change);
+            gamestate.Apply(change);
+            gamestate.Apply(change);
 
             var c5 = gamestate.BettingCards.First(x => x.Value == 5 && x.CamelColor == CamelColor.Blue).Owner;
             var c3 = gamestate.BettingCards.First(x => x.Value == 3 && x.CamelColor == CamelColor.Blue).Owner;

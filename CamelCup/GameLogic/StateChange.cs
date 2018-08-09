@@ -41,51 +41,8 @@ namespace Delver.CamelCup
         {
         }
 
-        public virtual void Reverse(GameState state) 
+        public virtual void Revert(GameState state) 
         {
-        }
-    }
-
-    public class StateBuilder 
-    {
-        public GameState GameState { get { return _state; } }
-
-        private GameState _state { get; set; }
-        
-        public StateBuilder()
-        {
-            _state = new GameState();
-        }
-
-        public StateBuilder(GameState state)
-        {
-            _state = state;
-        }
-
-        public GameState Build(List<StateChange> changes)
-        {
-            return Modify(changes, _state.Clone());
-        }
-
-        public GameState Apply(List<StateChange> changes)
-        {
-            return Modify(changes, _state);
-        }
-
-        public GameState Apply(StateChange change)
-        {
-            change.Apply(_state);
-            return _state;
-        }
-
-        private GameState Modify(List<StateChange> changes, GameState state)
-        {
-            foreach (var change in changes)
-            {
-                change.Apply(state);
-            }
-
-            return state;
         }
     }
 }

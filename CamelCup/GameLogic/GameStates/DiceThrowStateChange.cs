@@ -60,7 +60,7 @@ namespace Delver.CamelCup
             return camels;
         }
 
-        public override void Reverse(GameState gameState) 
+        public override void Revert(GameState gameState) 
         {
             gameState.Money[Player] -= 1;
 

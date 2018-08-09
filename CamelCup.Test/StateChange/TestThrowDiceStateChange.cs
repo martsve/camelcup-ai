@@ -18,7 +18,7 @@ namespace CamelCup.Test
             var change = new DiceThrowStateChange(0, CamelColor.Blue, 1);
             
             // 2: red, yellow, blue, green, orange
-            new StateBuilder(gamestate).Apply(change);
+            gamestate.Apply(change);
 
             Assert.AreEqual(new Position(2, 2), gamestate.GetPosition(CamelColor.Blue), "blue");
             Assert.AreEqual(new Position(2, 3), gamestate.GetPosition(CamelColor.Green), "green");
@@ -40,7 +40,7 @@ namespace CamelCup.Test
             var change = new DiceThrowStateChange(0, CamelColor.Blue, 1);
             
             // 3: red, yellow, blue, green, orange
-            new StateBuilder(gamestate).Apply(change);
+            gamestate.Apply(change);
 
             Assert.AreEqual(new Position(3, 2), gamestate.GetPosition(CamelColor.Blue), "blue");
             Assert.AreEqual(new Position(3, 3), gamestate.GetPosition(CamelColor.Green), "green");
@@ -62,7 +62,7 @@ namespace CamelCup.Test
             var change = new DiceThrowStateChange(0, CamelColor.Blue, 1);
             
             // 3: red, yellow, blue, green, orange
-            new StateBuilder(gamestate).Apply(change);
+            gamestate.Apply(change);
 
             Assert.AreEqual(new Position(1, 0), gamestate.GetPosition(CamelColor.Blue), "blue");
             Assert.AreEqual(new Position(1, 1), gamestate.GetPosition(CamelColor.Green), "green");
@@ -84,7 +84,7 @@ namespace CamelCup.Test
             var change = new DiceThrowStateChange(0, CamelColor.Green, 1);
             
             // 1: green, orange, BLUE | trap | 3: red, yellow
-            new StateBuilder(gamestate).Apply(change);
+            gamestate.Apply(change);
 
             Assert.AreEqual(new Position(1, 0), gamestate.GetPosition(CamelColor.Green), "green");
             Assert.AreEqual(new Position(1, 1), gamestate.GetPosition(CamelColor.Orange), "orange");
@@ -106,7 +106,7 @@ namespace CamelCup.Test
             var change = new DiceThrowStateChange(0, CamelColor.Green, 1);
             
             // 1: green, orange, BLUE | trap | 3: red, yellow
-            new StateBuilder(gamestate).Apply(change);
+            gamestate.Apply(change);
 
             Assert.AreEqual(new Position(1, 0), gamestate.GetPosition(CamelColor.Green), "green");
             Assert.AreEqual(new Position(1, 1), gamestate.GetPosition(CamelColor.Orange), "orange");

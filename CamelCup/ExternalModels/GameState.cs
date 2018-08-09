@@ -40,5 +40,25 @@ namespace Delver.CamelCup.External
                 RemainingDice = RemainingDice.ToList()
             };
         }
+
+        public GameState Apply(StateChange change)
+        {
+            change.Apply(this);
+            return this;
+        }
+
+        public GameState Apply(IEnumerable<StateChange> changes)
+        {
+            foreach (var change in changes)
+                change.Apply(this);
+                
+            return this;
+        }
+
+        public GameState Revert(StateChange change)
+        {
+            change.Revert(this);
+            return this;
+        }
     }
 }

@@ -26,7 +26,7 @@ namespace Delver.CamelCup
             gameState.Traps[Player].Move = 1;
         }
 
-        public override void Reverse(GameState gameState) 
+        public override void Revert(GameState gameState) 
         {
             gameState.Traps[Player].Location = oldValue;
             gameState.Traps[Player].Move = oldMove;

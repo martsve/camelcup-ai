@@ -23,15 +23,12 @@ namespace Delver.CamelCup
 
         private RulesEngine RulesEngine = new RulesEngine();
 
-        public StateBuilder StateBuilder { get; set; }
-
         public CamelCupGame(List<Player> players, Dictionary<CamelColor, Position> startingPositions, int seed = -1) 
         {
             Players = players;
             CurrentPlayer = 0;
 
             GameState = new ImplementedGameState(Players.Count, startingPositions);
-            StateBuilder = new StateBuilder(GameState);
 
             if (seed == -1) 
             {
@@ -138,7 +135,7 @@ namespace Delver.CamelCup
 
             if (change != null) 
             {
-                StateBuilder.Apply(change);
+                GameState.Apply(change);
                 CamelHelper.Echo($"\n > {player} performs {action.CamelAction} ({action.Color}/{action.Value})\n  ");
             }
             else

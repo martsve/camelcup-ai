@@ -149,7 +149,7 @@ namespace Delver.CamelCup
                 for (int i = 1; i <= 3; i++)
                 {
                     changes.Add(new DiceThrowStateChange(0, dice, i));
-                    var newState = new StateBuilder(gameState).Build(changes);
+                    var newState = gameState.Apply(changes);
 
                     if (!newState.RemainingDice.Any() || newState.Camels.Any(x => x.Location >= newState.BoardSize)) {
                         result.Add(newState);

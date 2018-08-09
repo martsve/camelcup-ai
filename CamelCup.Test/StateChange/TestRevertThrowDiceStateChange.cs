@@ -19,8 +19,8 @@ namespace CamelCup.Test
             var change = new DiceThrowStateChange(0, CamelColor.Blue, 1);
             
             // 2: red, yellow, blue, green, orange
-            new StateBuilder(gamestate).Apply(change);
-            change.Reverse(gamestate);
+            gamestate.Apply(change);
+            change.Revert(gamestate);
 
             AssertBaseState(gamestate, startingPositions);
         }
@@ -36,8 +36,8 @@ namespace CamelCup.Test
             var change = new DiceThrowStateChange(0, CamelColor.Blue, 1);
             
             // 3: red, yellow, blue, green, orange
-            new StateBuilder(gamestate).Apply(change);
-            change.Reverse(gamestate);
+            gamestate.Apply(change);
+            change.Revert(gamestate);
 
             AssertBaseState(gamestate, startingPositions);
         }
@@ -53,8 +53,8 @@ namespace CamelCup.Test
             var change = new DiceThrowStateChange(0, CamelColor.Blue, 1);
             
             // 3: red, yellow, blue, green, orange
-            new StateBuilder(gamestate).Apply(change);
-            change.Reverse(gamestate);
+            gamestate.Apply(change);
+            change.Revert(gamestate);
 
             AssertBaseState(gamestate, startingPositions);
         }
@@ -70,8 +70,8 @@ namespace CamelCup.Test
             var change = new DiceThrowStateChange(0, CamelColor.Green, 1);
             
             // 1: green, orange, BLUE | trap | 3: red, yellow
-            new StateBuilder(gamestate).Apply(change);
-            change.Reverse(gamestate);
+            gamestate.Apply(change);
+            change.Revert(gamestate);
 
             AssertBaseState(gamestate, startingPositions);
         }
@@ -87,8 +87,8 @@ namespace CamelCup.Test
             var change = new DiceThrowStateChange(0, CamelColor.Green, 1);
             
             // 1: green, orange, BLUE | trap | 3: red, yellow
-            new StateBuilder(gamestate).Apply(change);
-            change.Reverse(gamestate);
+            gamestate.Apply(change);
+            change.Revert(gamestate);
 
             AssertBaseState(gamestate, startingPositions);
         }

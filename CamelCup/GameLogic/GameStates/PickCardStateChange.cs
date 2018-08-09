@@ -20,7 +20,7 @@ namespace Delver.CamelCup
             card.Owner = Player;
         }
 
-        public override void Reverse(GameState gameState) 
+        public override void Revert(GameState gameState) 
         {
             var card = gameState.BettingCards.Where(x => x.IsFree && x.CamelColor == Color).OrderByDescending(x => x.Value).First();
             card.Owner = -1;
