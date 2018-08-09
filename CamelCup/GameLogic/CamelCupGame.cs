@@ -25,7 +25,7 @@ namespace Delver.CamelCup
 
         public StateBuilder StateBuilder { get; set; }
 
-        public CamelCupGame(List<Player> players, Dictionary<CamelColor, int> startingPositions, int seed = -1) 
+        public CamelCupGame(List<Player> players, Dictionary<CamelColor, Position> startingPositions, int seed = -1) 
         {
             Players = players;
             CurrentPlayer = 0;

@@ -17,7 +17,7 @@ namespace Delver.CamelCup
 
         }
 
-        public ImplementedGameState(int players, Dictionary<CamelColor, int> startingPositions,  int boardSize = 16, int startingMoney = 3) : this()
+        public ImplementedGameState(int players, Dictionary<CamelColor, Position> startingPositions,  int boardSize = 16, int startingMoney = 3) : this()
         {
             RemainingDice = CamelHelper.GetAllCamelColors();
             BettingCards = ImplementedBettingCard.GetAllBettingCards();
@@ -30,12 +30,13 @@ namespace Delver.CamelCup
                 Traps[i] = new Trap();
             }
 
-            foreach (var item in startingPositions)
+            var h = 0;
+            foreach (var item in startingPositions.OrderBy(x => x.Value.Height))
             {
                 Camels.Add(new Camel() {
                     CamelColor = item.Key,
-                    Location = item.Value,
-                    Height = GetCamelsInLocation(item.Value).Count + 1
+                    Location = item.Value.Location,
+                    Height = h++,
                 });
             }
         }

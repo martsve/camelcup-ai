@@ -29,7 +29,7 @@ namespace Delver.CamelCup
 
         public static List<CamelColor> GetLeadingOrder(this GameState gameState) 
         {
-            return gameState.Camels.OrderByDescending(x => x.Location).ThenByDescending(x => x.Height).Select(x => x.CamelColor).ToList();
+            return gameState.Camels.OrderByDescending(x => x.Height).Select(x => x.CamelColor).ToList();
         }
 
         public static List<CamelColor> GetAllCamelColors()

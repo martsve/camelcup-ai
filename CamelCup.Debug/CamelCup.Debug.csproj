@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CamelCup\camelup.csproj" />
+    <ProjectReference Include="..\CamelCup.Test\CamelCup.Test.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

@@ -29,7 +29,7 @@ namespace Delver.CamelCup
 
         protected int Player { get; set; }
 
-        public StateChange(StateAction action, int player, CamelColor color, int value)
+        protected StateChange(StateAction action, int player, CamelColor color, int value)
         {
             Action = action;
             Player = player;

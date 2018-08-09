@@ -19,8 +19,9 @@ namespace Delver.CamelCup
             gameState.LoserBets.Add(new GameEndBet() { Player = Player, CamelColor = Color });
         }
 
-        public override void Reverse(GameState state) 
+        public override void Reverse(GameState gameState) 
         {
+            gameState.LoserBets.RemoveAll(x => x.Player == Player && x.CamelColor == Color);
         }
     }
 }

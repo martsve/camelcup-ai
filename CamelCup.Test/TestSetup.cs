@@ -18,17 +18,23 @@ namespace CamelCup.Test
             var game = runner.ComputeNewGame(steps: 0);    
             var players = runner.GetPlayers().ToList();
             var gameState = game.GameState;
-            var camelOrder = gameState.GetLeadingOrder();
 
             Assert.AreEqual(2, runner.GetPlayers().Count(), "players");
             Assert.AreEqual(16, gameState.BoardSize, "board");
             Assert.AreEqual(5, gameState.Camels.Count, "camels");
 
+            Assert.AreEqual(new Position(0, 0), gameState.GetPosition(CamelColor.Blue), "blue");
+            Assert.AreEqual(new Position(0, 1), gameState.GetPosition(CamelColor.Green), "green");
+            Assert.AreEqual(new Position(0, 2), gameState.GetPosition(CamelColor.Orange), "orange");
+            Assert.AreEqual(new Position(1, 3), gameState.GetPosition(CamelColor.Red), "red");
+            Assert.AreEqual(new Position(1, 4), gameState.GetPosition(CamelColor.Yellow), "yellow");
+
+            var camelOrder = gameState.GetLeadingOrder();
             Assert.AreEqual(CamelColor.Yellow, camelOrder.Skip(0).First(), "camel 0");
-            Assert.AreEqual(CamelColor.Orange, camelOrder.Skip(1).First(), "camel 1");
-            Assert.AreEqual(CamelColor.Green, camelOrder.Skip(2).First(), "camel 2");
-            Assert.AreEqual(CamelColor.Blue, camelOrder.Skip(3).First(), "camel 3");
-            Assert.AreEqual(CamelColor.Red, camelOrder.Skip(4).First(), "camel 4");
+            Assert.AreEqual(CamelColor.Red, camelOrder.Skip(1).First(), "camel 1");
+            Assert.AreEqual(CamelColor.Orange, camelOrder.Skip(2).First(), "camel 2");
+            Assert.AreEqual(CamelColor.Green, camelOrder.Skip(3).First(), "camel 3");
+            Assert.AreEqual(CamelColor.Blue, camelOrder.Skip(4).First(), "camel 4");
 
             Assert.AreEqual(0, game.StartingPlayer, "starting player");
             Assert.AreEqual(0, game.CurrentPlayer, "current player");

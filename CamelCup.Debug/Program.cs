@@ -3,6 +3,9 @@ using Delver.CamelCup;
 using Delver.CamelCup.MartinBots;
 using System.Linq;
 
+using CamelCup.Test;
+using Delver.CamelCup.External;
+
 namespace CamelCup.Debug
 {
     class Program
@@ -12,9 +15,7 @@ namespace CamelCup.Debug
             var runner = new CamelRunner(seed: 1);
             runner.AddPlayer(new RandomBot(1, seed: 2));
             runner.AddPlayer(new RandomBot(2, seed: 3));
-            var game = runner.ComputeNewGame();    
-
-            Console.WriteLine("Finished");
+            var game = runner.ComputeNewGame(steps: 0);   
         }
     }
 }

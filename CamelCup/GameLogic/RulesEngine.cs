@@ -93,7 +93,7 @@ namespace Delver.CamelCup
                     return new WinnerBetStateChange(playerId, action.Color);
             }
             
-            return new StateChange(StateAction.NoAction, playerId, CamelColor.Blue, -1);
+            return new NoActionStateChange(playerId);
         }
 
         public void ScoreRound(GameState state)

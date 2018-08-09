@@ -89,9 +89,10 @@ namespace Delver.CamelCup
             return game;
         }
 
-        private Dictionary<CamelColor, int> GetRandomStartingPositions() 
+        private Dictionary<CamelColor, Position> GetRandomStartingPositions() 
         {
-            return CamelHelper.GetAllCamelColors().ToDictionary(x => x, x => rnd.Next(0, 2));
+            int i = 0;
+            return CamelHelper.GetAllCamelColors().ToDictionary(x => x, x => new Position { Location = rnd.Next(0, 2), Height = i++ });
         }
 
         private List<Player> GetRandomPlayerOrder(List<Player> players)

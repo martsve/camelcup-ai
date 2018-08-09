@@ -10,6 +10,10 @@ namespace Delver.CamelCup
 {
     public class DiceThrowStateChange : StateChange 
     {
+        private List<CamelColor> movedStack;
+        private int oldLocation;
+        private int trapPlayer = -1;
+
         public DiceThrowStateChange(int player, CamelColor color, int value) : base(StateAction.ThrowDice, player, color, value)
         {
         }
@@ -17,44 +21,59 @@ namespace Delver.CamelCup
         public override void Apply(GameState gameState)
         {
             gameState.Money[Player] += 1;
-
             gameState.RemainingDice.Remove(Color);
 
             var mainCamel = gameState.Camels.First(x => x.CamelColor == Color);
             var camelStack = gameState.Camels.Where(x => x.Location == mainCamel.Location && x.Height >= mainCamel.Height).ToList();
-            camelStack.ForEach(x => x.Height += 500);
+            movedStack = camelStack.Select(x => x.CamelColor).ToList();
 
-            var oldLocation = mainCamel.Location;
-            var newLocation = mainCamel.Location + Value;
+            oldLocation = mainCamel.Location;
 
+            var newLocation = oldLocation + Value;
+            var onTop = true;
             var trap = gameState.Traps.FirstOrDefault(x => x.Value.Location == newLocation);
             if (trap.Value != null) 
             {
-                gameState.Money[trap.Key] += 1;
+                trapPlayer = trap.Key;
+                gameState.Money[trapPlayer] += 1;
                 newLocation += trap.Value.Move;
-
-                if (trap.Value.Move == -1) 
-                {
-                    camelStack.ForEach(x => x.Height -= 1000);
-                }
+                onTop = trap.Value.Move > 0;
             }
 
-            camelStack.ForEach(x => x.Location = newLocation);
-
-            foreach (var group in gameState.Camels.GroupBy(x => x.Location))
-            {
-                var height = 0;
-                foreach (var camel in group.OrderBy(x => x.Height).ToList())
-                {
-                    camel.Height = height;
-                    height++;
-                }
-            }
+            MoveStack(gameState.Camels, camelStack, newLocation, onTop);
         }
 
-        public override void Reverse(GameState state) 
+        private List<Camel> MoveStack(List<Camel> camels, List<Camel> movingCamels, int location, bool onTop)
         {
+            foreach (var camel in movingCamels)
+            {
+                camel.Location = location;
+                camel.Height += 500 * (onTop ? 1 : -1);
+            }
 
+            var height = 0;
+            foreach (var camel in camels.OrderBy(x => x.Location).ThenBy(x => x.Height))
+            {
+                camel.Height = height++;
+            }
+
+            return camels;
+        }
+
+        public override void Reverse(GameState gameState) 
+        {
+            gameState.Money[Player] -= 1;
+
+            gameState.RemainingDice.Add(Color);
+
+            if (trapPlayer >= 0)
+            {
+                gameState.Money[trapPlayer] -= 1;
+            }
+
+            var movedCamels = movedStack.Select(x => gameState.Camels.First(y => y.CamelColor == x)).ToList();
+
+            MoveStack(gameState.Camels, movedCamels, oldLocation, true);
         }
     }
 }

@@ -8,10 +8,10 @@ namespace Delver.CamelCup.External
 {
     public enum CamelColor
     {
-        Red,
-        Blue,
-        Green,
-        Orange,
-        Yellow
+        Blue = 0,
+        Green = 1,
+        Orange = 2,
+        Red = 3,
+        Yellow = 4
     }
 }
