@@ -134,34 +134,31 @@ namespace Delver.CamelCup
             return result;
         }
 
-        public static List<GameState> GetAllCamelEndStates(this GameState gameState, int depth = 5, bool includeAllStates = false, List<StateChange> changes = null) 
+        public static List<GameState> GetAllCamelEndStates(this GameState gameState, int depth = 5, bool includeAllStates = false) 
         {
             var result = new List<GameState>();
             var engine = new RulesEngine();
-
-            if (changes == null)
-            {
-                changes = new List<StateChange>();
-            }
-
-            foreach (var dice in gameState.RemainingDice)
+            var colors = gameState.RemainingDice.ToList();
+            foreach (var dice in colors)
             {
                 for (int i = 1; i <= 3; i++)
                 {
-                    changes.Add(new DiceThrowStateChange(0, dice, i));
-                    var newState = gameState.Apply(changes);
+                    var change = new DiceThrowStateChange(0, dice, i);
+                    gameState.Apply(change);
 
-                    if (!newState.RemainingDice.Any() || newState.Camels.Any(x => x.Location >= newState.BoardSize)) {
-                        result.Add(newState);
+                    if (!gameState.RemainingDice.Any() || gameState.Camels.Any(x => x.Location >= gameState.BoardSize)) {
+                        result.Add(gameState.Clone());
                     }
                     else if (depth > 0) {
                         if (includeAllStates)
-                            result.Add(newState);
-                        result.AddRange(GetAllCamelEndStates(newState, depth - 1, includeAllStates, changes));
+                            result.Add(gameState.Clone());
+                        result.AddRange(GetAllCamelEndStates(gameState, depth - 1, includeAllStates));
                     } 
                     else if (depth == 0)  {
-                        result.Add(newState);
+                        result.Add(gameState.Clone());
                     }
+
+                    gameState.Revert(change);
                 }
             }
             
