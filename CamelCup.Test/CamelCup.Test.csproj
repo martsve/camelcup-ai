@@ -15,4 +15,10 @@
     <ProjectReference Include="..\CamelCup\camelup.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="ExpectedResults\*.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>  
+  </ItemGroup>
+
 </Project>

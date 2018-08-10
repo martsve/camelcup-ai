@@ -9,15 +9,21 @@ namespace CamelCup.Test
 {
     public static class TestHelper
     {
-        public static Dictionary<CamelColor, Position> ConvertToStartingPositions(params int[] startingPositions) 
+        public static Dictionary<CamelColor, Position> ConvertToStartingPositions(string startingPositions) 
         {
-            return CamelHelper.GetAllCamelColors().ToDictionary(x => x, x => new Position { Location = startingPositions[(int)x], Height = (int)x });
+            var positions = startingPositions.Split(' ').Select(x => new Position(int.Parse(x.Split(',')[0]), int.Parse(x.Split(',')[1]))).ToArray();
+            return CamelHelper.GetAllCamelColors().ToDictionary(x => x, x => positions[(int)x]);
         }
         
         public static Position GetPosition(this GameState gamestate, CamelColor color)
         {
             var camel = gamestate.Camels.First(x => x.CamelColor == color);
             return new Position { Location = camel.Location, Height = camel.Height };
+        }
+
+        public static string CamelPositionToString(this GameState state)
+        {
+            return string.Join(" ", state.Camels.Select(x => new Position(x.Location, x.Height)));
         }
     }
 }

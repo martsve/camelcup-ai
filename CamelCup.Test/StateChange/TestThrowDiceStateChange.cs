@@ -13,18 +13,14 @@ namespace CamelCup.Test
         public void Unit_State_DiceThrow()
         {
             // 1: blue, green, orange | 2: red, yellow
-            var startingPositions = TestHelper.ConvertToStartingPositions(1, 1, 1, 2, 2);
+            var startingPositions = TestHelper.ConvertToStartingPositions("1,0 1,1 1,2 2,3 2,4");
             var gamestate = new ImplementedGameState(2, startingPositions, 16, 3);
             var change = new DiceThrowStateChange(0, CamelColor.Blue, 1);
             
             // 2: red, yellow, blue, green, orange
             gamestate.Apply(change);
 
-            Assert.AreEqual(new Position(2, 2), gamestate.GetPosition(CamelColor.Blue), "blue");
-            Assert.AreEqual(new Position(2, 3), gamestate.GetPosition(CamelColor.Green), "green");
-            Assert.AreEqual(new Position(2, 4), gamestate.GetPosition(CamelColor.Orange), "orange");
-            Assert.AreEqual(new Position(2, 0), gamestate.GetPosition(CamelColor.Red), "red");
-            Assert.AreEqual(new Position(2, 1), gamestate.GetPosition(CamelColor.Yellow), "yellow");
+            Assert.AreEqual("2,2 2,3 2,4 2,0 2,1", gamestate.CamelPositionToString(), "Camel positions");
 
             Assert.AreEqual(4, gamestate.Money[0], "money");
         }
@@ -33,7 +29,7 @@ namespace CamelCup.Test
         public void Unit_State_DiceThrow_Trap1()
         {
             // 1: blue, green, orange | trap | 3: red, yellow
-            var startingPositions = TestHelper.ConvertToStartingPositions(1, 1, 1, 3, 3);
+            var startingPositions = TestHelper.ConvertToStartingPositions("1,0 1,1 1,2 3,3 3,4");
             var gamestate = new ImplementedGameState(2, startingPositions, 16, 3);
             gamestate.Traps[0].Location = 2;
             gamestate.Traps[0].Move = 1;
@@ -42,11 +38,7 @@ namespace CamelCup.Test
             // 3: red, yellow, blue, green, orange
             gamestate.Apply(change);
 
-            Assert.AreEqual(new Position(3, 2), gamestate.GetPosition(CamelColor.Blue), "blue");
-            Assert.AreEqual(new Position(3, 3), gamestate.GetPosition(CamelColor.Green), "green");
-            Assert.AreEqual(new Position(3, 4), gamestate.GetPosition(CamelColor.Orange), "orange");
-            Assert.AreEqual(new Position(3, 0), gamestate.GetPosition(CamelColor.Red), "red");
-            Assert.AreEqual(new Position(3, 1), gamestate.GetPosition(CamelColor.Yellow), "yellow");
+            Assert.AreEqual("3,2 3,3 3,4 3,0 3,1", gamestate.CamelPositionToString(), "Camel positions");
 
             Assert.AreEqual(5, gamestate.Money[0], "money");
         }
@@ -55,7 +47,7 @@ namespace CamelCup.Test
         public void Unit_State_DiceThrow_Trap2()
         {
             // 1: blue, green, orange | trap | 3: red, yellow
-            var startingPositions = TestHelper.ConvertToStartingPositions(1, 1, 1, 3, 3);
+            var startingPositions = TestHelper.ConvertToStartingPositions("1,0 1,1 1,2 3,3 3,4");
             var gamestate = new ImplementedGameState(2, startingPositions, 16, 3);
             gamestate.Traps[0].Location = 2;
             gamestate.Traps[0].Move = -1;
@@ -64,11 +56,7 @@ namespace CamelCup.Test
             // 3: red, yellow, blue, green, orange
             gamestate.Apply(change);
 
-            Assert.AreEqual(new Position(1, 0), gamestate.GetPosition(CamelColor.Blue), "blue");
-            Assert.AreEqual(new Position(1, 1), gamestate.GetPosition(CamelColor.Green), "green");
-            Assert.AreEqual(new Position(1, 2), gamestate.GetPosition(CamelColor.Orange), "orange");
-            Assert.AreEqual(new Position(3, 3), gamestate.GetPosition(CamelColor.Red), "red");
-            Assert.AreEqual(new Position(3, 4), gamestate.GetPosition(CamelColor.Yellow), "yellow");
+            Assert.AreEqual("1,0 1,1 1,2 3,3 3,4", gamestate.CamelPositionToString(), "Camel positions");
 
             Assert.AreEqual(5, gamestate.Money[0], "money");
         }
@@ -77,7 +65,7 @@ namespace CamelCup.Test
         public void Unit_State_DiceThrow_Trap3()
         {
             // 1: blue, green, orange | trap | 3: red, yellow
-            var startingPositions = TestHelper.ConvertToStartingPositions(1, 1, 1, 3, 3);
+            var startingPositions = TestHelper.ConvertToStartingPositions("1,0 1,1 1,2 3,3 3,4");
             var gamestate = new ImplementedGameState(2, startingPositions, 16, 3);
             gamestate.Traps[0].Location = 2;
             gamestate.Traps[0].Move = -1;
@@ -86,11 +74,7 @@ namespace CamelCup.Test
             // 1: green, orange, BLUE | trap | 3: red, yellow
             gamestate.Apply(change);
 
-            Assert.AreEqual(new Position(1, 0), gamestate.GetPosition(CamelColor.Green), "green");
-            Assert.AreEqual(new Position(1, 1), gamestate.GetPosition(CamelColor.Orange), "orange");
-            Assert.AreEqual(new Position(1, 2), gamestate.GetPosition(CamelColor.Blue), "blue");
-            Assert.AreEqual(new Position(3, 3), gamestate.GetPosition(CamelColor.Red), "red");
-            Assert.AreEqual(new Position(3, 4), gamestate.GetPosition(CamelColor.Yellow), "yellow");
+            Assert.AreEqual("1,2 1,0 1,1 3,3 3,4", gamestate.CamelPositionToString(), "Camel positions");
 
             Assert.AreEqual(5, gamestate.Money[0], "money");
         }
@@ -99,7 +83,7 @@ namespace CamelCup.Test
         public void Unit_State_DiceThrow_Trap4()
         {
             // 1: blue, green, orange | trap | 3: red, yellow
-            var startingPositions = TestHelper.ConvertToStartingPositions(1, 1, 1, 3, 3);
+            var startingPositions = TestHelper.ConvertToStartingPositions("1,0 1,1 1,2 3,3 3,4");
             var gamestate = new ImplementedGameState(2, startingPositions, 16, 3);
             gamestate.Traps[1].Location = 2;
             gamestate.Traps[1].Move = -1;
@@ -108,11 +92,7 @@ namespace CamelCup.Test
             // 1: green, orange, BLUE | trap | 3: red, yellow
             gamestate.Apply(change);
 
-            Assert.AreEqual(new Position(1, 0), gamestate.GetPosition(CamelColor.Green), "green");
-            Assert.AreEqual(new Position(1, 1), gamestate.GetPosition(CamelColor.Orange), "orange");
-            Assert.AreEqual(new Position(1, 2), gamestate.GetPosition(CamelColor.Blue), "blue");
-            Assert.AreEqual(new Position(3, 3), gamestate.GetPosition(CamelColor.Red), "red");
-            Assert.AreEqual(new Position(3, 4), gamestate.GetPosition(CamelColor.Yellow), "yellow");
+            Assert.AreEqual("1,2 1,0 1,1 3,3 3,4", gamestate.CamelPositionToString(), "Camel positions");
 
             Assert.AreEqual(4, gamestate.Money[0], "money p0");
             Assert.AreEqual(4, gamestate.Money[1], "money p1");

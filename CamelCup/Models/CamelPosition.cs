@@ -15,7 +15,7 @@ namespace Delver.CamelCup
 
         public override string ToString()
         {
-            return $"Pos({Location}, {Height})";
+            return $"{Location},{Height}";
         }
 
         public override bool Equals(object obj)
