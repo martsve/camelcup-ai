@@ -48,36 +48,22 @@ namespace Delver.CamelCup
                 return null;
             }
             else if (action.CamelAction == CamelAction.PlaceMinusTrap)
-            { 
-                if (action.Value < 1 || action.Value >= gameState.BoardSize) 
-                    return null;
-
-                if (gameState.Camels.Any(x => x.Location == action.Value))
-                    return null;
-
-                if (gameState.Traps.Any(x => x.Key == playerId && x.Value.Location == action.Value && x.Value.Move == 1))
+            {
+                if (CamelHelper.IsValidTrapSpace(gameState, playerId, action.Value, positive: false))
+                {
                     return new MinusTrapStateChange(playerId, action.Value);
+                }
 
-                if (gameState.Traps.Any(x => x.Value.Location == action.Value || x.Value.Location - 1 == action.Value || x.Value.Location + 1 == action.Value))
-                    return null;
-
-                return new MinusTrapStateChange(playerId, action.Value);
+                return null;
             }
             else if (action.CamelAction == CamelAction.PlacePlussTrap)
             { 
-                if (action.Value < 1 || action.Value >= gameState.BoardSize) 
-                    return null;
-                    
-                if (gameState.Camels.Any(x => x.Location == action.Value))
-                    return null;
-                
-                if (gameState.Traps.Any(x => x.Key == playerId && x.Value.Location == action.Value && x.Value.Move == -1))
+                if (CamelHelper.IsValidTrapSpace(gameState, playerId, action.Value, positive: true))
+                {
                     return new PlussTrapStateChange(playerId, action.Value);
+                }
 
-                if (gameState.Traps.Any(x => x.Value.Location == action.Value || x.Value.Location - 1 == action.Value || x.Value.Location + 1 == action.Value))
-                    return null;
-                
-                return new PlussTrapStateChange(playerId, action.Value);
+                return null;
             }
             else if (action.CamelAction == CamelAction.SecretBetOnLoser || action.CamelAction == CamelAction.SecretBetOnWinner)
             { 

@@ -111,18 +111,18 @@ namespace CamelCup.Test
 
             var gameState = game.GameState;
             
-            Assert.AreEqual(82, runner.Step, "game step");
+            Assert.AreEqual(76, runner.Step, "game step");
 
             Assert.AreEqual(0, game.StartingPlayer, "starting player");
             Assert.AreEqual(0, game.CurrentPlayer, "current player");
 
-            Assert.AreEqual(32, gameState.Money[0], "player 0 money");
-            Assert.AreEqual(37, gameState.Money[1], "player 1 money");
+            Assert.AreEqual(19, gameState.Money[0], "player 0 money");
+            Assert.AreEqual(29, gameState.Money[1], "player 1 money");
 
             Assert.AreEqual(0, players[0].Wins, "player 0 wins");
             Assert.AreEqual(1, players[1].Wins, "player 1 wins");
 
-            Assert.AreEqual("12,1 13,2 10,0 17,4 17,3", gameState.CamelPositionToString(), "camel positions");
+            Assert.AreEqual("9,1 14,2 9,0 16,3 16,4", gameState.CamelPositionToString(), "camel positions");
         }
     }
 }

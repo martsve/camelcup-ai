@@ -37,15 +37,20 @@ namespace Delver.CamelCup
             return Enum.GetValues(typeof(CamelColor)).Cast<CamelColor>().OrderBy(x => (int)x).ToList();
         }
 
-        public static bool IsValidTrapSpace(this GameState gameState, int player, int location)
+        public static bool IsValidTrapSpace(this GameState gameState, int playerId, int location, bool positive = true)
         {
+            if (location < 1 || location >= gameState.BoardSize) 
+                return false;
+                
             if (gameState.Camels.Any(x => x.Location == location))
                 return false;
+            
+            var legalOwnTrapValue = positive ? -1 : 1;
 
-            if (gameState.Traps.Any(x => x.Key != player && (x.Value.Location == location || x.Value.Location - 1 == location || x.Value.Location + 1 == location)))
-                return false;
+            if (gameState.Traps.Any(x => x.Key == playerId && ((x.Value.Location == location && x.Value.Move == legalOwnTrapValue) || x.Value.Location - 1 == location || x.Value.Location + 1 == location)))
+                return true;
 
-            if (location <= 0 || location >= gameState.BoardSize)
+            if (gameState.Traps.Any(x => x.Value.Location == location || x.Value.Location - 1 == location || x.Value.Location + 1 == location))
                 return false;
 
             return true;
@@ -76,15 +81,20 @@ namespace Delver.CamelCup
             int expectedMove = positive ? 1 : -1;
             foreach (var playerTrapPair in gameState.Traps.Where(x => x.Value.Location > -1))
             {
-                freeLocations.Remove(playerTrapPair.Value.Location - 1);
-                freeLocations.Remove(playerTrapPair.Value.Location + 1);
-
                 if (playerTrapPair.Key == player && expectedMove != playerTrapPair.Value.Move)
                 {
                     continue;
                 }
-                
+
                 freeLocations.Remove(playerTrapPair.Value.Location);
+
+                if (playerTrapPair.Key == player)
+                {
+                    continue;
+                }
+
+                freeLocations.Remove(playerTrapPair.Value.Location - 1);
+                freeLocations.Remove(playerTrapPair.Value.Location + 1);                
             }
 
             return freeLocations;
