@@ -12,14 +12,14 @@ namespace CamelCup.Test
     public class TestGetwinners
     {
         [TestMethod]
-        public void CamelHelper_GetWinners_Base()
+        public void RulesEngine_GetWinners_Base()
         {
             var gamestate = Setup();
             Assert.AreEqual("0 1 2 3", GetWinnerString(gamestate));
         }
 
         [TestMethod]
-        public void CamelHelper_GetWinners_Money()
+        public void RulesEngine_GetWinners_Money()
         {
             var gamestate = Setup();
             gamestate.Money = new Dictionary<int, int> { 
@@ -32,7 +32,7 @@ namespace CamelCup.Test
         }
         
         [TestMethod]
-        public void CamelHelper_GetWinners_MoneyShared()
+        public void RulesEngine_GetWinners_MoneyShared()
         {
             var gamestate = Setup();
             gamestate.Money = new Dictionary<int, int> { 
@@ -54,7 +54,8 @@ namespace CamelCup.Test
 
         private string GetWinnerString(GameState gamestate)
         {
-            return string.Join(" ", CamelHelper.GetWinners(gamestate).OrderBy(x => x));
+            var engine = new RulesEngine(gamestate, seed: 1);
+            return string.Join(" ", engine.GetWinners().OrderBy(x => x));
         }
     }
 }

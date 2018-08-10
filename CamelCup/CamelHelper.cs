@@ -102,8 +102,8 @@ namespace Delver.CamelCup
 
         public static List<int> GetWinners(GameState state)
         {
-            var engine = new RulesEngine();
-            return engine.GetWinners(state);
+            var engine = new RulesEngine(state);
+            return engine.GetWinners();
         }
 
         public static Dictionary<CamelColor, double> GetWinningProbability(List<GameState> endStates)
@@ -147,7 +147,6 @@ namespace Delver.CamelCup
         public static List<GameState> GetAllCamelEndStates(this GameState gameState, int depth = 5, bool includeAllStates = false) 
         {
             var result = new List<GameState>();
-            var engine = new RulesEngine();
             var colors = gameState.RemainingDice.ToList();
             foreach (var dice in colors)
             {

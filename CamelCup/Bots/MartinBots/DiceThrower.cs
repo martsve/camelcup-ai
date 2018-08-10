@@ -11,7 +11,7 @@ namespace Delver.CamelCup.MartinBots
             return "Martin The Dice Thrower";
         }
 
-        public void StartNewGame(int playerId, Guid gameId, string[] players, GameState gameState)
+        public void StartNewGame(int playerId, GameInfo info, GameState gameState)
         {
         }
 

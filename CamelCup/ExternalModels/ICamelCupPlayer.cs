@@ -6,11 +6,17 @@ using System.Threading.Tasks;
 
 namespace Delver.CamelCup.External
 {
+    public class GameInfo
+    {
+        public Guid GameId { get; set; }
+        public string[] Players { get; set; }
+    }
+
     public interface ICamelCupPlayer 
     {
         string GetPlayerName();
 
-        void StartNewGame(int playerId, Guid gameId, string[] players, GameState gameState);
+        void StartNewGame(int playerId, GameInfo info, GameState gameState);
 
         void InformAboutAction(int player, PlayerAction action, GameState gameState);
 

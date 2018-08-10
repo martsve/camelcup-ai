@@ -49,7 +49,7 @@ namespace Delver.CamelCup.MartinBots
             return name;
         }
 
-        public void StartNewGame(int playerId, Guid gameId, string[] players, GameState gameState)
+        public void StartNewGame(int playerId, GameInfo info, GameState gameState)
         {
             Me = playerId;
         }

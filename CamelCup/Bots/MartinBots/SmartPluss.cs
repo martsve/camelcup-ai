@@ -21,7 +21,7 @@ namespace Delver.CamelCup.MartinBots
             return "SmartPluss";
         }
 
-        public void StartNewGame(int playerId, Guid gameId, string[] players, GameState gameState)
+        public void StartNewGame(int playerId, GameInfo info, GameState gameState)
         {
             Me = playerId;
         }
@@ -41,7 +41,6 @@ namespace Delver.CamelCup.MartinBots
             if (myTrap.Value == null) 
             {
                 var freeLocations = gameState.GetFreeTrapSpaces(Me, true);
-                var engine = new RulesEngine();
                 var bestSum = 0;
                 foreach (var location in freeLocations) {
                     var newState = gameState.Apply(new PlussTrapStateChange(Me, location));

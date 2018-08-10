@@ -12,8 +12,12 @@ namespace Delver.CamelCup
     {
         private Random rnd { get; set; }
 
-        public RulesEngine(int seed = -1)
+        private GameState gamestate { get; set; }
+
+        public RulesEngine(GameState gamestate, int seed = -1)
         {
+            this.gamestate = gamestate;
+
             if (seed == -1) 
             {
                 seed = unchecked((int)DateTime.Now.Ticks);
@@ -22,24 +26,24 @@ namespace Delver.CamelCup
             rnd = new Random(seed);
         }
 
-        public StateChange Getchange(GameState gameState, int playerId, PlayerAction action) 
+        public StateChange Getchange(int playerId, PlayerAction action) 
         {
             if (action.CamelAction == CamelAction.ThrowDice)
             {
-                if (!gameState.RemainingDice.Any())
+                if (!gamestate.RemainingDice.Any())
                 {
                     return null;
                 }
 
-                var index = rnd.Next(0, gameState.RemainingDice.Count);
-                var color = gameState.RemainingDice[index];
+                var index = rnd.Next(0, gamestate.RemainingDice.Count);
+                var color = gamestate.RemainingDice[index];
                 var value = rnd.Next(1, 4);
 
                 return new DiceThrowStateChange(playerId, color, value);    
             }
             else if (action.CamelAction == CamelAction.PickCard)
             { 
-                var bet = gameState.BettingCards.Where(x => x.IsFree && x.CamelColor == action.Color).FirstOrDefault();
+                var bet = gamestate.BettingCards.Where(x => x.IsFree && x.CamelColor == action.Color).FirstOrDefault();
 
                 if (bet != null) {
                     return new PickCardStateChange(playerId, action.Color);
@@ -49,7 +53,7 @@ namespace Delver.CamelCup
             }
             else if (action.CamelAction == CamelAction.PlaceMinusTrap)
             {
-                if (CamelHelper.IsValidTrapSpace(gameState, playerId, action.Value, positive: false))
+                if (CamelHelper.IsValidTrapSpace(gamestate, playerId, action.Value, positive: false))
                 {
                     return new MinusTrapStateChange(playerId, action.Value);
                 }
@@ -58,7 +62,7 @@ namespace Delver.CamelCup
             }
             else if (action.CamelAction == CamelAction.PlacePlussTrap)
             { 
-                if (CamelHelper.IsValidTrapSpace(gameState, playerId, action.Value, positive: true))
+                if (CamelHelper.IsValidTrapSpace(gamestate, playerId, action.Value, positive: true))
                 {
                     return new PlussTrapStateChange(playerId, action.Value);
                 }
@@ -67,10 +71,10 @@ namespace Delver.CamelCup
             }
             else if (action.CamelAction == CamelAction.SecretBetOnLoser || action.CamelAction == CamelAction.SecretBetOnWinner)
             { 
-                if (gameState.WinnerBets.Any(x => x.Player == playerId && x.CamelColor == action.Color))
+                if (gamestate.WinnerBets.Any(x => x.Player == playerId && x.CamelColor == action.Color))
                     return null;
 
-                if (gameState.LoserBets.Any(x => x.Player == playerId && x.CamelColor == action.Color))
+                if (gamestate.LoserBets.Any(x => x.Player == playerId && x.CamelColor == action.Color))
                     return null;
 
                 if (action.CamelAction == CamelAction.SecretBetOnLoser)
@@ -82,72 +86,72 @@ namespace Delver.CamelCup
             return new NoActionStateChange(playerId);
         }
 
-        public void ScoreRound(GameState state)
+        public void ScoreRound()
         {
-            var order = state.GetLeadingOrder();
+            var order = gamestate.GetLeadingOrder();
             var first = order.First();
             var second = order.Skip(1).First();
 
-            foreach (var bet in state.BettingCards.Where(x => !x.IsFree))
+            foreach (var bet in gamestate.BettingCards.Where(x => !x.IsFree))
             {
                 if (bet.CamelColor == first)
                 {
-                    state.Money[bet.Owner] += bet.Value;
+                    gamestate.Money[bet.Owner] += bet.Value;
                 }
                 else if (bet.CamelColor == second)
                 {
-                    state.Money[bet.Owner] += 1;
+                    gamestate.Money[bet.Owner] += 1;
                 }
                 else
                 {
-                    if (state.Money[bet.Owner] > 0)
-                        state.Money[bet.Owner] -= 1;
+                    if (gamestate.Money[bet.Owner] > 0)
+                        gamestate.Money[bet.Owner] -= 1;
                 }
             }
         }
 
-        public void ScoreGame(GameState state)
+        public void ScoreGame()
         {
-            var winner = state.GetLeadingOrder().First();
+            var winner = gamestate.GetLeadingOrder().First();
             var scores = new List<int>() { 8, 5, 3, 2, 1, 1, 1, 1, 1, 1, 1 };
-            foreach (var card in state.WinnerBets)
+            foreach (var card in gamestate.WinnerBets)
             {
                 if (card.CamelColor == winner) 
                 {
                     var score = scores.First();
                     scores.RemoveAt(0);
-                    state.Money[card.Player] += score;
+                    gamestate.Money[card.Player] += score;
                 }
                 else
                 {
-                    if (state.Money[card.Player] > 0)
-                        state.Money[card.Player] -= 1;
+                    if (gamestate.Money[card.Player] > 0)
+                        gamestate.Money[card.Player] -= 1;
                 }
             }
 
-            var loser = state.GetLeadingOrder().Last();
+            var loser = gamestate.GetLeadingOrder().Last();
             scores = new List<int>() { 8, 5, 3, 2, 1, 1, 1, 1, 1, 1, 1 };
-            foreach (var card in state.LoserBets)
+            foreach (var card in gamestate.LoserBets)
             {
                 if (card.CamelColor == loser) 
                 {
                     var score = scores.First();
                     scores.RemoveAt(0);
-                    state.Money[card.Player] += score;
+                    gamestate.Money[card.Player] += score;
                 }
                 else
                 {
-                    if (state.Money[card.Player] > 0)
-                        state.Money[card.Player] -= 1;
+                    if (gamestate.Money[card.Player] > 0)
+                        gamestate.Money[card.Player] -= 1;
                 }
             }
 
         }
         
-        public List<int> GetWinners(GameState state)
+        public List<int> GetWinners()
         {
-            var max = state.Money.OrderByDescending(x => x.Value).First().Value;
-            return state.Money.Where(x => x.Value == max).Select(x => x.Key).ToList();
+            var max = gamestate.Money.OrderByDescending(x => x.Value).First().Value;
+            return gamestate.Money.Where(x => x.Value == max).Select(x => x.Key).ToList();
         }
     }
 }

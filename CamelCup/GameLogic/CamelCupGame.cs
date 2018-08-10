@@ -21,7 +21,7 @@ namespace Delver.CamelCup
 
         private List<Player> Players { get; set; }        
 
-        private RulesEngine RulesEngine = new RulesEngine();
+        private RulesEngine RulesEngine { get; set; }
 
         public CamelCupGame(List<Player> players, Dictionary<CamelColor, Position> startingPositions, int seed = -1) 
         {
@@ -35,14 +35,18 @@ namespace Delver.CamelCup
                 seed = unchecked((int)DateTime.Now.Ticks);
             }
 
-            RulesEngine = new RulesEngine(seed);
+            RulesEngine = new RulesEngine(GameState, seed);
         }
 
         public void StartGame() 
         {
             var playerNames = Players.Select(x => x.Name).ToArray();
             var gameStateClone = GameState.Clone(true);
-
+            var gameInfo = new GameInfo() { 
+                GameId = GameId,
+                Players = playerNames
+            };
+            
             for (int i = 0; i < Players.Count; i++) 
             {
                 var player = Players[i];
@@ -50,7 +54,7 @@ namespace Delver.CamelCup
 
                 Attempt(() => {
                     player.PerformAction(x => player.Name = x.GetPlayerName());
-                    player.PerformAction(x => x.StartNewGame(i, GameId, playerNames, gameStateClone));
+                    player.PerformAction(x => x.StartNewGame(i, gameInfo, gameStateClone));
                 });
             }
         }
@@ -92,15 +96,15 @@ namespace Delver.CamelCup
 
             if (!GameState.RemainingDice.Any()) 
             {
-                RulesEngine.ScoreRound(GameState);
+                RulesEngine.ScoreRound();
             }
 
             if (IsComplete())
             {
                 foreach (var player in Players) 
                 {
-                    RulesEngine.ScoreGame(GameState);
-                    var winners = RulesEngine.GetWinners(GameState);
+                    RulesEngine.ScoreGame();
+                    var winners = RulesEngine.GetWinners();
                     Attempt(() => {
                         var gameStateClone = GameState.Clone(true);
                         player.PerformAction(x => x.Winners(winners, gameStateClone));
@@ -131,7 +135,7 @@ namespace Delver.CamelCup
 
         private void MoveGame(int player, PlayerAction action)
         {
-            var change = RulesEngine.Getchange(GameState, player, action);
+            var change = RulesEngine.Getchange(player, action);
 
             if (change != null) 
             {

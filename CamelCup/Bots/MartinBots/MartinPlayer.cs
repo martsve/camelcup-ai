@@ -13,7 +13,7 @@ namespace Delver.CamelCup.MartinBots
             return "5'er-Martin";
         }
 
-        public void StartNewGame(int playerId, Guid gameId, string[] players, GameState gameState)
+        public void StartNewGame(int playerId, GameInfo info, GameState gameState)
         {
         }
 
