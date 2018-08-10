@@ -21,13 +21,13 @@ namespace Delver.CamelCup
 
     public class StateChange 
     {
-        protected int Value { get; set; }
+        public int Value { get; set; }
 
-        protected StateAction Action { get; set; }
+        public StateAction Action { get; set; }
 
-        protected CamelColor Color { get; set; }
+        public CamelColor Color { get; set; }
 
-        protected int Player { get; set; }
+        public int Player { get; set; }
 
         protected StateChange(StateAction action, int player, CamelColor color, int value)
         {

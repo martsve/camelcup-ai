@@ -43,10 +43,9 @@ namespace Delver.CamelCup
             }
             else if (action.CamelAction == CamelAction.PickCard)
             { 
-                var bet = gamestate.BettingCards.Where(x => x.IsFree && x.CamelColor == action.Color).FirstOrDefault();
-
-                if (bet != null) {
-                    return new PickCardStateChange(playerId, action.Color);
+                if (gamestate.BettingCards.Any(x => x.IsFree && x.CamelColor == action.Color)) {
+                    var card = gamestate.BettingCards.Where(x => x.IsFree && x.CamelColor == action.Color).OrderByDescending(x => x.Value).First();
+                    return new PickCardStateChange(playerId, action.Color, card.Value);
                 }
                 
                 return null;

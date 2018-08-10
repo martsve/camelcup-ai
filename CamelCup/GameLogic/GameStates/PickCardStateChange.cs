@@ -10,19 +10,19 @@ namespace Delver.CamelCup
 {
     public class PickCardStateChange : StateChange 
     {
-        public PickCardStateChange(int player, CamelColor color) : base(StateAction.PickCard, player, color, -1)
+        public PickCardStateChange(int player, CamelColor color, int value) : base(StateAction.PickCard, player, color, value)
         {
         }
 
         public override void Apply(GameState gameState)
         {
-            var card = gameState.BettingCards.Where(x => x.IsFree && x.CamelColor == Color).OrderByDescending(x => x.Value).First();
+            var card = gameState.BettingCards.First(x => x.IsFree && x.CamelColor == Color && x.Value == Value);
             card.Owner = Player;
         }
 
         public override void Revert(GameState gameState) 
         {
-            var card = gameState.BettingCards.Where(x => x.IsFree && x.CamelColor == Color).OrderByDescending(x => x.Value).First();
+            var card = gameState.BettingCards.First(x => x.Value == Value && x.CamelColor == Color);
             card.Owner = -1;
         }
     }
