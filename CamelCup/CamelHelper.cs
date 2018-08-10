@@ -174,15 +174,9 @@ namespace Delver.CamelCup
             return result;
         }
 
-        public static Dictionary<CamelColor, int> GetCamelWins(this GameState gameState, out int[] money) 
+        public static Dictionary<CamelColor, int> GetCamelWins(this GameState gameState, out int[] money, int depth = 5) 
         {
-            var colors = gameState.RemainingDice.ToArray();
-            var initialPosition = ConvertGameStateToCamelPosition(gameState);
-            var traps =  Enumerable.Range(0, 20)
-                .Select(x => gameState.Traps.Any(y => y.Value.Location == x) ? gameState.Traps.First(y => y.Value.Location == x).Value.Move  : 0)
-                .ToArray();
-            
-            var positions = GetAllPossibleCamelPositions(initialPosition, colors, traps);
+            var positions = GetCamelEndPositions(gameState, depth, includeAll: false);
 
             var result = new Dictionary<CamelColor, int>();
             foreach (var camel in CamelHelper.GetAllCamelColors())
@@ -203,6 +197,36 @@ namespace Delver.CamelCup
             return result;
         }
 
+        public static Dictionary<int, int> GetLocationHeatmap(this GameState gameState, int depth = 5) 
+        {
+            var positions = GetCamelEndPositions(gameState, depth, includeAll: true);
+            var result = new Dictionary<int, int>();
+            for (int i = 0; i < gameState.BoardSize; i++)
+            {
+                result[i] = 0;
+            }
+
+            foreach (var pos in positions)
+                foreach (var loc in pos.Location)
+                    result[loc]++;
+
+            var sum = result.Sum(x => x.Value);
+            return result.ToDictionary(x => x.Key, x => x.Value / sum);
+        }
+
+        private static List<CamelPositions> GetCamelEndPositions(GameState gameState, int depth = 5, bool includeAll) 
+        {
+            var colors = gameState.RemainingDice.ToArray();
+            var initialPosition = ConvertGameStateToCamelPosition(gameState);
+            var traps =  Enumerable.Range(0, 20)
+                .Select(x => gameState.Traps.Any(y => y.Value.Location == x) ? gameState.Traps.First(y => y.Value.Location == x).Value.Move  : 0)
+                .ToArray();
+            
+            var positions = GetAllPossibleCamelPositions(initialPosition, colors, traps, depth, includeAll);
+
+            return positions;
+        }
+
         private static CamelPositions ConvertGameStateToCamelPosition(GameState gameState)
         {
             var pos = new CamelPositions() {  };
@@ -212,7 +236,7 @@ namespace Delver.CamelCup
             return pos;
         }
 
-        private static List<CamelPositions> GetAllPossibleCamelPositions(CamelPositions initialPosition, CamelColor[] colors, int[] traps) 
+        private static List<CamelPositions> GetAllPossibleCamelPositions(CamelPositions initialPosition, CamelColor[] colors, int[] traps, int depth, bool includeAll) 
         {
             var positions = new List<CamelPositions>();
 
@@ -226,10 +250,15 @@ namespace Delver.CamelCup
                     {
                         positions.Add(pos);
                     }
-                    else {
+                    else if (depth > 0)
+                    {
                         var remaining = colors.Where(x => x != dice).ToArray();
-                        var other = GetAllPossibleCamelPositions(pos, remaining, traps);
+                        var other = GetAllPossibleCamelPositions(pos, remaining, traps, depth - 1, includeAll);
                         positions.AddRange(other);
+                    }
+                    else if (includeAll)
+                    {
+                        positions.Add(pos);
                     }
                 }
             }

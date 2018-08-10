@@ -38,6 +38,8 @@ namespace Delver.CamelCup.MartinBots
                 var endStates = CamelHelper.GetAllGameEndStates(gameState, 2, true);
                 var heatmap = CamelHelper.GetHeatMap(endStates);
 
+                var camelWins = CamelHelper.GetCamelPositions(gameState, 3, true);
+
                 foreach (var location in heatmap.Where(x => x.Value > 0.5).OrderByDescending(x => x.Value).Select(x => x.Key))
                 {
                     if (gameState.IsValidTrapSpace(Me, location))
