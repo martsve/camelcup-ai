@@ -34,7 +34,7 @@ namespace Delver.CamelCup
 
         public static List<CamelColor> GetAllCamelColors()
         {
-            return Enum.GetValues(typeof(CamelColor)).Cast<CamelColor>().ToList();
+            return Enum.GetValues(typeof(CamelColor)).Cast<CamelColor>().OrderBy(x => (int)x).ToList();
         }
 
         public static bool IsValidTrapSpace(this GameState gameState, int player, int location)
@@ -42,7 +42,7 @@ namespace Delver.CamelCup
             if (gameState.Camels.Any(x => x.Location == location))
                 return false;
 
-            if (gameState.Traps.Any(x => x.Value.Location == location || x.Value.Location - 1 == location || x.Value.Location + 1 == location))
+            if (gameState.Traps.Any(x => x.Key != player && (x.Value.Location == location || x.Value.Location - 1 == location || x.Value.Location + 1 == location)))
                 return false;
 
             if (location <= 0 || location >= gameState.BoardSize)

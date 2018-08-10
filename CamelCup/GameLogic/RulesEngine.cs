@@ -56,7 +56,7 @@ namespace Delver.CamelCup
                     return null;
 
                 if (gameState.Traps.Any(x => x.Key == playerId && x.Value.Location == action.Value && x.Value.Move == 1))
-                    return new PlussTrapStateChange(playerId, action.Value);
+                    return new MinusTrapStateChange(playerId, action.Value);
 
                 if (gameState.Traps.Any(x => x.Value.Location == action.Value || x.Value.Location - 1 == action.Value || x.Value.Location + 1 == action.Value))
                     return null;
