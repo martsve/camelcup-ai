@@ -35,7 +35,7 @@ namespace Delver.CamelCup.MartinBots
 
             if (myTrap.Value == null) 
             {
-                var endStates = CamelHelper.GetAllCamelEndStates(gameState, 2, true);
+                var endStates = CamelHelper.GetAllGameEndStates(gameState, 2, true);
                 var heatmap = CamelHelper.GetHeatMap(endStates);
 
                 foreach (var location in heatmap.Where(x => x.Value > 0.5).OrderByDescending(x => x.Value).Select(x => x.Key))

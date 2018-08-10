@@ -144,7 +144,7 @@ namespace Delver.CamelCup
             return result;
         }
 
-        public static List<GameState> GetAllCamelEndStates(this GameState gameState, int depth = 5, bool includeAllStates = false) 
+        public static List<GameState> GetAllGameEndStates(this GameState gameState, int depth = 5, bool includeAllStates = false) 
         {
             var result = new List<GameState>();
             var colors = gameState.RemainingDice.ToList();
@@ -161,7 +161,7 @@ namespace Delver.CamelCup
                     else if (depth > 0) {
                         if (includeAllStates)
                             result.Add(gameState.Clone());
-                        result.AddRange(GetAllCamelEndStates(gameState, depth - 1, includeAllStates));
+                        result.AddRange(GetAllGameEndStates(gameState, depth - 1, includeAllStates));
                     } 
                     else if (depth == 0)  {
                         result.Add(gameState.Clone());
@@ -172,6 +172,78 @@ namespace Delver.CamelCup
             }
             
             return result;
+        }
+
+        public static Dictionary<CamelColor, int> GetCamelWins(this GameState gameState) 
+        {
+            var colors = gameState.RemainingDice.ToArray();
+            var initialPosition = ConvertGameStateToCamelPosition(gameState);
+            var traps = gameState.Traps.ToDictionary(x => x.Value.Location, x => x.Value.Move);
+
+            var positions = GetAllPossibleCamelPositions(initialPosition, colors, traps);
+
+            var result = new Dictionary<CamelColor, int>();
+            foreach (var camel in CamelHelper.GetAllCamelColors())
+                result.Add(camel, 0);
+
+            foreach (var pos in positions)
+            {
+                var winner = (CamelColor)Array.IndexOf(pos.Height, pos.Height.Max());
+                result[winner]++;
+            }
+
+            return result;
+        }
+
+        private static CamelPositions ConvertGameStateToCamelPosition(GameState gameState)
+        {
+            var pos = new CamelPositions() {  };
+            pos.Location = gameState.Camels.OrderBy(x => (int)x.CamelColor).Select(x => x.Location).ToArray();
+            pos.Height = gameState.Camels.OrderBy(x => (int)x.CamelColor).Select(x => x.Height).ToArray();
+            return pos;
+        }
+
+        private static List<CamelPositions> GetAllPossibleCamelPositions(CamelPositions initialPosition, CamelColor[] colors, Dictionary<int, int> traps) 
+        {
+            var positions = new List<CamelPositions>();
+
+            foreach (var dice in colors)
+            {
+                for (int i = 1; i <= 3; i++)
+                {
+                    var pos = FastCamelMove(initialPosition, dice, i, traps);
+
+                    if (colors.Length == 1 || pos.Location.Any(x => x > 15))
+                    {
+                        positions.Add(pos);
+                    }
+                    else {
+                        var remaining = colors.Where(x => x != dice).ToArray();
+                        var other = GetAllPossibleCamelPositions(pos, remaining, traps);
+                        positions.AddRange(other);
+                    }
+                }
+            }
+            
+            return positions;
+        }
+
+        private static CamelPositions FastCamelMove(CamelPositions initialPosition, CamelColor dice, int value, Dictionary<int, int> traps) 
+        {
+            var pos = new CamelPositions() 
+            {
+                Location = initialPosition.Location.ToArray(),
+                Height = initialPosition.Height.ToArray()
+            };
+
+            // Modify positions
+
+            return initialPosition;
+        }
+
+        struct CamelPositions {
+            public int[] Location;
+            public int[] Height;
         }
     }
 }

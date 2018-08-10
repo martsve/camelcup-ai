@@ -23,7 +23,7 @@ namespace CamelCup.Test
             var startString = "1,0 1,1 1,2 2,3 2,4";
             var startingPositions = TestHelper.ConvertToStartingPositions(startString);
             var gamestate = new ImplementedGameState(1, startingPositions);
-            var states = CamelHelper.GetAllCamelEndStates(gamestate, 0);
+            var states = CamelHelper.GetAllGameEndStates(gamestate, 0);
 
             Assert.AreEqual(15, states.Count, "final states");
 
@@ -40,7 +40,7 @@ namespace CamelCup.Test
             var startString = "1,0 1,1 1,2 2,3 2,4";
             var startingPositions = TestHelper.ConvertToStartingPositions(startString);
             var gamestate = new ImplementedGameState(1, startingPositions);
-            var states = CamelHelper.GetAllCamelEndStates(gamestate, 1);
+            var states = CamelHelper.GetAllGameEndStates(gamestate, 1);
 
             Assert.AreEqual(15*12, states.Count, "final states");
 
@@ -60,7 +60,7 @@ namespace CamelCup.Test
             var startString = "1,0 1,1 1,2 2,3 2,4";
             var startingPositions = TestHelper.ConvertToStartingPositions(startString);
             var gamestate = new ImplementedGameState(1, startingPositions);
-            var states = CamelHelper.GetAllCamelEndStates(gamestate, 1, includeAllStates: true);
+            var states = CamelHelper.GetAllGameEndStates(gamestate, 1, includeAllStates: true);
 
             Assert.AreEqual(15*12 + 15, states.Count, "final states");
 
@@ -80,7 +80,7 @@ namespace CamelCup.Test
             var startString = "1,0 1,1 1,2 2,3 2,4";
             var startingPositions = TestHelper.ConvertToStartingPositions(startString);
             var gamestate = new ImplementedGameState(1, startingPositions);
-            var states = CamelHelper.GetAllCamelEndStates(gamestate, 2);
+            var states = CamelHelper.GetAllGameEndStates(gamestate, 2);
 
             Assert.AreEqual(15*12*9, states.Count, "final states");
 
@@ -100,7 +100,7 @@ namespace CamelCup.Test
             var startString = "1,0 1,1 1,2 2,3 2,4";
             var startingPositions = TestHelper.ConvertToStartingPositions(startString);
             var gamestate = new ImplementedGameState(1, startingPositions);
-            var states = CamelHelper.GetAllCamelEndStates(gamestate, 3);
+            var states = CamelHelper.GetAllGameEndStates(gamestate, 3);
 
             Assert.AreEqual(15*12*9*6, states.Count, "final states");
 
@@ -117,7 +117,7 @@ namespace CamelCup.Test
             var startString = "1,0 1,1 1,2 2,3 2,4";
             var startingPositions = TestHelper.ConvertToStartingPositions(startString);
             var gamestate = new ImplementedGameState(1, startingPositions);
-            var states = CamelHelper.GetAllCamelEndStates(gamestate, 4);
+            var states = CamelHelper.GetAllGameEndStates(gamestate, 4);
 
             Assert.AreEqual(15*12*9*6*3, states.Count, "final states");
 
@@ -135,7 +135,7 @@ namespace CamelCup.Test
             var startString = "1,0 1,1 1,2 2,3 2,4";
             var startingPositions = TestHelper.ConvertToStartingPositions(startString);
             var gamestate = new ImplementedGameState(1, startingPositions);
-            var states = CamelHelper.GetAllCamelEndStates(gamestate, 5);
+            var states = CamelHelper.GetAllGameEndStates(gamestate, 5);
 
             Assert.AreEqual(15*12*9*6*3, states.Count, "final states");
 

@@ -44,7 +44,7 @@ namespace Delver.CamelCup.MartinBots
                 var bestSum = 0;
                 foreach (var location in freeLocations) {
                     var newState = gameState.Apply(new PlussTrapStateChange(Me, location));
-                    var endStates = CamelHelper.GetAllCamelEndStates(newState, 2);
+                    var endStates = CamelHelper.GetAllGameEndStates(newState, 2);
                     var sum = endStates.Sum(x => x.Money.First(y => y.Key == Me).Value);
                     if (sum > bestSum) {
                         bestSum = sum;
