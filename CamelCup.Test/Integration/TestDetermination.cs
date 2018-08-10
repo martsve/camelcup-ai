@@ -27,6 +27,8 @@ namespace CamelCup.Test
 
             Assert.AreEqual(1, players[0].Wins, "player 0 wins");
             Assert.AreEqual(1, players[1].Wins, "player 1 wins");
+
+            Assert.AreEqual("0,0 0,1 0,2 1,3 1,4", gameState.CamelPositionToString(), "camel positions");
         }
 
         [TestMethod]
@@ -48,6 +50,8 @@ namespace CamelCup.Test
 
             Assert.AreEqual(1, players[0].Wins, "player 0 wins");
             Assert.AreEqual(0, players[1].Wins, "player 1 wins");
+
+            Assert.AreEqual("0,0 0,1 3,4 3,2 3,3", gameState.CamelPositionToString(), "camel positions");
         }
 
         [TestMethod]
@@ -69,6 +73,8 @@ namespace CamelCup.Test
 
             Assert.AreEqual(1, players[0].Wins, "player 0 wins");
             Assert.AreEqual(0, players[1].Wins, "player 1 wins");
+
+            Assert.AreEqual("5,3 7,4 5,2 3,0 5,1", gameState.CamelPositionToString(), "camel positions");
         }
 
         [TestMethod]
@@ -90,6 +96,8 @@ namespace CamelCup.Test
 
             Assert.AreEqual(0, players[0].Wins, "player 0 wins");
             Assert.AreEqual(1, players[1].Wins, "player 1 wins");
+
+            Assert.AreEqual("7,1 9,3 6,0 7,2 11,4", gameState.CamelPositionToString(), "camel positions");
         }
 
         [TestMethod]
@@ -113,6 +121,8 @@ namespace CamelCup.Test
 
             Assert.AreEqual(0, players[0].Wins, "player 0 wins");
             Assert.AreEqual(1, players[1].Wins, "player 1 wins");
+
+            Assert.AreEqual("12,1 13,2 10,0 17,4 17,3", gameState.CamelPositionToString(), "camel positions");
         }
     }
 }
