@@ -39,9 +39,18 @@ namespace Delver.CamelCup
         }
 
         public void StartGame() 
-        {
-            var playerNames = Players.Select(x => x.Name).ToArray();
+        {            
+            for (int i = 0; i < Players.Count; i++) 
+            {
+                var player = Players[i];
+                Attempt(() => {
+                    player.PerformAction(x => player.Name = x.GetPlayerName());
+                });
+            }
+
             var gameStateClone = GameState.Clone(true);
+            var playerNames = Players.Select(x => x.Name).ToArray();
+
             var gameInfo = new GameInfo() { 
                 GameId = GameId,
                 Players = playerNames
@@ -53,7 +62,6 @@ namespace Delver.CamelCup
                 player.Reset(i);
 
                 Attempt(() => {
-                    player.PerformAction(x => player.Name = x.GetPlayerName());
                     player.PerformAction(x => x.StartNewGame(i, gameInfo, gameStateClone));
                 });
             }

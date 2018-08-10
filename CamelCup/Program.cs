@@ -24,6 +24,8 @@ namespace Delver.CamelCup
                 Console.WriteLine($"Game #{i} finished");
             } 
 
+            runner.Save();
+
             var players = runner.GetPlayers();
 
             var title = "Player";

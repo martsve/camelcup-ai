@@ -43,6 +43,14 @@ namespace Delver.CamelCup
             Players.Add(player);
         }
 
+        public void Save()
+        {
+            foreach (var player in Players)
+            {
+                player.PerformAction(x => x.Save());
+            }
+        }
+
         public void LoadPlayers(string filename)
         {
             var lines = File.ReadAllLines("players.txt").Where(x => x.Trim().Length > 0).ToList();
