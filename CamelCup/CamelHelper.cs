@@ -178,8 +178,10 @@ namespace Delver.CamelCup
         {
             var colors = gameState.RemainingDice.ToArray();
             var initialPosition = ConvertGameStateToCamelPosition(gameState);
-            var traps = gameState.Traps.ToDictionary(x => x.Value.Location, x => x.Value.Move);
-
+            var traps =  Enumerable.Range(0, 20)
+                .Select(x => gameState.Traps.Any(y => y.Value.Location == x) ? gameState.Traps.First(y => y.Value.Location == x).Value.Move  : 0)
+                .ToArray();
+            
             var positions = GetAllPossibleCamelPositions(initialPosition, colors, traps);
 
             var result = new Dictionary<CamelColor, int>();
@@ -188,7 +190,7 @@ namespace Delver.CamelCup
 
             foreach (var pos in positions)
             {
-                var winner = (CamelColor)Array.IndexOf(pos.Height, pos.Height.Max());
+                var winner = (CamelColor)Array.IndexOf(pos.Height, 4);
                 result[winner]++;
             }
 
@@ -203,7 +205,7 @@ namespace Delver.CamelCup
             return pos;
         }
 
-        private static List<CamelPositions> GetAllPossibleCamelPositions(CamelPositions initialPosition, CamelColor[] colors, Dictionary<int, int> traps) 
+        private static List<CamelPositions> GetAllPossibleCamelPositions(CamelPositions initialPosition, CamelColor[] colors, int[] traps) 
         {
             var positions = new List<CamelPositions>();
 
@@ -211,7 +213,7 @@ namespace Delver.CamelCup
             {
                 for (int i = 1; i <= 3; i++)
                 {
-                    var pos = FastCamelMove(initialPosition, dice, i, traps);
+                    var pos = FastCamelMove(initialPosition, (int)dice, i, traps);
 
                     if (colors.Length == 1 || pos.Location.Any(x => x > 15))
                     {
@@ -228,7 +230,7 @@ namespace Delver.CamelCup
             return positions;
         }
 
-        private static CamelPositions FastCamelMove(CamelPositions initialPosition, CamelColor dice, int value, Dictionary<int, int> traps) 
+        private static CamelPositions FastCamelMove(CamelPositions initialPosition, int dice, int value, int[] traps) 
         {
             var pos = new CamelPositions() 
             {
@@ -236,9 +238,51 @@ namespace Delver.CamelCup
                 Height = initialPosition.Height.ToArray()
             };
 
-            // Modify positions
+            var from = pos.Location[dice];
+            var fromHeight = pos.Height[dice];
+            var toSpace = from + value;
+            var move = 1;
+            if (traps[toSpace] != 0)
+            {
+                if (traps[toSpace] < 1)
+                    move = -1;
+                toSpace += move;
+            }
 
-            return initialPosition;
+            var N = 0;
+            var M = 0;
+            for (int i = 0; i < 5; i++) 
+                if (pos.Location[i] == from && pos.Height[i] >= fromHeight) 
+                    N++;
+
+            for (int x = from + 1; x < toSpace; x++)
+            {
+                for (int i = 0; i < 5; i++)
+                    if (pos.Location[i] == x) 
+                    {
+                        pos.Height[i] -= N;
+                        M++;
+                    }
+            }
+
+            if (move == 1)
+            {
+                for (int i = 0; i < 5; i++)
+                    if (pos.Location[i] == toSpace) 
+                    {
+                        pos.Height[i] -= N;
+                        M++;
+                    }
+            }
+
+            for (int i = 0; i < 5; i++) {
+                if (pos.Location[i] == from  && pos.Height[i] >= fromHeight) {
+                    pos.Location[i] = toSpace;
+                    pos.Height[i] += M;
+                }
+            }
+
+            return pos;
         }
 
         struct CamelPositions {

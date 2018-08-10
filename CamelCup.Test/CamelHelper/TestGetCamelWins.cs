@@ -19,11 +19,11 @@ namespace CamelCup.Test
             var gamestate = new ImplementedGameState(1, startingPositions);
             var wins = CamelHelper.GetCamelWins(gamestate);
             
-            Assert.AreEqual(0, wins[CamelColor.Blue], "blue");
-            Assert.AreEqual(0, wins[CamelColor.Green], "green");
-            Assert.AreEqual(0, wins[CamelColor.Orange], "orange");
-            Assert.AreEqual(0, wins[CamelColor.Red], "red");
-            Assert.AreEqual(29160, wins[CamelColor.Yellow], "yellow");
+            Assert.AreEqual(3107, wins[CamelColor.Blue], "blue");
+            Assert.AreEqual(6226, wins[CamelColor.Green], "green");
+            Assert.AreEqual(9329, wins[CamelColor.Orange], "orange");
+            Assert.AreEqual(3302, wins[CamelColor.Red], "red");
+            Assert.AreEqual(7196, wins[CamelColor.Yellow], "yellow");
         }
     }
 }

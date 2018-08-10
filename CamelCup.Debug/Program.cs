@@ -22,6 +22,11 @@ namespace CamelCup.Debug
             watch.Stop();
 
             Console.WriteLine(wins.Sum(x => x.Value));
+            foreach (var win in wins)
+            {
+                Console.WriteLine($"{win.Key}: {win.Value}");
+            }
+
             Console.WriteLine($"{watch.ElapsedMilliseconds} ms");
         }
     }
