@@ -174,7 +174,7 @@ namespace Delver.CamelCup
             return result;
         }
 
-        public static Dictionary<CamelColor, int> GetCamelWins(this GameState gameState) 
+        public static Dictionary<CamelColor, int> GetCamelWins(this GameState gameState, out int[] money) 
         {
             var colors = gameState.RemainingDice.ToArray();
             var initialPosition = ConvertGameStateToCamelPosition(gameState);
@@ -188,9 +188,15 @@ namespace Delver.CamelCup
             foreach (var camel in CamelHelper.GetAllCamelColors())
                 result.Add(camel, 0);
 
+            money = new int[16];
+
             foreach (var pos in positions)
             {
                 var winner = (CamelColor)Array.IndexOf(pos.Height, 4);
+
+                for (int i = 1; i < 16; i++)
+                    money[i] += pos.Money[i];
+
                 result[winner]++;
             }
 
@@ -202,6 +208,7 @@ namespace Delver.CamelCup
             var pos = new CamelPositions() {  };
             pos.Location = gameState.Camels.OrderBy(x => (int)x.CamelColor).Select(x => x.Location).ToArray();
             pos.Height = gameState.Camels.OrderBy(x => (int)x.CamelColor).Select(x => x.Height).ToArray();
+            pos.Money = new int[16];
             return pos;
         }
 
@@ -235,7 +242,8 @@ namespace Delver.CamelCup
             var pos = new CamelPositions() 
             {
                 Location = initialPosition.Location.ToArray(),
-                Height = initialPosition.Height.ToArray()
+                Height = initialPosition.Height.ToArray(),
+                Money = initialPosition.Money.ToArray()
             };
 
             var from = pos.Location[dice];
@@ -244,6 +252,7 @@ namespace Delver.CamelCup
             var move = 1;
             if (traps[toSpace] != 0)
             {
+                pos.Money[toSpace]++;
                 if (traps[toSpace] < 1)
                     move = -1;
                 toSpace += move;
@@ -288,6 +297,7 @@ namespace Delver.CamelCup
         struct CamelPositions {
             public int[] Location;
             public int[] Height;
+            public int[] Money;
         }
     }
 }

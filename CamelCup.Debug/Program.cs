@@ -18,7 +18,7 @@ namespace CamelCup.Debug
             var gamestate = new ImplementedGameState(1, startingPositions);
 
             var watch = System.Diagnostics.Stopwatch.StartNew();
-            var wins = CamelHelper.GetCamelWins(gamestate);
+            var wins = CamelHelper.GetCamelWins(gamestate, out int[] money);
             watch.Stop();
 
             Console.WriteLine(wins.Sum(x => x.Value));
