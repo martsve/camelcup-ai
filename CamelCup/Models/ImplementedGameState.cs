@@ -17,12 +17,13 @@ namespace Delver.CamelCup
 
         }
 
-        public ImplementedGameState(int players, Dictionary<CamelColor, Position> startingPositions,  int boardSize = 16, int startingMoney = 3) : this()
+        public ImplementedGameState(int players, Dictionary<CamelColor, Position> startingPositions, int boardSize = 16, int startingMoney = 3) : this()
         {
             RemainingDice = CamelHelper.GetAllCamelColors();
             BettingCards = ImplementedBettingCard.GetAllBettingCards();
 
             BoardSize = boardSize;
+            Round = 0;
 
             for (int i = 0; i < players; i++)
             {

@@ -136,6 +136,7 @@ namespace Delver.CamelCup
             CurrentPlayer = StartingPlayer;
             GameState.RemainingDice = CamelHelper.GetAllCamelColors();
             GameState.BettingCards = ImplementedBettingCard.GetAllBettingCards();
+            GameState.Round++;
 
             foreach (var playerTrapPair in GameState.Traps)
                 playerTrapPair.Value.Location = -1;            

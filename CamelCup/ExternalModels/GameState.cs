@@ -10,7 +10,7 @@ namespace Delver.CamelCup.External
 {
     public class GameState 
     {
-        public int CurrentPlayer { get; set; }
+        public int Round { get; set; }
 
         public int BoardSize { get; set; }
 
@@ -32,7 +32,7 @@ namespace Delver.CamelCup.External
         {
            return new GameState() 
             {
-                CurrentPlayer = CurrentPlayer,
+                Round = Round,
                 BoardSize = BoardSize,
                 Camels = Camels.Select(x => x.Clone()).ToList(),
                 Traps = Traps.ToDictionary(x => x.Key, x => x.Value.Clone()),

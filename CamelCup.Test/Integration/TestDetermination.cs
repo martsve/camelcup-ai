@@ -21,6 +21,7 @@ namespace CamelCup.Test
             var gameState = game.GameState;
             Assert.AreEqual(0, game.StartingPlayer, "starting player");
             Assert.AreEqual(1, game.CurrentPlayer, "current player");
+            Assert.AreEqual(0, gameState.Round, "round");
 
             Assert.AreEqual(3, gameState.Money[0], "player 0 money");
             Assert.AreEqual(3, gameState.Money[1], "player 1 money");
@@ -44,6 +45,7 @@ namespace CamelCup.Test
 
             Assert.AreEqual(0, game.StartingPlayer, "starting player");
             Assert.AreEqual(1, game.CurrentPlayer, "current player");
+            Assert.AreEqual(0, gameState.Round, "round");
 
             Assert.AreEqual(5, gameState.Money[0], "player 0 money");
             Assert.AreEqual(3, gameState.Money[1], "player 1 money");
@@ -67,6 +69,7 @@ namespace CamelCup.Test
 
             Assert.AreEqual(1, game.StartingPlayer, "starting player");
             Assert.AreEqual(1, game.CurrentPlayer, "current player");
+            Assert.AreEqual(1, gameState.Round, "round");
 
             Assert.AreEqual(8, gameState.Money[0], "player 0 money");
             Assert.AreEqual(6, gameState.Money[1], "player 1 money");
@@ -90,6 +93,7 @@ namespace CamelCup.Test
 
             Assert.AreEqual(0, game.StartingPlayer, "starting player");
             Assert.AreEqual(0, game.CurrentPlayer, "current player");
+            Assert.AreEqual(2, gameState.Round, "round");
 
             Assert.AreEqual(8, gameState.Money[0], "player 0 money");
             Assert.AreEqual(17, gameState.Money[1], "player 1 money");
@@ -115,6 +119,7 @@ namespace CamelCup.Test
 
             Assert.AreEqual(0, game.StartingPlayer, "starting player");
             Assert.AreEqual(0, game.CurrentPlayer, "current player");
+            Assert.AreEqual(4, gameState.Round, "round");
 
             Assert.AreEqual(19, gameState.Money[0], "player 0 money");
             Assert.AreEqual(29, gameState.Money[1], "player 1 money");
