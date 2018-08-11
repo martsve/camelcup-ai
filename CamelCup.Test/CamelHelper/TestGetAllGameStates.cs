@@ -4,6 +4,7 @@ using Delver.CamelCup.MartinBots;
 using System.Linq;
 using Delver.CamelCup.External;
 using System.IO;
+using System.Collections.Generic;
 
 namespace CamelCup.Test
 {
@@ -16,6 +17,11 @@ namespace CamelCup.Test
         private static string[] depth3positions  = File.ReadAllLines("ExpectedResults/Positions_Depth_3.txt").Select(x => x.Trim()).ToArray(); 
         private static string[] depth4positions  = File.ReadAllLines("ExpectedResults/Positions_Depth_4.txt").Select(x => x.Trim()).ToArray(); 
 
+        private string CamelsToString(List<Camel> camels)
+        {
+            return string.Join(" ", camels.Select(x => $"{x.Location},{x.Height}"));
+        }
+
         [TestMethod]
         public void CamelHelper_GetallGameStates_Depth_0()
         {
@@ -27,7 +33,7 @@ namespace CamelCup.Test
 
             Assert.AreEqual(15, states.Count, "final states");
 
-            var positions = states.Select(x => TestHelper.CamelPositionToString(x)).ToList();
+            var positions = states.Select(x => CamelsToString(x)).ToList();
 
             foreach (var pos in depth0positions)
                 Assert.IsTrue(positions.Contains(pos), "Can't find state: " + pos);
@@ -44,7 +50,7 @@ namespace CamelCup.Test
 
             Assert.AreEqual(15*12, states.Count, "final states");
 
-            var positions = states.Select(x => TestHelper.CamelPositionToString(x)).ToList();
+            var positions = states.Select(x => CamelsToString(x)).ToList();
 
             foreach (var pos in depth0positions)
                 Assert.IsTrue(!positions.Contains(pos), "Found state: " + pos);
@@ -64,7 +70,7 @@ namespace CamelCup.Test
 
             Assert.AreEqual(15*12 + 15, states.Count, "final states");
 
-            var positions = states.Select(x => TestHelper.CamelPositionToString(x)).ToList();
+            var positions = states.Select(x => CamelsToString(x)).ToList();
 
             foreach (var pos in depth0positions)
                 Assert.IsTrue(positions.Contains(pos), "Can't find state: " + pos);
@@ -84,7 +90,7 @@ namespace CamelCup.Test
 
             Assert.AreEqual(15*12*9, states.Count, "final states");
 
-            var positions = states.Select(x => TestHelper.CamelPositionToString(x)).ToList();
+            var positions = states.Select(x => CamelsToString(x)).ToList();
 
             foreach (var pos in depth1positions)
                 Assert.IsTrue(!positions.Contains(pos), "Found depth 1 state: " + pos);
@@ -104,7 +110,7 @@ namespace CamelCup.Test
 
             Assert.AreEqual(15*12*9*6, states.Count, "final states");
 
-            var positions = states.Select(x => TestHelper.CamelPositionToString(x)).ToList();
+            var positions = states.Select(x => CamelsToString(x)).ToList();
 
             foreach (var pos in depth3positions)
                 Assert.IsTrue(positions.Contains(pos), "Can't find state: " + pos);
@@ -121,7 +127,7 @@ namespace CamelCup.Test
 
             Assert.AreEqual(15*12*9*6*3, states.Count, "final states");
 
-            var positions = states.Select(x => TestHelper.CamelPositionToString(x)).ToList();
+            var positions = states.Select(x => CamelsToString(x)).ToList();
 
             foreach (var pos in depth4positions)
                 Assert.IsTrue(positions.Contains(pos), "Can't find state: " + pos);
@@ -139,7 +145,7 @@ namespace CamelCup.Test
 
             Assert.AreEqual(15*12*9*6*3, states.Count, "final states");
 
-            var positions = states.Select(x => TestHelper.CamelPositionToString(x)).ToList();
+            var positions = states.Select(x => CamelsToString(x)).ToList();
 
             foreach (var pos in depth4positions)
                 Assert.IsTrue(positions.Contains(pos), "Can't find state: " + pos);

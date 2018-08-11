@@ -130,6 +130,11 @@ namespace Delver.CamelCup
             }
         }
 
+        public List<Player> Winners()
+        {
+            return RulesEngine.GetWinners().Select(x => Players[x]).ToList();
+        }
+
         private void ResetRound()
         {
             StartingPlayer = (StartingPlayer + 1) % Players.Count;

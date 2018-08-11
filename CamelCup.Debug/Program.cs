@@ -12,6 +12,14 @@ namespace CamelCup.Debug
     {
         static void Main(string[] args)
         {
+            var startString = "1,0 1,1 1,2 2,3 2,4";
+            var startingPositions = TestHelper.ConvertToStartingPositions(startString);
+            var gamestate = new ImplementedGameState(1, startingPositions);
+            var states = CamelHelper.GetAllGameEndStates(gamestate, 1, includeAllStates: true);
+        }
+
+        static void N()
+        {
             // 1: blue, green, orange | 2: red, yellow
             var startString = "1,0 1,1 1,2 2,3 2,4";
             var startingPositions = TestHelper.ConvertToStartingPositions(startString);

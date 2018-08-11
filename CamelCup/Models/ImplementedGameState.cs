@@ -32,7 +32,7 @@ namespace Delver.CamelCup
             }
 
             var h = 0;
-            foreach (var item in startingPositions.OrderBy(x => x.Value.Height))
+            foreach (var item in startingPositions.OrderBy(x => x.Value.Location).ThenBy(x => x.Value.Height))
             {
                 Camels.Add(new Camel() {
                     CamelColor = item.Key,

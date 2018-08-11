@@ -89,7 +89,7 @@ namespace Delver.CamelCup
                 Step++;
             }
 
-            foreach (var winner in CamelHelper.GetWinners(game.GameState).Select(x => Players[x]))
+            foreach (var winner in game.Winners())
             {
                 winner.Wins++;
             }

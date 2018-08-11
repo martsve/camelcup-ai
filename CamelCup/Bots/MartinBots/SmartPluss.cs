@@ -9,9 +9,8 @@ namespace Delver.CamelCup.MartinBots
     public class SmartPluss : ICamelCupPlayer
     {
         private int Me;
-        private static Random rnd = new Random();
 
-        public SmartPluss(int seed = -1)
+        public SmartPluss()
         {
 
         }
@@ -41,13 +40,13 @@ namespace Delver.CamelCup.MartinBots
             if (myTrap.Value == null) 
             {
                 var freeLocations = gameState.GetFreeTrapSpaces(Me, true);
-                var bestSum = 0;
+                var bestSum = 1;
                 foreach (var location in freeLocations) {
-                    var newState = gameState.Apply(new PlussTrapStateChange(Me, location));
-                    var endStates = CamelHelper.GetAllGameEndStates(newState, 2);
-                    var sum = endStates.Sum(x => x.Money.First(y => y.Key == Me).Value);
-                    if (sum > bestSum) {
-                        bestSum = sum;
+                    gameState.Traps[Me].Location = location;
+                    gameState.Traps[Me].Move = 1;
+                    CamelHelper.GetCamelWins(gameState, out int[] money, depth: 2);
+                    if (money[location] > bestSum) {
+                        bestSum = money[location];
                         bestAction = new PlayerAction() { CamelAction = CamelAction.PlacePlussTrap, Value = location };
                     }
                 }
