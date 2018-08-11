@@ -18,10 +18,15 @@ namespace Delver.CamelCup
             var runner = new CamelRunner(TimeScalingFactor: timeScalingFactor);
             runner.LoadPlayers(filename);
 
-            for (int i = 0; i < 1000; i++)
+            var history = runner.GetPlayers().ToDictionary(x => x, x => new List<TimeSpan>());
+
+            for (int i = 0; i < 250; i++)
             {
                 runner.ComputeNewGame();
                 Console.WriteLine($"Game #{i} finished");
+
+                foreach (var player in runner.GetPlayers())
+                    history[player].Add(player.ComputationTime);
             } 
 
             runner.Save();
@@ -32,7 +37,8 @@ namespace Delver.CamelCup
             Console.WriteLine($"{title,-32} Wins");
             foreach (var player in players.OrderByDescending(x => x.Wins))
             {
-                Console.WriteLine($"{player.Name,-32} {player.Wins}");
+                var avgTime = history[player].Average(x => x.TotalSeconds);
+                Console.WriteLine($"{player.Name,-32} {player.Wins, -6} {avgTime:0.000}s");
             }    
             
             Console.ReadLine();       

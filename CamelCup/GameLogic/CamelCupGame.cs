@@ -169,7 +169,8 @@ namespace Delver.CamelCup
                 action.Invoke();
             }
             catch (PlayerLoseesException ex) {
-                Trace.WriteLine($"Game {GameId}: Player {ex.PlayerId} loses the game to Exception/Timeout");
+                var name = Players[ex.PlayerId].Name;
+                Trace.WriteLine($"Game {GameId}: Player {name} loses the game to Exception/Timeout");
                 Players[ex.PlayerId].Disqualified = true;
                 GameState.Money[ex.PlayerId] = 0;
             }

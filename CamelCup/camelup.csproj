@@ -9,4 +9,10 @@
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="players.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>  
+  </ItemGroup>
+
 </Project>

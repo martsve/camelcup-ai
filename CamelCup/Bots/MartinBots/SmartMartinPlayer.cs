@@ -27,7 +27,7 @@ namespace Delver.CamelCup.MartinBots
 
         public PlayerAction GetAction(GameState gameState)
         {
-            var camelWins = CamelHelper.GetCamelWins(gameState, out int[] money, 3);
+            var camelWins = CamelHelper.GetCamelWins(gameState, out int[] money, 5);
             var sum = (double)camelWins.Sum(x => x.Value);
             var probability = camelWins.ToDictionary(x => x.Key, x => x.Value / sum);
             var bettingCards = gameState.BettingCards
