@@ -1,8 +1,50 @@
 <html>
 <head>
     <title>CamelCup-Ai-Cup</title>
+    <script src='jquery-3.3.1.min.js'></script>
 </head>
 <body>
-    
+    <input type="button" value='New' id='new'>
+    <input type="button" value='Run' id='run'>
+    <input type="button" value='Stop' id='stop'>
+
+
+    <div id='data'>data</div>
+
+    <script>
+    $(function() {
+        function update()
+        {
+            $.get("/api/cup", function (data) { 
+                showGameData(data);
+            });
+            setTimeout(update, 1000);
+        }
+
+        function showGameData(data)
+        {
+            var gameId = data.gameId;
+            var content = "GameId: " + gameId;
+            var players = data.players;
+            players.sort(function (x, y) {
+                return x.wins < y.wins;
+            });
+
+            for (var key in players)
+            {
+                var player = data.players[key];
+                content += "<br />" + player.name + ": " + player.wins;    
+            }
+
+            $('#data').html(content); 
+        }
+
+        $('#new').on('click', function() {  $.get("/api/cup/new") });
+        $('#run').on('click', function() {  $.get("/api/cup/run") });
+        $('#stop').on('click', function() {  $.get("/api/cup/stop") });
+
+        setTimeout(update, 1000);
+    });
+    </script>
 </body>
 </html> 

@@ -40,6 +40,7 @@ namespace Delver.CamelCup
         {
             var player = new Player(playerInterface, MaxComputeTimePerAction, MaxComputeTimePerGame);
             player.PerformAction(x => x.Load());
+            player.PerformAction(x => player.Name = x.GetPlayerName());
             Players.Add(player);
         }
 

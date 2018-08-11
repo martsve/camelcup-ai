@@ -40,14 +40,6 @@ namespace Delver.CamelCup
 
         public void StartGame() 
         {            
-            for (int i = 0; i < Players.Count; i++) 
-            {
-                var player = Players[i];
-                Attempt(() => {
-                    player.PerformAction(x => player.Name = x.GetPlayerName());
-                });
-            }
-
             var gameStateClone = GameState.Clone(true);
             var playerNames = Players.Select(x => x.Name).ToArray();
 
