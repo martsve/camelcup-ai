@@ -11,7 +11,7 @@ namespace Delver.CamelCup
 {
     public class CamelCupGame 
     {
-        public Guid GameId { get; } = Guid.NewGuid();
+        public Guid GameId { get; }
 
         public ImplementedGameState GameState { get; set; }
 
@@ -36,6 +36,16 @@ namespace Delver.CamelCup
             }
 
             RulesEngine = new RulesEngine(GameState, seed);
+            
+            GameId = GenerateSeededGuid(seed);
+        }
+
+        private Guid GenerateSeededGuid(int seed)
+        {
+            var r = new Random(seed);
+            var guid = new byte[16];
+            r.NextBytes(guid);
+            return new Guid(guid);
         }
 
         public void StartGame() 

@@ -13,59 +13,60 @@ namespace Web.Controllers
     [Route("api/[controller]")]
     public class CupController : Controller
     {
-        public static CupRunner Runner;
+        public static CamelService CamelService;
 
         public class RunnerState
         {
             public List<Player> Players;
-            public Guid GameId;
+            public Guid CupId;
         }
 
         [HttpGet("new")]
         public Guid New(string id = null)
         {
-            if (Runner != null)
-            {
-                Runner.Stop();
-            }
+            CamelService?.Stop();
 
             Guid? guid = id != null ? (Guid?)Guid.Parse(id) : null;
-            Runner = new CupRunner(guid);
-            Runner.Load();
-            return Runner.GameId;
+            CamelService = new CamelService(guid);
+            CamelService.Load();
+            return CamelService.CupId;
         }
 
         [HttpGet]
         public RunnerState GetInfo()
         {
-            if (Runner == null)
+            if (CamelService == null)
             {
                 return null;
             }
 
-            var runner = Runner.Runner;
+            var runner = CamelService.Runner;
 
             var result = new RunnerState()
             {
                 Players = runner.GetPlayers().ToList(),
-                GameId = Runner.GameId
+                CupId = CamelService.CupId
             };
 
             return result;
+        }       
+
+        [HttpGet("history")]
+        public List<Guid> History()
+        {
+            return CamelService?.GameIdHistory;
         }
 
         [HttpGet("run")]
         public void Run()
         {
-            if (Runner != null)
-                Runner.Run();
+            CamelService?.Run();
         }
         
         [HttpGet("stop")]
         public void Stop()
         {
-            if (Runner != null)
-                Runner.Stop();
+            CamelService?.Stop();
         }
     }
 }

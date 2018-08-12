@@ -5,23 +5,27 @@ using Delver.CamelCup.External;
 using System;
 using System.Threading.Tasks;
 using System.Threading;
+using System.Collections.Generic;
 
 namespace CamelCup.Web
 {
-    public class CupRunner
+    public class CamelService
     {
         public CamelRunner Runner { get; set; }
 
-        public Guid GameId { get; set; }
+        public Guid CupId { get; set; }
+
+        public List<Guid> GameIdHistory { get; set; }
 
         private Task GameTask { get; set; }
         private CancellationTokenSource cts;
 
-        public CupRunner(Guid? gameId = null)
+        public CamelService(Guid? cupId = null)
         {
-            GameId = gameId ?? Guid.NewGuid();
-            var seed = GameId.GetHashCode();
+            CupId = cupId ?? Guid.NewGuid();
+            var seed = CupId.GetHashCode();
             Runner = new CamelRunner(seed: seed);
+            GameIdHistory = new List<Guid>();
         }
 
         public void Load()
@@ -54,7 +58,8 @@ namespace CamelCup.Web
         {
             while (!cancelToken.IsCancellationRequested)
             {
-                Runner.ComputeNewGame();
+                var game = Runner.ComputeNewGame();
+                GameIdHistory.Add(game.GameId);
             }
         }
     }

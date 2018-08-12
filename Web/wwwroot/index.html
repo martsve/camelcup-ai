@@ -23,8 +23,7 @@
 
         function showGameData(data)
         {
-            var gameId = data.gameId;
-            var content = "GameId: " + gameId;
+            var content = "CupId: " + data.cupId;
             var players = data.players;
             players.sort(function (x, y) {
                 return x.wins < y.wins;
@@ -33,8 +32,10 @@
             for (var key in players)
             {
                 var player = data.players[key];
-                content += "<br />" + player.name + ": " + player.wins;    
+                content += "<br /><li>" + player.name + ": " + player.wins+ "</li>";    
             }
+
+            content += "<br /><br/>" + JSON.stringify(data.gameHistory);
 
             $('#data').html(content); 
         }
