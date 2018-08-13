@@ -7,23 +7,54 @@
     <input type="button" value='New' id='new'>
     <input type="button" value='Run' id='run'>
     <input type="button" value='Stop' id='stop'>
+    <input type="button" value='Get one' id='single'>
+    <input type="button" value='Play' id='play'><br />
 
+    <form id='uploadForm' method='post' enctype="multipart/form-data">
+        <input type="file" id="browse" name="fileupload" multiple style="display: none" onChange="Handlechange();"/>
+    </form>
+    
+    <input type="button" value='Upload new player' id='upload'>
+    <select id='players'>
+    </select>
+    <input type="button" value='Add' id='add'>
 
-    <div id='data'>data</div>
+    <div id='data'></div>
 
     <script>
+        
+    function Handlechange()
+    {
+        var fd = new FormData($("#uploadForm")[0]);
+        $.ajax({
+            url: "/api/cup/upload",
+            type: 'POST',
+            data: fd,
+            cache: false,
+            processData: false,
+            contentType: false,
+            success: function(data)
+            {
+                console.log(data);
+                UpdateBotList();
+            }
+        });
+    }
+    
     $(function() {
+        var lastSingleGame = null;
         function update()
         {
             $.get("/api/cup", function (data) { 
-                showGameData(data);
+                if (data)
+                    showGameData(data);
             });
             setTimeout(update, 1000);
         }
 
         function showGameData(data)
         {
-            var content = "CupId: " + data.cupId;
+            var content = "CupId: " + data.cupId + "<ul>";
             var players = data.players;
             players.sort(function (x, y) {
                 return x.wins < y.wins;
@@ -32,20 +63,45 @@
             for (var key in players)
             {
                 var player = data.players[key];
-                content += "<br /><li>" + player.name + ": " + player.wins+ "</li>";    
+                content += "<li>" + player.name + ": " + player.wins+ "</li>";    
             }
 
-            content += "<br /><br/>" + JSON.stringify(data.gameHistory);
+            content += "</ul><br /><pre>" + JSON.stringify(lastSingleGame, null, 2);
 
             $('#data').html(content); 
         }
+        
+        $('#upload').on('click', function() { $('#browse').click(); });
+        $('#add').on('click', function() { $.get("/api/cup/add/" + $('#players').val()); });
 
-        $('#new').on('click', function() {  $.get("/api/cup/new") });
-        $('#run').on('click', function() {  $.get("/api/cup/run") });
-        $('#stop').on('click', function() {  $.get("/api/cup/stop") });
+        $('#new').on('click', function() {  $.get("/api/cup/new"); });
+        $('#run').on('click', function() {  $.get("/api/cup/run"); });
+        $('#stop').on('click', function() {  $.get("/api/cup/stop"); });
+        $('#single').on('click', function() {  $.get("/api/cup/single", function (data) { lastSingleGame = data; }); });
 
         setTimeout(update, 1000);
+
+        UpdateBotList();
     });
+
+    function UpdateBotList()
+    {
+        $.get('/api/cup/bots', function (data) {
+            var $select = $('#players');
+            $select.find('option').remove();
+            for (var key in data) 
+            {
+                var name = htmlEncode(data[key].botName);
+                $select.append('<option value="' + data[key].id + '">' + name + '</option>');
+            }
+        });
+    }
+    function htmlEncode(value){
+    //create a in-memory div, set it's inner text(which jQuery automatically encodes)
+    //then grab the encoded contents back out.  The div never exists on the page.
+    return $('<div/>').text(value).html();
+    }
+
     </script>
 </body>
 </html> 

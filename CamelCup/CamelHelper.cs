@@ -133,7 +133,7 @@ namespace Delver.CamelCup
         {
             var positions = GetCamelEndPositions(gameState, depth, includeAll: true);
             var result = new Dictionary<int, int>();
-            for (int i = 0; i < gameState.BoardSize; i++)
+            for (int i = 0; i < gameState.BoardSize + 3; i++)
             {
                 result[i] = 0;
             }

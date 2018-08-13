@@ -12,7 +12,7 @@ namespace Delver.CamelCup
 {
     public class Player 
     {
-        private int playerId;
+        public int PlayerId;
 
         public string Name { get; set; }
 
@@ -36,7 +36,7 @@ namespace Delver.CamelCup
 
         public void Reset(int playerId) 
         {
-            this.playerId = playerId;
+            this.PlayerId = playerId;
             Disqualified = false;
             ComputationTime = TimeSpan.FromMilliseconds(0);
         }
@@ -61,11 +61,11 @@ namespace Delver.CamelCup
 
                 if (watch.Elapsed > MaxActionTime || ComputationTime > MaxGameTime)
                 {
-                    throw new PlayerLoseesException(playerId);
+                    throw new PlayerLoseesException(PlayerId);
                 }
             }
             catch {
-                throw new PlayerLoseesException(playerId);
+                throw new PlayerLoseesException(PlayerId);
             }
         }
     }

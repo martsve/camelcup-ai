@@ -45,10 +45,11 @@ namespace CamelCup.Test
             runner.AddPlayer(new RandomBot(1, seed: 2));
             runner.AddPlayer(bot);
 
-            var game = runner.ComputeNewGame(steps: 1);
+            var game = runner.ComputeSeededGame(1, 3, 3, steps: 1);
 
             Assert.AreEqual("RandomBot #1", bot.GameInfo.Players[0], "name");
             Assert.AreEqual("TestBot", bot.GameInfo.Players[1], "name");
+            
             Assert.AreEqual(1, bot.PlayerNum, "testbot order");
             Assert.AreEqual(1, bot.CalledPlayerName, "player name");
             Assert.AreEqual(1, bot.CalledLoad, "load");
@@ -112,13 +113,13 @@ namespace CamelCup.Test
             runner.AddPlayer(new RandomBot(1, seed: 2));
             runner.AddPlayer(bot);
 
-            var game = runner.ComputeNewGame();
+            var game = runner.ComputeSeededGame(1, 2, 3);
 
             Assert.AreEqual(1, bot.CalledPlayerName, "player name");
             Assert.AreEqual(1, bot.CalledLoad, "load");
             Assert.AreEqual(1, bot.CalledStart, "start");
-            Assert.AreEqual(13, bot.CalledAction, "action");
-            Assert.AreEqual(26, bot.CalledInform, "inform");
+            Assert.AreEqual(19, bot.CalledAction, "action");
+            Assert.AreEqual(38, bot.CalledInform, "inform");
             Assert.AreEqual(1, bot.CalledWinners, "winners");
 
             Assert.AreEqual(0, bot.CalledSave, "save");

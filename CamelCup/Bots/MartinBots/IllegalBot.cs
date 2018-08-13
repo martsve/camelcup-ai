@@ -20,6 +20,10 @@ namespace Delver.CamelCup.MartinBots
 
         private static Random rnd = new Random();
 
+        public IllegalBot() : this(1)
+        {
+        }
+
         public IllegalBot(int num = 1, bool usePlusTrap = true, bool useMinusTrap = true, bool betOnWinner = true, bool betOnLoser = true)
         {
             name = $"IllegalBot #{num}";

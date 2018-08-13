@@ -20,12 +20,16 @@ namespace Delver.CamelCup
 
         public override void Apply(GameState gameState)
         {
-            gameState.Money[Player] += 1;
+            ChildChanges = new List<StateChange>();
+
             gameState.RemainingDice.Remove(Color);
+
+            gameState.Money[Player] += 1;
+            ChildChanges.Add(new StateChange(StateAction.GetMoney, Player, Color, 1));
 
             var mainCamel = gameState.Camels.First(x => x.CamelColor == Color);
             var camelStack = gameState.Camels.Where(x => x.Location == mainCamel.Location && x.Height >= mainCamel.Height).ToList();
-            movedStack = camelStack.Select(x => x.CamelColor).ToList();
+            movedStack = camelStack.OrderBy(x => x.Height).Select(x => x.CamelColor).ToList();
 
             oldLocation = mainCamel.Location;
 
@@ -36,9 +40,13 @@ namespace Delver.CamelCup
             {
                 trapPlayer = trap.Key;
                 gameState.Money[trapPlayer] += 1;
+                ChildChanges.Add(new MoveStackStateChange(movedStack, oldLocation, newLocation, onTop));
+                ChildChanges.Add(new StateChange(StateAction.GetMoney, trapPlayer, Color, 1));
                 newLocation += trap.Value.Move;
                 onTop = trap.Value.Move > 0;
             }
+
+            ChildChanges.Add(new MoveStackStateChange(movedStack, oldLocation, newLocation, onTop));
 
             MoveStack(gameState.Camels, camelStack, newLocation, onTop);
         }

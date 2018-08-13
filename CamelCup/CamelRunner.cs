@@ -22,6 +22,10 @@ namespace Delver.CamelCup
         private Random rnd;
 
         private List<Player> Players = new List<Player>();
+        
+        public int? StartPositionSeed;
+        public int? PlayerOrderSeed;
+        public int? GameSeed;
 
         public CamelRunner(int seed = -1, double TimeScalingFactor = 1.0)
         {
@@ -75,9 +79,18 @@ namespace Delver.CamelCup
 
         public CamelCupGame ComputeNewGame(int steps = -1)
         {
-            var startPos = GetRandomStartingPositions();
-            Players = GetRandomPlayerOrder(Players);
-            var game = new CamelCupGame(Players, startPos, rnd.Next());
+            return ComputeSeededGame(rnd.Next(), rnd.Next(), rnd.Next(), steps);
+        }
+        
+        public CamelCupGame ComputeSeededGame(int startPosSeed, int playerOrderSeed, int gameSeed, int steps = -1)
+        {
+            StartPositionSeed = startPosSeed;
+            PlayerOrderSeed = playerOrderSeed;
+            GameSeed = gameSeed;
+
+            var startPos = GetRandomStartingPositions(startPosSeed);
+            Players = GetRandomPlayerOrder(Players, playerOrderSeed);
+            var game = new CamelCupGame(Players, startPos, gameSeed);
 
             game.StartGame();
 
@@ -98,14 +111,20 @@ namespace Delver.CamelCup
             return game;
         }
 
-        private Dictionary<CamelColor, Position> GetRandomStartingPositions() 
+        private Dictionary<CamelColor, Position> GetRandomStartingPositions(int seed) 
         {
+            var rnd = new Random(seed);
             int i = 0;
             return CamelHelper.GetAllCamelColors().ToDictionary(x => x, x => new Position { Location = rnd.Next(0, 2), Height = i++ });
         }
 
-        private List<Player> GetRandomPlayerOrder(List<Player> players)
+        private List<Player> GetRandomPlayerOrder(List<Player> players, int seed)
         {
+            var rnd = new Random(seed);
+
+            // make original order not matter for determination
+            players = players.OrderBy(x => x.Name).ToList();
+
             return players.OrderBy(x => rnd.Next()).ToList();
         }
     }

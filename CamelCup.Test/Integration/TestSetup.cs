@@ -23,13 +23,13 @@ namespace CamelCup.Test
             Assert.AreEqual(16, gameState.BoardSize, "board");
             Assert.AreEqual(5, gameState.Camels.Count, "camels");
 
-            Assert.AreEqual("0,0 0,1 0,2 1,3 1,4", gameState.CamelPositionToString(), "Camel positions");
+            Assert.AreEqual("0,0 0,1 1,2 1,3 1,4", gameState.CamelPositionToString(), "Camel positions");
 
             var camelOrder = gameState.GetLeadingOrder();
             Assert.AreEqual(CamelColor.Yellow, camelOrder.Skip(0).First(), "camel 0");
             Assert.AreEqual(CamelColor.Red, camelOrder.Skip(1).First(), "camel 1");
-            Assert.AreEqual(CamelColor.Orange, camelOrder.Skip(2).First(), "camel 2");
-            Assert.AreEqual(CamelColor.Green, camelOrder.Skip(3).First(), "camel 3");
+            Assert.AreEqual(CamelColor.Green, camelOrder.Skip(2).First(), "camel 2");
+            Assert.AreEqual(CamelColor.Orange, camelOrder.Skip(3).First(), "camel 3");
             Assert.AreEqual(CamelColor.Blue, camelOrder.Skip(4).First(), "camel 4");
 
             Assert.AreEqual(0, game.StartingPlayer, "starting player");

@@ -6,6 +6,7 @@ using System;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Collections.Generic;
+using Web.Models;
 
 namespace CamelCup.Web
 {
@@ -36,6 +37,11 @@ namespace CamelCup.Web
             Runner.AddPlayer(new SmartMartinPlayer());
         }
 
+        public void Load(ICamelCupPlayer player)
+        {
+            Runner.AddPlayer(player);
+        }
+
         public void Run()
         {
             Stop();
@@ -52,6 +58,24 @@ namespace CamelCup.Web
                     Thread.Sleep(100);
                 }
             }
+        }
+        
+        public GameResult GetGame()
+        {
+            var game = Runner.ComputeNewGame();
+            GameIdHistory.Add(game.GameId);
+            
+            return new GameResult()
+            {
+                 StartPositionSeed = Runner.StartPositionSeed,
+                 GameSeed = Runner.GameSeed,
+                 PlayerOrderSeed = Runner.PlayerOrderSeed,
+                 History = game.History,
+                 GameId = game.GameId,
+                 EndState = game.GameState,
+                 Players = Runner.GetPlayers().ToDictionary(x => x.PlayerId, x => x.Name),
+                 Winners = game.Winners().Select(x => x.PlayerId).ToList()
+            };
         }
 
         private void ComputeGame(CancellationToken cancelToken)

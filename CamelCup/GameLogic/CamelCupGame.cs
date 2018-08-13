@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -23,6 +25,8 @@ namespace Delver.CamelCup
 
         private RulesEngine RulesEngine { get; set; }
 
+        public List<StateChange> History { get; set; }
+
         public CamelCupGame(List<Player> players, Dictionary<CamelColor, Position> startingPositions, int seed = -1) 
         {
             Players = players;
@@ -35,14 +39,26 @@ namespace Delver.CamelCup
                 seed = unchecked((int)DateTime.Now.Ticks);
             }
 
+            GameId = GenerateSeededGuid(seed, players, GameState.Camels);
+
             RulesEngine = new RulesEngine(GameState, seed);
-            
-            GameId = GenerateSeededGuid(seed);
+            History = new List<StateChange>();
         }
 
-        private Guid GenerateSeededGuid(int seed)
+        private Guid GenerateSeededGuid(int gameSeed, List<Player> players, List<Camel> camels)
         {
+            var playerString = string.Join(";", players.Select(x => x.Name));
+            var startingPositions = camels.OrderBy(x => x.CamelColor).Select(x => $"{x.Location},{x.Height}").ToList();
+            var startPosString = string.Join(";", startingPositions);
+
+            var seedString = $"{gameSeed};{playerString};{startPosString}";
+
+            MD5 md5Hasher = MD5.Create();
+            var hashed = md5Hasher.ComputeHash(Encoding.UTF8.GetBytes(seedString));
+            var seed = BitConverter.ToInt32(hashed, 0);
+
             var r = new Random(seed);
+
             var guid = new byte[16];
             r.NextBytes(guid);
             return new Guid(guid);
@@ -156,10 +172,18 @@ namespace Delver.CamelCup
             if (change != null) 
             {
                 GameState.Apply(change);
+                History.Add(change);
+
+                if (change.ChildChanges != null) 
+                {
+                    History.AddRange(change.ChildChanges);   
+                }
+
                 CamelHelper.Echo($"\n > {player} performs {action.CamelAction} ({action.Color}/{action.Value})\n  ");
             }
             else
             {
+                History.Add(new DisqualifiedStateChange(player, action));
                 Players[player].Disqualified = true;
                 Trace.WriteLine($"Game {GameId}: Player {player} loses the game to illegal action: {action.CamelAction} ({action.Color}/{action.Value})");
             }
