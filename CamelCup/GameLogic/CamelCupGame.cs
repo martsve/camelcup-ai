@@ -185,6 +185,7 @@ namespace Delver.CamelCup
             {
                 History.Add(new DisqualifiedStateChange(player, action));
                 Players[player].Disqualified = true;
+                GameState.Money[player] = 0;
                 Trace.WriteLine($"Game {GameId}: Player {player} loses the game to illegal action: {action.CamelAction} ({action.Color}/{action.Value})");
             }
         }
