@@ -18,6 +18,7 @@
     <select id='players'>
     </select>
     <input type="button" value='Add' id='add'>
+    <input type="button" value='Use All' id='add_all'>
 
     <div id='data'></div>
     <div id='last'></div>
@@ -73,6 +74,7 @@
         
         $('#upload').on('click', function() { $('#browse').click(); });
         $('#add').on('click', function() { $.get("/api/cup/add/" + $('#players').val()); });
+        $('#add_all').on('click', function() { $.get("/api/cup/add_all"); });
 
         $('#new').on('click', function() {  $.get("/api/cup/new"); });
         $('#run').on('click', function() {  $.get("/api/cup/run"); });

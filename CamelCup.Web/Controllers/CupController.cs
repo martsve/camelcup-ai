@@ -10,6 +10,7 @@ using System.IO;
 using System.Runtime.Loader;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
+using System.Reflection;
 
 namespace Delver.CamelCup.Web.Controllers
 {
@@ -17,9 +18,17 @@ namespace Delver.CamelCup.Web.Controllers
     public class CupController : Controller
     {
         public static CamelService CamelService;
-        public static string BotPath = @"E:\Temp\bots";
+        public static string BotPath;
 
         public static List<CamelBot> CamelBots;
+
+        public static string Dir;
+
+        public CupController()
+        {
+            Dir = System.IO.Path.GetDirectoryName(new Uri(System.Reflection.Assembly.GetExecutingAssembly().CodeBase).LocalPath);
+            BotPath = Path.Combine(Dir, "bots");
+        }
 
         [HttpGet("new")]
         public Guid New(string id = null)
@@ -42,23 +51,42 @@ namespace Delver.CamelCup.Web.Controllers
             }
         }
 
+        [HttpGet("add_all")]
+        public void AddAll(string id = null)
+        {
+            New(id);
+            foreach (var bot in CamelBots) {
+                if (bot != null && CamelService != null)
+                {
+                    var instance = Activator.CreateInstance(bot.BotType) as ICamelCupPlayer;
+                    CamelService.Load(instance);
+                }
+            }
+        }
+
         [HttpGet("bots")]
         public List<CamelBot> Bots()
         {
             if (CamelBots == null)
             {
-                CamelBots = new List<CamelBot>()
+                CamelBots = new List<CamelBot>();
+                foreach (var line in System.IO.File.ReadAllLines("InternalBots.txt").Where(x => x.Trim().Length > 0))
                 {
-                    CreateCamelBot(typeof(DiceThrower)),
-                    CreateCamelBot(typeof(HeatmapMinus)),
-                    CreateCamelBot(typeof(HeatmapPluss)),
-                    CreateCamelBot(typeof(IllegalBot)),
-                    CreateCamelBot(typeof(MartinPlayer)),
-                    CreateCamelBot(typeof(RandomBot)),
-                    CreateCamelBot(typeof(SmartMartinPlayer)),
-                    CreateCamelBot(typeof(SmartPluss)),
-                };
-    
+                    var w = line.Trim().Split(';');
+                    var type = GetTypeByName(w[0], w[1]);
+                    if (type == null)
+                    {
+                        throw new Exception("Unable to create type: " + line);
+                    }
+
+                    CamelBots.Add(CreateCamelBot(type));
+                }
+
+                if (!Directory.Exists(BotPath))
+                {
+                    Directory.CreateDirectory(BotPath);
+                }
+
                 var externalFiles = Directory.GetFiles(BotPath);
                 foreach (var file in externalFiles)
                 {
@@ -143,6 +171,11 @@ namespace Delver.CamelCup.Web.Controllers
         [HttpPost("upload")]
         public int Upload()
         {
+            if (!Directory.Exists(BotPath))
+            {
+                Directory.CreateDirectory(BotPath);
+            }
+
             var form = Request.Form;
             var formFiles = Request.Form.Files;
             var uploaded = 0;
@@ -183,6 +216,17 @@ namespace Delver.CamelCup.Web.Controllers
             return GetExternalBot(filename)?.BotName;
         }
         
+        public Type GetTypeByName(string dll, string name)
+        {
+            if (!System.IO.Path.IsPathRooted(dll))
+            {
+                dll = Path.Combine(Dir, dll);
+            }
+
+            var lib = AssemblyLoadContext.Default.LoadFromAssemblyPath(dll);
+            return lib.GetType(name);
+        }
+
         private CamelBot GetExternalBot(string filename)
         {
             try {

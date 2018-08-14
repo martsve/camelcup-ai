@@ -34,12 +34,17 @@ namespace Delver.CamelCup
             var trap = gameState.Traps.FirstOrDefault(x => x.Value.Location == newLocation);
             if (trap.Value != null) 
             {
-                _trapPlayer = trap.Key;
-                gameState.Money[_trapPlayer] += 1;
                 ChildChanges.Add(new MoveStackStateChange(_movedStack, _oldLocation, newLocation, onTop));
-                ChildChanges.Add(new StateChange(StateAction.GetMoney, _trapPlayer, Color, gameState.Money[_trapPlayer]));
+
                 newLocation += trap.Value.Move;
                 onTop = trap.Value.Move > 0;
+                
+                _trapPlayer = trap.Key;
+                if (!gameState.Disqualified[_trapPlayer])
+                {
+                    gameState.Money[_trapPlayer] += 1;
+                    ChildChanges.Add(new StateChange(StateAction.GetMoney, _trapPlayer, Color, gameState.Money[_trapPlayer]));
+                }
             }
 
             ChildChanges.Add(new MoveStackStateChange(_movedStack, _oldLocation, newLocation, onTop));

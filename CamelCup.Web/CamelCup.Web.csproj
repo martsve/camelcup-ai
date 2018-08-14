@@ -19,6 +19,12 @@
   <ItemGroup>
     <ProjectReference Include="..\CamelCup.Game\CamelCup.Game.csproj" />
     <ProjectReference Include="..\CamelCup.External\CamelCup.External.csproj" />
+    <ProjectReference Include="..\CamelCup.Player\CamelCup.Player.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="InternalBots.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>  
+  </ItemGroup>
 </Project>

@@ -50,21 +50,6 @@ namespace Delver.CamelCup
             }
         }
 
-        public void LoadPlayers(string filename)
-        {
-            var lines = File.ReadAllLines("players.txt").Where(x => x.Trim().Length > 0).ToList();
-            foreach (var line in  lines)
-            {
-                var player = PlayerInterfaceFactory.CreateByName(line);
-                if (player == null)
-                {
-                    throw new Exception($"Unable to create object: " + line);
-                }
-
-                AddPlayer(player);
-            }
-        }
-
         public IEnumerable<Player> GetPlayers() 
         {
             return _players.ToList();

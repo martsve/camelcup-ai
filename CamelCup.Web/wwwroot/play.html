@@ -186,12 +186,12 @@
             {
                 $('#dice').empty();  
                 $('.player .cards').empty(); 
+                ResetTraps();
             }            
             else if (event.action == "Disqualified")
             {
                 $('#player' + event.player).addClass("disqualified");
                 $('#player' + event.player + ' .money').html(0);
-                ResetTraps();
             }
 
             if (current >= gameHistory.history.length -1) 
@@ -242,7 +242,7 @@
             }
         }
 
-        play(70);
+        play();
     </script>
 </body>
 </html> 

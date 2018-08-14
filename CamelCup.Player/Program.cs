@@ -23,10 +23,10 @@ namespace MyTestProgram
 
         private static void RunBenchmark(string[] args)
         {
-            var filename = args.FirstOrDefault(x => !x.StartsWith("-")) ?? "players.txt";
-
             var runner = new CamelRunner(timeScalingFactor: TimeScalingFactor);
-            runner.LoadPlayers(filename);
+            runner.AddPlayer(new DiceThrower());
+            runner.AddPlayer(new IllegalBot());
+            runner.AddPlayer(new RandomBot());            
 
             var history = runner.GetPlayers().ToDictionary(x => x, x => new List<TimeSpan>());
 

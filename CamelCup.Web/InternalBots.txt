@@ -1,0 +1,4 @@
+CamelCup.Game.dll;Delver.CamelCup.MartinBots.DiceThrower
+CamelCup.Game.dll;Delver.CamelCup.MartinBots.IllegalBot
+CamelCup.Game.dll;Delver.CamelCup.MartinBots.SmartMartinPlayer
+CamelCup.Game.dll;Delver.CamelCup.MartinBots.RandomBot
