@@ -86,10 +86,10 @@ namespace Delver.CamelCup.Web.Services.Test
             var gamestate = new ImplementedGameState(4, startingPositions);
 
             gamestate.LoserBets.Add(new GameEndBet() { Player = 0, CamelColor = CamelColor.Green });
-            gamestate.LoserBets.Add(new GameEndBet() { Player = 0, CamelColor = CamelColor.Orange });
+            gamestate.LoserBets.Add(new GameEndBet() { Player = 0, CamelColor = CamelColor.White });
             gamestate.LoserBets.Add(new GameEndBet() { Player = 0, CamelColor = CamelColor.Red });
 
-            gamestate.LoserBets.Add(new GameEndBet() { Player = 1, CamelColor = CamelColor.Orange });
+            gamestate.LoserBets.Add(new GameEndBet() { Player = 1, CamelColor = CamelColor.White });
             gamestate.LoserBets.Add(new GameEndBet() { Player = 1, CamelColor = CamelColor.Red });
 
             gamestate.LoserBets.Add(new GameEndBet() { Player = 2, CamelColor = CamelColor.Red });

@@ -20,7 +20,7 @@ namespace Delver.CamelCup.Web.Services.Test
 
             Assert.AreEqual(0, owner[CamelColor.Blue], "blue 5 owner");
             Assert.AreEqual(-1, owner[CamelColor.Green], "green 5 owner");
-            Assert.AreEqual(-1, owner[CamelColor.Orange], "orange 5 owner");
+            Assert.AreEqual(-1, owner[CamelColor.White], "white 5 owner");
             Assert.AreEqual(-1, owner[CamelColor.Red], "red 5 owner");
             Assert.AreEqual(-1, owner[CamelColor.Yellow], "yellow 5 owner");            
         }

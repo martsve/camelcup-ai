@@ -70,13 +70,13 @@ namespace Delver.CamelCup.Web.Services.Test
             var startingPositions = TestHelper.ConvertToStartingPositions("1,0 2,1 2,2 3,3 3,4");
             var gamestate = new ImplementedGameState(4, startingPositions);
 
-            gamestate.BettingCards.First(x => x.CamelColor == CamelColor.Orange && x.Value == 5).Owner = 0;
+            gamestate.BettingCards.First(x => x.CamelColor == CamelColor.White && x.Value == 5).Owner = 0;
             gamestate.BettingCards.First(x => x.CamelColor == CamelColor.Green && x.Value == 5).Owner = 0;
 
-            gamestate.BettingCards.First(x => x.CamelColor == CamelColor.Orange && x.Value == 3).Owner = 1;
+            gamestate.BettingCards.First(x => x.CamelColor == CamelColor.White && x.Value == 3).Owner = 1;
             gamestate.BettingCards.First(x => x.CamelColor == CamelColor.Blue && x.Value == 5).Owner = 1;
 
-            gamestate.BettingCards.First(x => x.CamelColor == CamelColor.Orange && x.Value == 2).Owner = 2;
+            gamestate.BettingCards.First(x => x.CamelColor == CamelColor.White && x.Value == 2).Owner = 2;
 
             var engine = new RulesEngine(gamestate, seed: 1);
             engine.ScoreRound();

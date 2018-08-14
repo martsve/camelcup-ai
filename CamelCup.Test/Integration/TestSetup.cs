@@ -28,7 +28,7 @@ namespace Delver.CamelCup.Web.Services.Test
             Assert.AreEqual(CamelColor.Yellow, camelOrder.Skip(0).First(), "camel 0");
             Assert.AreEqual(CamelColor.Red, camelOrder.Skip(1).First(), "camel 1");
             Assert.AreEqual(CamelColor.Green, camelOrder.Skip(2).First(), "camel 2");
-            Assert.AreEqual(CamelColor.Orange, camelOrder.Skip(3).First(), "camel 3");
+            Assert.AreEqual(CamelColor.White, camelOrder.Skip(3).First(), "camel 3");
             Assert.AreEqual(CamelColor.Blue, camelOrder.Skip(4).First(), "camel 4");
 
             Assert.AreEqual(0, game.StartingPlayer, "starting player");

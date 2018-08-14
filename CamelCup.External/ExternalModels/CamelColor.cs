@@ -11,8 +11,8 @@ namespace Delver.CamelCup.External
         Blue = 0,
         [EnumMember(Value = "Green")]
         Green = 1,
-        [EnumMember(Value = "Orange")]
-        Orange = 2,
+        [EnumMember(Value = "White")]
+        White = 2,
         [EnumMember(Value = "Red")]
         Red = 3,
         [EnumMember(Value = "Yellow")]

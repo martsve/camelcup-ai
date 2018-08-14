@@ -23,7 +23,7 @@ namespace Delver.CamelCup.Web.Services.Test
         [TestMethod]
         public void CamelHelper_GetallGameStates_Depth_0()
         {
-            // 1: blue, green, orange | 2: red, yellow
+            // 1: blue, green, white | 2: red, yellow
             var startString = "1,0 1,1 1,2 2,3 2,4";
             var startingPositions = TestHelper.ConvertToStartingPositions(startString);
             var gamestate = new ImplementedGameState(1, startingPositions);
@@ -40,7 +40,7 @@ namespace Delver.CamelCup.Web.Services.Test
         [TestMethod]
         public void CamelHelper_GetallGameStates_Depth_1()
         {
-            // 1: blue, green, orange | 2: red, yellow
+            // 1: blue, green, white | 2: red, yellow
             var startString = "1,0 1,1 1,2 2,3 2,4";
             var startingPositions = TestHelper.ConvertToStartingPositions(startString);
             var gamestate = new ImplementedGameState(1, startingPositions);
@@ -60,7 +60,7 @@ namespace Delver.CamelCup.Web.Services.Test
         [TestMethod]
         public void CamelHelper_GetallGameStates_Depth_0_and_1()
         {
-            // 1: blue, green, orange | 2: red, yellow
+            // 1: blue, green, white | 2: red, yellow
             var startString = "1,0 1,1 1,2 2,3 2,4";
             var startingPositions = TestHelper.ConvertToStartingPositions(startString);
             var gamestate = new ImplementedGameState(1, startingPositions);
@@ -80,7 +80,7 @@ namespace Delver.CamelCup.Web.Services.Test
         [TestMethod]
         public void CamelHelper_GetallGameStates_Depth_2()
         {
-            // 1: blue, green, orange | 2: red, yellow
+            // 1: blue, green, white | 2: red, yellow
             var startString = "1,0 1,1 1,2 2,3 2,4";
             var startingPositions = TestHelper.ConvertToStartingPositions(startString);
             var gamestate = new ImplementedGameState(1, startingPositions);
@@ -100,7 +100,7 @@ namespace Delver.CamelCup.Web.Services.Test
         [TestMethod]
         public void CamelHelper_GetallGameStates_Depth_3()
         {
-            // 1: blue, green, orange | 2: red, yellow
+            // 1: blue, green, white | 2: red, yellow
             var startString = "1,0 1,1 1,2 2,3 2,4";
             var startingPositions = TestHelper.ConvertToStartingPositions(startString);
             var gamestate = new ImplementedGameState(1, startingPositions);
@@ -117,7 +117,7 @@ namespace Delver.CamelCup.Web.Services.Test
         [TestMethod]
         public void CamelHelper_GetallGameStates_Depth_4()
         {
-            // 1: blue, green, orange | 2: red, yellow
+            // 1: blue, green, white | 2: red, yellow
             var startString = "1,0 1,1 1,2 2,3 2,4";
             var startingPositions = TestHelper.ConvertToStartingPositions(startString);
             var gamestate = new ImplementedGameState(1, startingPositions);
@@ -135,7 +135,7 @@ namespace Delver.CamelCup.Web.Services.Test
         [TestMethod]
         public void CamelHelper_GetallGameStates_Depth_5()
         {
-            // 1: blue, green, orange | 2: red, yellow
+            // 1: blue, green, white | 2: red, yellow
             var startString = "1,0 1,1 1,2 2,3 2,4";
             var startingPositions = TestHelper.ConvertToStartingPositions(startString);
             var gamestate = new ImplementedGameState(1, startingPositions);
