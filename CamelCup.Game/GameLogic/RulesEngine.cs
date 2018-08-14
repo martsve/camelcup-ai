@@ -82,8 +82,9 @@ namespace Delver.CamelCup
             return new NoActionStateChange(playerId);
         }
 
-        public void ScoreRound()
+        public List<StateChange> ScoreRound()
         {
+            var history = new List<StateChange>();
             var order = Gamestate.GetLeadingOrder();
             var first = order.First();
             var second = order.Skip(1).First();
@@ -93,21 +94,29 @@ namespace Delver.CamelCup
                 if (bet.CamelColor == first)
                 {
                     Gamestate.Money[bet.Owner] += bet.Value;
+                    history.Add(new StateChange(StateAction.GetMoney, bet.Owner, CamelColor.Blue, Gamestate.Money[bet.Owner]));
                 }
                 else if (bet.CamelColor == second)
                 {
                     Gamestate.Money[bet.Owner] += 1;
+                    history.Add(new StateChange(StateAction.GetMoney, bet.Owner, CamelColor.Blue, Gamestate.Money[bet.Owner]));
                 }
                 else
                 {
                     if (Gamestate.Money[bet.Owner] > 0)
+                    {
                         Gamestate.Money[bet.Owner] -= 1;
+                        history.Add(new StateChange(StateAction.GetMoney, bet.Owner, CamelColor.Blue, Gamestate.Money[bet.Owner]));
+                    }
                 }
             }
+
+            return history;
         }
 
-        public void ScoreGame()
+        public List<StateChange> ScoreGame()
         {
+            var history = new List<StateChange>();
             var winner = Gamestate.GetLeadingOrder().First();
             var scores = new List<int>() { 8, 5, 3, 2, 1, 1, 1, 1, 1, 1, 1 };
             foreach (var card in Gamestate.WinnerBets.Where(x => !Gamestate.Disqualified[x.Player]))
@@ -117,11 +126,14 @@ namespace Delver.CamelCup
                     var score = scores.First();
                     scores.RemoveAt(0);
                     Gamestate.Money[card.Player] += score;
+                    history.Add(new StateChange(StateAction.GetMoney, card.Player, CamelColor.Blue, Gamestate.Money[card.Player]));
                 }
                 else
                 {
-                    if (Gamestate.Money[card.Player] > 0)
+                    if (Gamestate.Money[card.Player] > 0) {
                         Gamestate.Money[card.Player] -= 1;
+                        history.Add(new StateChange(StateAction.GetMoney, card.Player, CamelColor.Blue, Gamestate.Money[card.Player]));
+                    }
                 }
             }
 
@@ -134,14 +146,18 @@ namespace Delver.CamelCup
                     var score = scores.First();
                     scores.RemoveAt(0);
                     Gamestate.Money[card.Player] += score;
+                    history.Add(new StateChange(StateAction.GetMoney, card.Player, CamelColor.Blue, Gamestate.Money[card.Player]));
                 }
                 else
                 {
-                    if (Gamestate.Money[card.Player] > 0)
+                    if (Gamestate.Money[card.Player] > 0) {
                         Gamestate.Money[card.Player] -= 1;
+                        history.Add(new StateChange(StateAction.GetMoney, card.Player, CamelColor.Blue, Gamestate.Money[card.Player]));
+                    }
                 }
             }
 
+            return history;
         }
         
         public List<int> GetWinners()

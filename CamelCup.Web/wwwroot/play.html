@@ -1,0 +1,248 @@
+<html>
+<head>
+    <title>CamelCup History Player</title>
+    <script src='jquery-3.3.1.min.js'></script>
+    <style>
+        #board { width: 1280px; height: 635px; background: url(abg.jpg); position: relative; }
+        #loc0 { width: 135px; height: 125px; border: 1px solid black; border-top: 2px solid red; position: absolute; left:615px; top: 263px; }
+        #loc1 { width: 135px; height: 125px; border: 1px solid black; position: absolute; left:615px; top: 400px; }
+        #loc2 { width: 135px; height: 100px; border: 1px solid black; position: absolute; left:615px; top: 534px; }
+        #loc3 { width: 125px; height: 100px; border: 1px solid black; position: absolute; left:470px; top: 534px; }
+        #loc4 { width: 125px; height: 100px; border: 1px solid black; position: absolute; left:315px; top: 534px; }
+        #loc5 { width: 125px; height: 100px; border: 1px solid black; position: absolute; left:166px; top: 534px; }
+        #loc6 { width: 140px; height: 100px; border: 1px solid black; position: absolute; left:0px; top: 534px; }
+        #loc7 { width: 140px; height: 125px; border: 1px solid black; position: absolute; left:0px; top: 400px; }
+        #loc8 { width: 140px; height: 125px; border: 1px solid black; position: absolute; left:0px; top: 263px; }
+        #loc9 { width: 140px; height: 125px; border: 1px solid black; position: absolute; left:0px; top: 125px; }
+        #loc10 { width: 140px; height: 115px; border: 1px solid black; position: absolute; left:0px; top: 0px; }
+        #loc11 { width: 125px; height: 115px; border: 1px solid black; position: absolute; left:166px; top: 0px; }
+        #loc12 { width: 125px; height: 115px; border: 1px solid black; position: absolute; left:315px; top: 0px; }
+        #loc13 { width: 125px; height: 115px; border: 1px solid black; position: absolute; left:470px; top: 0px; }
+        #loc14 { width: 135px; height: 115px; border: 1px solid black; position: absolute; left:615px; top: 0px; }
+        #loc15 { width: 135px; height: 125px; border: 1px solid black; position: absolute; left:615px; top: 125px; }
+        .loc { text-align: center; }
+
+        .camel { width: 40px; height: 24px; margin-left: 50px; }
+
+        #camelBlue { background-color: blue; }
+        #camelGreen { background-color: green; }
+        #camelOrange { background-color: orange; }
+        #camelRed { background-color: red; }
+        #camelYellow { background-color: yellow; }
+
+        #players { position: absolute; left: 750px; top: 0px; }
+        .name { font-weight: bold; }
+        .money { font-size: 200%; }
+
+        .card { display: inline-block; font-size: 150%; }
+        .card.Blue { background-color: blue; }
+        .card.Green { background-color: green; }
+        .card.Orange { background-color: orange; }
+        .card.Red { background-color: red; }
+        .card.Yellow { background-color: yellow; }
+
+        .winnerbets .card { display: inline-block; font-size: 75%; border: 2px solid black; }
+        .loserbets .card { display: inline-block; font-size: 75%; border: 2px solid black; }
+
+        #dice { position: absolute; left: 200px; top: 200px; text-align: center; }
+        #dice .card { width: 40px; height: 40px; font-size: 200%; }
+
+        .trap { display: inline-block; font-size: 75%; }
+        .trap .value { font-size: 150%; }
+        .trap.pluss { background: greenyellow; }
+        .trap.minus { background: pink; }
+
+        .player.disqualified { text-decoration: line-through; }
+        .player.winner { font-size: 150%; background: lightgreen; border: 3px dotted green; }
+    </style>
+</head>
+<body>
+    <input type="button" value='Next' id='next'>
+
+    <div id='board'>
+
+            <ul id="players">
+
+            </ul>
+
+            <ul id="dice">
+
+            </ul>
+
+    </div>
+
+    <div id='current'></div>
+
+    <script>
+        function UpdateMoney(player, money)
+        {
+            $('#player' + player + ' .money').html(money);
+        }
+
+        function ThrowDice(color, value) {
+            $('#dice').append("<li><span class='card "+color+"'>"+value+"</span></li>");
+        }
+
+        function StartCamel(color, location, height)
+        {
+            var camel = $('#camel' + color).remove();
+            camel.data('height', height)
+
+            var smallest = null;
+            $('#loc' + location + ' .camel').each(function() {
+                var ch = $(this);
+                if (ch.data('height') > height && (!smallest || ch.data('height') < smallest.data('height')))
+                    smallest = ch;
+            });
+
+            if (!smallest)
+                $('#loc' + location).append(camel);
+            else 
+                smallest.after(camel);
+        }
+        
+        function MoveStack(stack, from, to, top)
+        {
+            if (to > 15) to = to - 16;
+            for (var i = 0; i < stack.length; i++)
+            {
+                var j = top ? i : (stack.length - i - 1);
+                var color = stack[j];
+                var camel = $('#camel' + color).remove();
+                if (top)
+                    $('#loc' + to).append(camel);
+                else 
+                    $('#loc' + to).prepend(camel);
+            }
+        }
+
+        function PlaceTrap(player, location, move) {
+            var trap = $('#trap' + player).remove();
+            trap.removeClass('pluss');
+            trap.removeClass('minus');
+            trap.addClass(move > 0 ? 'pluss' : 'minus');
+            trap.find('.value').html(move);
+            $('#loc' + location).append(trap);
+        }
+
+        function ResetTraps() {
+            for (player in gameHistory.players)
+            {
+                var trap = $('#trap' + player).remove();
+                $('#player' + player).append(trap);
+            }
+        }
+
+        function showWinner()
+        {
+            for (key in gameHistory.winners)
+            {
+                $("#player" + gameHistory.winners[key]).addClass("winner");
+            }
+        }
+
+        function Next() 
+        {
+            current++;
+            var event = gameHistory.history[current];
+            $('#current').html('<pre>'+current+ ': ' + JSON.stringify(event, null, 2) + '</pre>');
+            if (event.action == "StartPosition")
+            {
+                StartCamel(event.color, event.value, event.height);
+            } 
+            else if (event.action == "GetMoney")
+            {
+                UpdateMoney(event.player, event.value);
+            } 
+            else if (event.action == "PickCard")
+            {
+                $('#player' + event.player + ' .cards').append('<span class="card '+event.color+'">'+event.value+'</span>');
+            } 
+            else if (event.action == "SecretBetOnWinner")
+            {
+                $('#player' + event.player + ' .winnerbets').append('<span class="card '+event.color+'">Winner</span>');
+            } 
+            else if (event.action == "SecretBetOnLoser")
+            {
+                $('#player' + event.player + ' .loserbets').append('<span class="card '+event.color+'">Loser</span>');
+            } 
+            else if (event.action == "ThrowDice")
+            {
+                ThrowDice(event.color, event.value);
+            } 
+            else if (event.action == "Move")
+            {
+                MoveStack(event.stack, event.from, event.to, event.landOnTop);
+            } 
+            else if (event.action == "PlacePlussTrap")
+            {
+                PlaceTrap(event.player, event.value, 1);
+            }
+            else if (event.action == "PlaceMinusTrap")
+            {
+                PlaceTrap(event.player, event.value, -1);
+            }
+            else if (event.action == "NewRound")
+            {
+                $('#dice').empty();  
+                $('.player .cards').empty(); 
+            }            
+            else if (event.action == "Disqualified")
+            {
+                $('#player' + event.player).addClass("disqualified");
+                $('#player' + event.player + ' .money').html(0);
+                ResetTraps();
+            }
+
+            if (current >= gameHistory.history.length -1) 
+            {
+                showWinner();   
+            }
+        }
+
+        $('#next').on('click', function() {
+            Next();
+        });
+
+
+        var gameHistory = JSON.parse(window.localStorage.getItem('history'));
+        var current = -1;
+
+        var board = $('#board')
+        for (var i = 0; i < 16; i++)
+        {
+            board.append('<div class="loc" id="loc'+i+'"></div>');
+        }
+
+        $('#loc15').append('<div class="camel" id="camelBlue"></div>');
+        $('#loc15').append('<div class="camel" id="camelGreen"></div>');
+        $('#loc15').append('<div class="camel" id="camelOrange"></div>');
+        $('#loc15').append('<div class="camel" id="camelRed"></div>');
+        $('#loc15').append('<div class="camel" id="camelYellow"></div>');
+        $('#current').html("<pre>" + JSON.stringify(gameHistory, null, 2) + "</pre>");
+
+
+        for (key in gameHistory.players)
+        {
+            $('#players').append('<li class="player" id="player'+key+'"><span class="name"></span> <span class="money"></span><div class="cards"></div><div class="winnerbets"></div><div class="loserbets"></div><div class="trap" id="trap'+key+'"><span class="value"></span><span class="owner">'+gameHistory.players[key]+'</span></div></li>');
+            $('#player' + key + ' .name').html(gameHistory.players[key]);
+            UpdateMoney(key, 0);
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        async function play(iterations = -1, pause = 100)
+        {
+            var goto = iterations > -1 ? iterations : gameHistory.history.length;
+            for (var i = 0; i < goto; i++) {
+                await sleep(pause);
+                Next();
+            }
+        }
+
+        play(70);
+    </script>
+</body>
+</html> 

@@ -8,7 +8,7 @@
     <input type="button" value='Run' id='run'>
     <input type="button" value='Stop' id='stop'>
     <input type="button" value='Get one' id='single'>
-    <input type="button" value='Play' id='play'><br />
+    <a href='play.html'>Play</a><br />
 
     <form id='uploadForm' method='post' enctype="multipart/form-data">
         <input type="file" id="browse" name="fileupload" multiple style="display: none" onChange="Handlechange();"/>
@@ -20,6 +20,7 @@
     <input type="button" value='Add' id='add'>
 
     <div id='data'></div>
+    <div id='last'></div>
 
     <script>
         
@@ -42,7 +43,6 @@
     }
     
     $(function() {
-        var lastSingleGame = null;
         function update()
         {
             $.get("/api/cup", function (data) { 
@@ -62,11 +62,11 @@
 
             for (var key in players)
             {
-                var player = data.players[key];
+                var player = data.players[key]; 
                 content += "<li>" + player.name + ": " + player.wins+ "</li>";    
             }
 
-            content += "</ul><br /><pre>" + JSON.stringify(lastSingleGame, null, 2);
+            content += "</ul>";
 
             $('#data').html(content); 
         }
@@ -77,7 +77,12 @@
         $('#new').on('click', function() {  $.get("/api/cup/new"); });
         $('#run').on('click', function() {  $.get("/api/cup/run"); });
         $('#stop').on('click', function() {  $.get("/api/cup/stop"); });
-        $('#single').on('click', function() {  $.get("/api/cup/single", function (data) { lastSingleGame = data; }); });
+        $('#single').on('click', function() {  
+            $.get("/api/cup/single", function (data) {
+                $('#last').html("<pre>"+JSON.stringify(data)+"</pre>"); 
+                window.localStorage.setItem('history', JSON.stringify(data));
+            });
+        });
 
         setTimeout(update, 1000);
 

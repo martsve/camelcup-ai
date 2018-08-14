@@ -11,27 +11,31 @@ namespace Delver.CamelCup
     {
         // player actions
         [EnumMember(Value = "NoAction")]
-        NoAction,
+        NoAction = 0,
         [EnumMember(Value = "ThrowDice")]
-        ThrowDice,
+        ThrowDice = 1,
         [EnumMember(Value = "PickCard")]
-        PickCard,
+        PickCard = 2,
         [EnumMember(Value = "PlacePlussTrap")]
-        PlacePlussTrap,
+        PlacePlussTrap = 3,
         [EnumMember(Value = "PlaceMinusTrap")]
-        PlaceMinusTrap,
+        PlaceMinusTrap = 4,
         [EnumMember(Value = "SecretBetOnWinner")]
-        SecretBetOnWinner,
+        SecretBetOnWinner = 5,
         [EnumMember(Value = "SecretBetOnLoser")]
-        SecretBetOnLoser,
+        SecretBetOnLoser = 6,
 
         // game changes
+        [EnumMember(Value = "StartPosition")]
+        StartPosition = 7,
+        [EnumMember(Value = "NewRound")]
+        NewRound = 8,
         [EnumMember(Value = "GetMoney")]
-        GetMoney,
+        GetMoney = 9,
         [EnumMember(Value = "Move")]
-        Move,
+        Move = 10,
         [EnumMember(Value = "Disqualified")]
-        Disqualified
+        Disqualified = 11
     }
 
     public class StateChange 

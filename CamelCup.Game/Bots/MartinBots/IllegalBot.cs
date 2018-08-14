@@ -83,18 +83,14 @@ namespace Delver.CamelCup.MartinBots
                     return new PlayerAction() { CamelAction = CamelAction.PlaceMinusTrap, Value = Rnd.Next(0, gameState.BoardSize) };
 
                 case CamelAction.PlacePlussTrap:
-                    var plussLoc = GetRandomTrapPlace(gameState, true);
-                    if (plussLoc > -1) {
-                        return new PlayerAction() { CamelAction = CamelAction.PlacePlussTrap, Value = Rnd.Next(0, gameState.BoardSize) };
-                    }
-                    break;
+                    return new PlayerAction() { CamelAction = CamelAction.PlacePlussTrap, Value = Rnd.Next(0, gameState.BoardSize) };
 
                 case CamelAction.ThrowDice:
                 default:
                     break;
             }
 
-            return new PlayerAction() { CamelAction = CamelAction.NoAction };
+            return new PlayerAction() { CamelAction = CamelAction.ThrowDice };
         }
 
         private int GetRandomTrapPlace(GameState gameState, bool positive) 

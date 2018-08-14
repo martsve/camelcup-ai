@@ -4,7 +4,7 @@ namespace Delver.CamelCup
 {
     public class LoserBetStateChange : StateChange 
     {
-        public LoserBetStateChange(int player, CamelColor color) : base(StateAction.PlacePlussTrap, player, color, -1)
+        public LoserBetStateChange(int player, CamelColor color) : base(StateAction.SecretBetOnLoser, player, color, -1)
         {
         }
 

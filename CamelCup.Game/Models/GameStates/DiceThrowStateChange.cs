@@ -21,7 +21,7 @@ namespace Delver.CamelCup
             gameState.RemainingDice.Remove(Color);
 
             gameState.Money[Player] += 1;
-            ChildChanges.Add(new StateChange(StateAction.GetMoney, Player, Color, 1));
+            ChildChanges.Add(new StateChange(StateAction.GetMoney, Player, Color, gameState.Money[Player]));
 
             var mainCamel = gameState.Camels.First(x => x.CamelColor == Color);
             var camelStack = gameState.Camels.Where(x => x.Location == mainCamel.Location && x.Height >= mainCamel.Height).ToList();
@@ -37,7 +37,7 @@ namespace Delver.CamelCup
                 _trapPlayer = trap.Key;
                 gameState.Money[_trapPlayer] += 1;
                 ChildChanges.Add(new MoveStackStateChange(_movedStack, _oldLocation, newLocation, onTop));
-                ChildChanges.Add(new StateChange(StateAction.GetMoney, _trapPlayer, Color, 1));
+                ChildChanges.Add(new StateChange(StateAction.GetMoney, _trapPlayer, Color, gameState.Money[_trapPlayer]));
                 newLocation += trap.Value.Move;
                 onTop = trap.Value.Move > 0;
             }

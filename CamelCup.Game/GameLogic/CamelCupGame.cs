@@ -62,6 +62,9 @@ namespace Delver.CamelCup
 
         public void StartGame() 
         {            
+            foreach (var camel in GameState.Camels)
+                History.Add(new StartPositionStateChange(camel));
+
             var gameStateClone = GameState.Clone(true);
             var playerNames = Players.Select(x => x.Name).ToArray();
 
@@ -74,6 +77,7 @@ namespace Delver.CamelCup
             {
                 var player = Players[i];
                 player.Reset(i);
+                History.Add(new StateChange(StateAction.GetMoney, player.PlayerId, CamelColor.Blue, 3));
 
                 Attempt(() => {
                     player.PerformAction(x => x.StartNewGame(i, gameInfo, gameStateClone));
@@ -118,18 +122,18 @@ namespace Delver.CamelCup
 
             if (!GameState.RemainingDice.Any()) 
             {
-                RulesEngine.ScoreRound();
+                History.AddRange(RulesEngine.ScoreRound());
             }
 
             if (IsComplete())
             {
+                History.AddRange(RulesEngine.ScoreGame());
+                var winners = RulesEngine.GetWinners();
                 foreach (var player in Players) 
                 {
-                    RulesEngine.ScoreGame();
-                    var winners = RulesEngine.GetWinners();
                     Attempt(() => {
                         var gameStateClone = GameState.Clone(true);
-                        player.PerformAction(x => x.Winners(winners, gameStateClone));
+                        player.PerformAction(x => x.Winners(winners.ToList(), gameStateClone));
                     });
                 }
             }
@@ -156,6 +160,8 @@ namespace Delver.CamelCup
             GameState.RemainingDice = CamelHelper.GetAllCamelColors();
             GameState.BettingCards = ImplementedBettingCard.GetAllBettingCards();
             GameState.Round++;
+
+            History.Add(new StateChange(StateAction.NewRound, -1, CamelColor.Blue, GameState.Round));
 
             foreach (var playerTrapPair in GameState.Traps)
                 playerTrapPair.Value.Location = -1;            

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Collections.Generic;
 using Delver.CamelCup.Web.Models;
+using Newtonsoft.Json;
 
 namespace Delver.CamelCup.Web.Services
 {
@@ -63,7 +64,7 @@ namespace Delver.CamelCup.Web.Services
         {
             var game = Runner.ComputeNewGame();
             GameIdHistory.Add(game.GameId);
-            
+        
             return new GameResult()
             {
                  RunnerSeed = CupId.GetHashCode(),

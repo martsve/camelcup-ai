@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Delver.CamelCup;
+using Delver.CamelCup.MartinBots;
 
 namespace MyTestProgram
 {
@@ -10,6 +11,17 @@ namespace MyTestProgram
         const double TimeScalingFactor = 1.0;
 
         static void Main(string[] args)
+        {
+            var runner = new CamelRunner(2061097081);
+            runner.AddPlayer(new DiceThrower());
+            runner.AddPlayer(new IllegalBot());
+            runner.AddPlayer(new RandomBot());
+
+            var game = runner.ComputeSeededGame(1808123255, 92884888, 1278662542);
+            Console.ReadLine();       
+        }
+
+        private static void RunBenchmark(string[] args)
         {
             var filename = args.FirstOrDefault(x => !x.StartsWith("-")) ?? "players.txt";
 
@@ -39,7 +51,6 @@ namespace MyTestProgram
                 Console.WriteLine($"{player.Name,-32} {player.Wins, -6} {avgTime:0.000}s");
             }    
             
-            Console.ReadLine();       
         }
     }
 }

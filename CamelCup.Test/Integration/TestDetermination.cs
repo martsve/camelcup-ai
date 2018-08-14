@@ -119,10 +119,10 @@ namespace Delver.CamelCup.Web.Services.Test
             Assert.AreEqual(0, game.CurrentPlayer, "current player");
             Assert.AreEqual(4, gameState.Round, "round");
 
-            Assert.AreEqual(21, gameState.Money[0], "player 0 money");
-            Assert.AreEqual(28, gameState.Money[1], "player 1 money");
+            Assert.AreEqual(24, gameState.Money[0], "player 0 money");
+            Assert.AreEqual(24, gameState.Money[1], "player 1 money");
 
-            Assert.AreEqual(0, players[0].Wins, "player 0 wins");
+            Assert.AreEqual(1, players[0].Wins, "player 0 wins");
             Assert.AreEqual(1, players[1].Wins, "player 1 wins");
 
             Assert.AreEqual("17,1 17,2 13,0 17,3 17,4", gameState.CamelPositionToString(), "camel positions");
