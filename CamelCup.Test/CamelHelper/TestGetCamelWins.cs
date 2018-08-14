@@ -9,7 +9,7 @@ namespace Delver.CamelCup.Web.Services.Test
         [TestMethod]
         public void CamelHelper_GetCamelWins_SimpleWin_Stacked()
         {
-            // 1: blue, green, orange | 2: red, yellow
+            // 1: blue, green, white | 2: red, yellow
             var startString = "1,0 1,1 1,2 2,3 2,4";
             var startingPositions = TestHelper.ConvertToStartingPositions(startString);
             var gamestate = new ImplementedGameState(1, startingPositions);
@@ -20,7 +20,7 @@ namespace Delver.CamelCup.Web.Services.Test
             
             Assert.AreEqual(0, wins[CamelColor.Blue], "blue");
             Assert.AreEqual(0, wins[CamelColor.Green], "green");
-            Assert.AreEqual(0, wins[CamelColor.White], "orange");
+            Assert.AreEqual(0, wins[CamelColor.White], "white");
             Assert.AreEqual(0, wins[CamelColor.Red], "red");
             Assert.AreEqual(3, wins[CamelColor.Yellow], "yellow");
         }
@@ -28,7 +28,7 @@ namespace Delver.CamelCup.Web.Services.Test
         [TestMethod]
         public void CamelHelper_GetCamelWins_SimpleWin()
         {
-            // 1: blue, green, orange | 2: red, yellow
+            // 1: blue, green, white | 2: red, yellow
             var startString = "1,0 1,1 1,2 2,3 2,4";
             var startingPositions = TestHelper.ConvertToStartingPositions(startString);
             var gamestate = new ImplementedGameState(1, startingPositions);
@@ -39,7 +39,7 @@ namespace Delver.CamelCup.Web.Services.Test
             
             Assert.AreEqual(0, wins[CamelColor.Blue], "blue");
             Assert.AreEqual(0, wins[CamelColor.Green], "green");
-            Assert.AreEqual(0, wins[CamelColor.White], "orange");
+            Assert.AreEqual(0, wins[CamelColor.White], "white");
             Assert.AreEqual(0, wins[CamelColor.Red], "red");
             Assert.AreEqual(3, wins[CamelColor.Yellow], "yellow");
         }
@@ -47,7 +47,7 @@ namespace Delver.CamelCup.Web.Services.Test
         [TestMethod]
         public void CamelHelper_GetCamelWins_SimpleWin_TrapMinus()
         {
-            // 1: blue, green, orange | 2: red, yellow
+            // 1: blue, green, white | 2: red, yellow
             var startString = "1,0 1,1 1,2 2,3 2,4";
             var startingPositions = TestHelper.ConvertToStartingPositions(startString);
             var gamestate = new ImplementedGameState(1, startingPositions);
@@ -60,7 +60,7 @@ namespace Delver.CamelCup.Web.Services.Test
             
             Assert.AreEqual(0, wins[CamelColor.Blue], "blue");
             Assert.AreEqual(0, wins[CamelColor.Green], "green");
-            Assert.AreEqual(2, wins[CamelColor.White], "orange");
+            Assert.AreEqual(2, wins[CamelColor.White], "white");
             Assert.AreEqual(0, wins[CamelColor.Red], "red");
             Assert.AreEqual(1, wins[CamelColor.Yellow], "yellow");
 
@@ -70,7 +70,7 @@ namespace Delver.CamelCup.Web.Services.Test
         [TestMethod]
         public void CamelHelper_GetCamelWins_SimpleWin_TrapPlus()
         {
-            // 1: blue, green, orange | 4: red, yellow
+            // 1: blue, green, white | 4: red, yellow
             var startString = "1,0 1,1 1,2 4,3 4,4";
             var startingPositions = TestHelper.ConvertToStartingPositions(startString);
             var gamestate = new ImplementedGameState(1, startingPositions);
@@ -83,7 +83,7 @@ namespace Delver.CamelCup.Web.Services.Test
             
             Assert.AreEqual(0, wins[CamelColor.Blue], "blue");
             Assert.AreEqual(0, wins[CamelColor.Green], "green");
-            Assert.AreEqual(2, wins[CamelColor.White], "orange");
+            Assert.AreEqual(2, wins[CamelColor.White], "white");
             Assert.AreEqual(0, wins[CamelColor.Red], "red");
             Assert.AreEqual(1, wins[CamelColor.Yellow], "yellow");
 
@@ -93,7 +93,7 @@ namespace Delver.CamelCup.Web.Services.Test
         [TestMethod]
         public void CamelHelper_GetCamelWins_Full_NoTraps()
         {
-            // 1: blue, green, orange | 2: red, yellow
+            // 1: blue, green, white | 2: red, yellow
             var startString = "1,0 1,1 1,2 2,3 2,4";
             var startingPositions = TestHelper.ConvertToStartingPositions(startString);
             var gamestate = new ImplementedGameState(1, startingPositions);
@@ -101,7 +101,7 @@ namespace Delver.CamelCup.Web.Services.Test
             
             Assert.AreEqual(3107, wins[CamelColor.Blue], "blue");
             Assert.AreEqual(6226, wins[CamelColor.Green], "green");
-            Assert.AreEqual(9329, wins[CamelColor.White], "orange");
+            Assert.AreEqual(9329, wins[CamelColor.White], "white");
             Assert.AreEqual(3302, wins[CamelColor.Red], "red");
             Assert.AreEqual(7196, wins[CamelColor.Yellow], "yellow");
         }
@@ -109,7 +109,7 @@ namespace Delver.CamelCup.Web.Services.Test
         [TestMethod]
         public void CamelHelper_GetCamelWins_Full_PlussTrap()
         {
-            // 1: blue, green, orange | 2: red, yellow
+            // 1: blue, green, white | 2: red, yellow
             var startString = "1,0 1,1 1,2 2,3 2,4";
             var startingPositions = TestHelper.ConvertToStartingPositions(startString);
             var gamestate = new ImplementedGameState(1, startingPositions);
@@ -121,7 +121,7 @@ namespace Delver.CamelCup.Web.Services.Test
             
             Assert.AreEqual(4239, wins[CamelColor.Blue], "blue");
             Assert.AreEqual(6215, wins[CamelColor.Green], "green");
-            Assert.AreEqual(8217, wins[CamelColor.White], "orange");
+            Assert.AreEqual(8217, wins[CamelColor.White], "white");
             Assert.AreEqual(3983, wins[CamelColor.Red], "red");
             Assert.AreEqual(6506, wins[CamelColor.Yellow], "yellow");
 
@@ -131,7 +131,7 @@ namespace Delver.CamelCup.Web.Services.Test
         [TestMethod]
         public void CamelHelper_GetCamelWins_Full_MinusTrap()
         {
-            // 1: blue, green, orange | 2: red, yellow
+            // 1: blue, green, white | 2: red, yellow
             var startString = "1,0 1,1 1,2 2,3 2,4";
             var startingPositions = TestHelper.ConvertToStartingPositions(startString);
             var gamestate = new ImplementedGameState(1, startingPositions);
@@ -143,7 +143,7 @@ namespace Delver.CamelCup.Web.Services.Test
             
             Assert.AreEqual(3086, wins[CamelColor.Blue], "blue");
             Assert.AreEqual(5240, wins[CamelColor.Green], "green");
-            Assert.AreEqual(8834, wins[CamelColor.White], "orange");
+            Assert.AreEqual(8834, wins[CamelColor.White], "white");
             Assert.AreEqual(3251, wins[CamelColor.Red], "red");
             Assert.AreEqual(8749, wins[CamelColor.Yellow], "yellow");
 

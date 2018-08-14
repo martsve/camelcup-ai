@@ -9,7 +9,7 @@ namespace Delver.CamelCup.Web.Services.Test
         [TestMethod]
         public void RulesEngine_ScoreGame_NoBets()
         {
-            // 1: blue | 2: green, orange | 3: red, yellow
+            // 1: blue | 2: green, white | 3: red, yellow
             var startingPositions = TestHelper.ConvertToStartingPositions("1,0 2,1 2,2 3,3 3,4");
             var gamestate = new ImplementedGameState(4, startingPositions);
 
@@ -25,7 +25,7 @@ namespace Delver.CamelCup.Web.Services.Test
         [TestMethod]
         public void RulesEngine_ScoreGame_Winners()
         {
-            // 1: blue | 2: green, orange | 3: red, yellow
+            // 1: blue | 2: green, white | 3: red, yellow
             var startingPositions = TestHelper.ConvertToStartingPositions("1,0 2,1 2,2 3,3 3,4");
             var gamestate = new ImplementedGameState(8, startingPositions);
 
@@ -53,7 +53,7 @@ namespace Delver.CamelCup.Web.Services.Test
         [TestMethod]
         public void RulesEngine_ScoreGame_Losers()
         {
-            // 1: blue | 2: green, orange | 3: red, yellow
+            // 1: blue | 2: green, white | 3: red, yellow
             var startingPositions = TestHelper.ConvertToStartingPositions("1,0 2,1 2,2 3,3 3,4");
             var gamestate = new ImplementedGameState(8, startingPositions);
 
@@ -81,7 +81,7 @@ namespace Delver.CamelCup.Web.Services.Test
         [TestMethod]
         public void RulesEngine_ScoreGame_WrongBets()
         {
-            // 1: blue | 2: green, orange | 3: red, yellow
+            // 1: blue | 2: green, white | 3: red, yellow
             var startingPositions = TestHelper.ConvertToStartingPositions("1,0 2,1 2,2 3,3 3,4");
             var gamestate = new ImplementedGameState(4, startingPositions);
 

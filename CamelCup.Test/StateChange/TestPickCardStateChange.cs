@@ -10,7 +10,7 @@ namespace Delver.CamelCup.Web.Services.Test
         [TestMethod]
         public void Unit_State_PickCard()
         {
-            // 1: blue, green, orange | 2: red, yellow
+            // 1: blue, green, white | 2: red, yellow
             var startingPositions = TestHelper.ConvertToStartingPositions("1,0 1,1 1,2 2,3 2,4");
             var gamestate = new ImplementedGameState(2, startingPositions, 16, 3);
             var change = new PickCardStateChange(0, CamelColor.Blue, 5);            
@@ -28,7 +28,7 @@ namespace Delver.CamelCup.Web.Services.Test
         [TestMethod]
         public void Unit_State_PickCard_Twice()
         {
-            // 1: blue, green, orange | 2: red, yellow
+            // 1: blue, green, white | 2: red, yellow
             var startingPositions = TestHelper.ConvertToStartingPositions("1,0 1,1 1,2 2,3 2,4");
             var gamestate = new ImplementedGameState(2, startingPositions, 16, 3);
 

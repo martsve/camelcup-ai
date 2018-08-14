@@ -9,7 +9,7 @@ namespace Delver.CamelCup.Web.Services.Test
         [TestMethod]
         public void RulesEngine_ThrowDice_NoAction()
         {
-            // 1: blue | 2: green, orange | 3: red, yellow
+            // 1: blue | 2: green, white | 3: red, yellow
             var startingPositions = TestHelper.ConvertToStartingPositions("1,0 2,1 2,2 3,3 3,4");
             var gamestate = new ImplementedGameState(4, startingPositions);
             var engine = new RulesEngine(gamestate, seed: 1);
@@ -21,7 +21,7 @@ namespace Delver.CamelCup.Web.Services.Test
         [TestMethod]
         public void RulesEngine_ThrowDice_ThrowDice()
         {
-            // 1: blue | 2: green, orange | 3: red, yellow
+            // 1: blue | 2: green, white | 3: red, yellow
             var startingPositions = TestHelper.ConvertToStartingPositions("1,0 2,1 2,2 3,3 3,4");
             var gamestate = new ImplementedGameState(2, startingPositions);
             var engine = new RulesEngine(gamestate, seed: 1);
@@ -36,7 +36,7 @@ namespace Delver.CamelCup.Web.Services.Test
         [TestMethod]
         public void RulesEngine_ThrowDice_ThrowDice_NoDiceLeft()
         {
-            // 1: blue | 2: green, orange | 3: red, yellow
+            // 1: blue | 2: green, white | 3: red, yellow
             var startingPositions = TestHelper.ConvertToStartingPositions("1,0 2,1 2,2 3,3 3,4");
             var gamestate = new ImplementedGameState(4, startingPositions);
             gamestate.RemainingDice.Clear();
@@ -50,7 +50,7 @@ namespace Delver.CamelCup.Web.Services.Test
         [TestMethod]
         public void RulesEngine_ThrowDice_ThrowNonGreen()
         {
-            // 1: blue | 2: green, orange | 3: red, yellow
+            // 1: blue | 2: green, white | 3: red, yellow
             var startingPositions = TestHelper.ConvertToStartingPositions("1,0 2,1 2,2 3,3 3,4");
             var gamestate = new ImplementedGameState(2, startingPositions);
 
@@ -68,7 +68,7 @@ namespace Delver.CamelCup.Web.Services.Test
         [TestMethod]
         public void RulesEngine_ThrowDice_ThrowRed()
         {
-            // 1: blue | 2: green, orange | 3: red, yellow
+            // 1: blue | 2: green, white | 3: red, yellow
             var startingPositions = TestHelper.ConvertToStartingPositions("1,0 2,1 2,2 3,3 3,4");
             var gamestate = new ImplementedGameState(2, startingPositions);
 
@@ -86,7 +86,7 @@ namespace Delver.CamelCup.Web.Services.Test
         [TestMethod]
         public void RulesEngine_PickCard_Valid5()
         {
-            // 1: blue | 2: green, orange | 3: red, yellow
+            // 1: blue | 2: green, white | 3: red, yellow
             var startingPositions = TestHelper.ConvertToStartingPositions("1,0 2,1 2,2 3,3 3,4");
             var gamestate = new ImplementedGameState(2, startingPositions);
 
@@ -102,7 +102,7 @@ namespace Delver.CamelCup.Web.Services.Test
         [TestMethod]
         public void RulesEngine_PickCard_Valid2()
         {
-            // 1: blue | 2: green, orange | 3: red, yellow
+            // 1: blue | 2: green, white | 3: red, yellow
             var startingPositions = TestHelper.ConvertToStartingPositions("1,0 2,1 2,2 3,3 3,4");
             var gamestate = new ImplementedGameState(2, startingPositions);
             gamestate.BettingCards.RemoveAll(x => x.CamelColor == CamelColor.Red && x.Value != 2);
@@ -119,7 +119,7 @@ namespace Delver.CamelCup.Web.Services.Test
         [TestMethod]
         public void RulesEngine_PickCard_Invalid()
         {
-            // 1: blue | 2: green, orange | 3: red, yellow
+            // 1: blue | 2: green, white | 3: red, yellow
             var startingPositions = TestHelper.ConvertToStartingPositions("1,0 2,1 2,2 3,3 3,4");
             var gamestate = new ImplementedGameState(2, startingPositions);
             gamestate.BettingCards.RemoveAll(x => x.CamelColor == CamelColor.Red);
@@ -134,7 +134,7 @@ namespace Delver.CamelCup.Web.Services.Test
         [TestMethod]
         public void RulesEngine_PlaceMinus_AtStart()
         {
-            // 1: blue | 2: green, orange | 3: red, yellow
+            // 1: blue | 2: green, white | 3: red, yellow
             var startingPositions = TestHelper.ConvertToStartingPositions("1,0 2,1 2,2 3,3 3,4");
             var gamestate = new ImplementedGameState(2, startingPositions);
 
@@ -147,7 +147,7 @@ namespace Delver.CamelCup.Web.Services.Test
         [TestMethod]
         public void RulesEngine_PlaceMinus_AtCamel()
         {
-            // 1: blue | 2: green, orange | 3: red, yellow
+            // 1: blue | 2: green, white | 3: red, yellow
             var startingPositions = TestHelper.ConvertToStartingPositions("1,0 2,1 2,2 3,3 3,4");
             var gamestate = new ImplementedGameState(2, startingPositions);
 
@@ -166,7 +166,7 @@ namespace Delver.CamelCup.Web.Services.Test
         [TestMethod]
         public void RulesEngine_PlaceMinus_OutOfBounds()
         {
-            // 1: blue | 2: green, orange | 3: red, yellow
+            // 1: blue | 2: green, white | 3: red, yellow
             var startingPositions = TestHelper.ConvertToStartingPositions("1,0 2,1 2,2 3,3 3,4");
             var gamestate = new ImplementedGameState(2, startingPositions);
 
@@ -185,7 +185,7 @@ namespace Delver.CamelCup.Web.Services.Test
         [TestMethod]
         public void RulesEngine_PlaceMinus_OnOtherTrap()
         {
-            // 1: blue | 2: green, orange | 3: red, yellow
+            // 1: blue | 2: green, white | 3: red, yellow
             var startingPositions = TestHelper.ConvertToStartingPositions("1,0 2,1 2,2 3,3 3,4");
             var gamestate = new ImplementedGameState(2, startingPositions);
             gamestate.Traps[1].Location = 5;
@@ -204,7 +204,7 @@ namespace Delver.CamelCup.Web.Services.Test
         [TestMethod]
         public void RulesEngine_PlaceMinus_OnOwnTrap()
         {
-            // 1: blue | 2: green, orange | 3: red, yellow
+            // 1: blue | 2: green, white | 3: red, yellow
             var startingPositions = TestHelper.ConvertToStartingPositions("1,0 2,1 2,2 3,3 3,4");
             var gamestate = new ImplementedGameState(2, startingPositions);
             gamestate.Traps[0].Location = 5;
@@ -224,7 +224,7 @@ namespace Delver.CamelCup.Web.Services.Test
         [TestMethod]
         public void RulesEngine_PlaceMinus_OnOwnMinusTrap()
         {
-            // 1: blue | 2: green, orange | 3: red, yellow
+            // 1: blue | 2: green, white | 3: red, yellow
             var startingPositions = TestHelper.ConvertToStartingPositions("1,0 2,1 2,2 3,3 3,4");
             var gamestate = new ImplementedGameState(2, startingPositions);
             gamestate.Traps[0].Location = 5;
@@ -244,7 +244,7 @@ namespace Delver.CamelCup.Web.Services.Test
         [TestMethod]
         public void RulesEngine_PlaceMinus_ValidSpace()
         {
-            // 1: blue | 2: green, orange | 3: red, yellow
+            // 1: blue | 2: green, white | 3: red, yellow
             var startingPositions = TestHelper.ConvertToStartingPositions("1,0 2,1 2,2 3,3 3,4");
             var gamestate = new ImplementedGameState(2, startingPositions);
 
@@ -259,7 +259,7 @@ namespace Delver.CamelCup.Web.Services.Test
         [TestMethod]
         public void RulesEngine_PlacePlus_AtStart()
         {
-            // 1: blue | 2: green, orange | 3: red, yellow
+            // 1: blue | 2: green, white | 3: red, yellow
             var startingPositions = TestHelper.ConvertToStartingPositions("1,0 2,1 2,2 3,3 3,4");
             var gamestate = new ImplementedGameState(2, startingPositions);
 
@@ -272,7 +272,7 @@ namespace Delver.CamelCup.Web.Services.Test
         [TestMethod]
         public void RulesEngine_PlacePlus_AtCamel()
         {
-            // 1: blue | 2: green, orange | 3: red, yellow
+            // 1: blue | 2: green, white | 3: red, yellow
             var startingPositions = TestHelper.ConvertToStartingPositions("1,0 2,1 2,2 3,3 3,4");
             var gamestate = new ImplementedGameState(2, startingPositions);
 
@@ -291,7 +291,7 @@ namespace Delver.CamelCup.Web.Services.Test
         [TestMethod]
         public void RulesEngine_PlacePluss_OutOfBounds()
         {
-            // 1: blue | 2: green, orange | 3: red, yellow
+            // 1: blue | 2: green, white | 3: red, yellow
             var startingPositions = TestHelper.ConvertToStartingPositions("1,0 2,1 2,2 3,3 3,4");
             var gamestate = new ImplementedGameState(2, startingPositions);
 
@@ -310,7 +310,7 @@ namespace Delver.CamelCup.Web.Services.Test
         [TestMethod]
         public void RulesEngine_PlacePluss_OnOtherTrap()
         {
-            // 1: blue | 2: green, orange | 3: red, yellow
+            // 1: blue | 2: green, white | 3: red, yellow
             var startingPositions = TestHelper.ConvertToStartingPositions("1,0 2,1 2,2 3,3 3,4");
             var gamestate = new ImplementedGameState(2, startingPositions);
             gamestate.Traps[1].Location = 5;
@@ -329,7 +329,7 @@ namespace Delver.CamelCup.Web.Services.Test
         [TestMethod]
         public void RulesEngine_PlacePluss_OnOwnTrap()
         {
-            // 1: blue | 2: green, orange | 3: red, yellow
+            // 1: blue | 2: green, white | 3: red, yellow
             var startingPositions = TestHelper.ConvertToStartingPositions("1,0 2,1 2,2 3,3 3,4");
             var gamestate = new ImplementedGameState(2, startingPositions);
             gamestate.Traps[0].Location = 5;
@@ -349,7 +349,7 @@ namespace Delver.CamelCup.Web.Services.Test
         [TestMethod]
         public void RulesEngine_PlacePluss_OnOwnPlussTrap()
         {
-            // 1: blue | 2: green, orange | 3: red, yellow
+            // 1: blue | 2: green, white | 3: red, yellow
             var startingPositions = TestHelper.ConvertToStartingPositions("1,0 2,1 2,2 3,3 3,4");
             var gamestate = new ImplementedGameState(2, startingPositions);
             gamestate.Traps[0].Location = 5;
@@ -369,7 +369,7 @@ namespace Delver.CamelCup.Web.Services.Test
         [TestMethod]
         public void RulesEngine_PlacePluss_ValidSpace()
         {
-            // 1: blue | 2: green, orange | 3: red, yellow
+            // 1: blue | 2: green, white | 3: red, yellow
             var startingPositions = TestHelper.ConvertToStartingPositions("1,0 2,1 2,2 3,3 3,4");
             var gamestate = new ImplementedGameState(2, startingPositions);
 
@@ -384,7 +384,7 @@ namespace Delver.CamelCup.Web.Services.Test
         [TestMethod]
         public void RulesEngine_BetOnLoser_Valid()
         {
-            // 1: blue | 2: green, orange | 3: red, yellow
+            // 1: blue | 2: green, white | 3: red, yellow
             var startingPositions = TestHelper.ConvertToStartingPositions("1,0 2,1 2,2 3,3 3,4");
             var gamestate = new ImplementedGameState(2, startingPositions);
 
@@ -399,7 +399,7 @@ namespace Delver.CamelCup.Web.Services.Test
         [TestMethod]
         public void RulesEngine_BetOnLoser_Valid_Other()
         {
-            // 1: blue | 2: green, orange | 3: red, yellow
+            // 1: blue | 2: green, white | 3: red, yellow
             var startingPositions = TestHelper.ConvertToStartingPositions("1,0 2,1 2,2 3,3 3,4");
             var gamestate = new ImplementedGameState(2, startingPositions);
             gamestate.LoserBets.Add(new GameEndBet() { Player = 0, CamelColor = CamelColor.Green });
@@ -414,7 +414,7 @@ namespace Delver.CamelCup.Web.Services.Test
         [TestMethod]
         public void RulesEngine_BetOnLoser_Invalid_Self()
         {
-            // 1: blue | 2: green, orange | 3: red, yellow
+            // 1: blue | 2: green, white | 3: red, yellow
             var startingPositions = TestHelper.ConvertToStartingPositions("1,0 2,1 2,2 3,3 3,4");
             var gamestate = new ImplementedGameState(2, startingPositions);
             gamestate.LoserBets.Add(new GameEndBet() { Player = 1, CamelColor = CamelColor.Green });
@@ -427,7 +427,7 @@ namespace Delver.CamelCup.Web.Services.Test
         [TestMethod]
         public void RulesEngine_BetOnWinner_Valid()
         {
-            // 1: blue | 2: green, orange | 3: red, yellow
+            // 1: blue | 2: green, white | 3: red, yellow
             var startingPositions = TestHelper.ConvertToStartingPositions("1,0 2,1 2,2 3,3 3,4");
             var gamestate = new ImplementedGameState(2, startingPositions);
 
@@ -442,7 +442,7 @@ namespace Delver.CamelCup.Web.Services.Test
         [TestMethod]
         public void RulesEngine_BetOnWinner_Valid_Other()
         {
-            // 1: blue | 2: green, orange | 3: red, yellow
+            // 1: blue | 2: green, white | 3: red, yellow
             var startingPositions = TestHelper.ConvertToStartingPositions("1,0 2,1 2,2 3,3 3,4");
             var gamestate = new ImplementedGameState(2, startingPositions);
             gamestate.LoserBets.Add(new GameEndBet() { Player = 0, CamelColor = CamelColor.Green });
@@ -457,7 +457,7 @@ namespace Delver.CamelCup.Web.Services.Test
         [TestMethod]
         public void RulesEngine_BetOnWinner_Invalid_Self()
         {
-            // 1: blue | 2: green, orange | 3: red, yellow
+            // 1: blue | 2: green, white | 3: red, yellow
             var startingPositions = TestHelper.ConvertToStartingPositions("1,0 2,1 2,2 3,3 3,4");
             var gamestate = new ImplementedGameState(2, startingPositions);
             gamestate.LoserBets.Add(new GameEndBet() { Player = 1, CamelColor = CamelColor.Green });

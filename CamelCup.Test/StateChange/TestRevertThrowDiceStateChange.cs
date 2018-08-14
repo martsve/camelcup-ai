@@ -9,13 +9,13 @@ namespace Delver.CamelCup.Web.Services.Test
         [TestMethod]
         public void Unit_RevertState_DiceThrow()
         {
-            // 1: blue, green, orange | 2: red, yellow
+            // 1: blue, green, white | 2: red, yellow
             var startString = "1,0 1,1 1,2 2,3 2,4";
             var startingPositions = TestHelper.ConvertToStartingPositions(startString);
             var gamestate = new ImplementedGameState(2, startingPositions, 16, 3);
             var change = new DiceThrowStateChange(0, CamelColor.Blue, 1);
             
-            // 2: red, yellow, blue, green, orange
+            // 2: red, yellow, blue, green, white
             gamestate.Apply(change).Revert(change);
 
             AssertBaseState(gamestate, startString);
@@ -24,7 +24,7 @@ namespace Delver.CamelCup.Web.Services.Test
        [TestMethod]
         public void Unit_RevertState_DiceThrow_Trap1()
         {
-            // 1: blue, green, orange | trap | 3: red, yellow
+            // 1: blue, green, white | trap | 3: red, yellow
             var startString = "1,0 1,1 1,2 3,3 3,4";
             var startingPositions = TestHelper.ConvertToStartingPositions(startString);
             var gamestate = new ImplementedGameState(2, startingPositions, 16, 3);
@@ -32,7 +32,7 @@ namespace Delver.CamelCup.Web.Services.Test
             gamestate.Traps[0].Move = 1;
             var change = new DiceThrowStateChange(0, CamelColor.Blue, 1);
             
-            // 3: red, yellow, blue, green, orange
+            // 3: red, yellow, blue, green, white
             gamestate.Apply(change).Revert(change);
 
             AssertBaseState(gamestate, startString);
@@ -41,7 +41,7 @@ namespace Delver.CamelCup.Web.Services.Test
        [TestMethod]
         public void Unit_RevertState_DiceThrow_Trap2()
         {
-            // 1: blue, green, orange | trap | 3: red, yellow
+            // 1: blue, green, white | trap | 3: red, yellow
             var startString = "1,0 1,1 1,2 3,3 3,4";
             var startingPositions = TestHelper.ConvertToStartingPositions(startString);
             var gamestate = new ImplementedGameState(2, startingPositions, 16, 3);
@@ -49,7 +49,7 @@ namespace Delver.CamelCup.Web.Services.Test
             gamestate.Traps[0].Move = -1;
             var change = new DiceThrowStateChange(0, CamelColor.Blue, 1);
             
-            // 3: red, yellow, blue, green, orange
+            // 3: red, yellow, blue, green, white
             gamestate.Apply(change).Revert(change);
 
             AssertBaseState(gamestate, startString);
@@ -58,7 +58,7 @@ namespace Delver.CamelCup.Web.Services.Test
        [TestMethod]
         public void Unit_RevertState_DiceThrow_Trap3()
         {
-            // 1: blue, green, orange | trap | 3: red, yellow
+            // 1: blue, green, white | trap | 3: red, yellow
             var startString = "1,0 1,1 1,2 3,3 3,4";
             var startingPositions = TestHelper.ConvertToStartingPositions(startString);
             var gamestate = new ImplementedGameState(2, startingPositions, 16, 3);
@@ -66,7 +66,7 @@ namespace Delver.CamelCup.Web.Services.Test
             gamestate.Traps[0].Move = -1;
             var change = new DiceThrowStateChange(0, CamelColor.Green, 1);
             
-            // 1: green, orange, BLUE | trap | 3: red, yellow
+            // 1: green, white, BLUE | trap | 3: red, yellow
             gamestate.Apply(change).Revert(change);
 
             AssertBaseState(gamestate, startString);
@@ -75,7 +75,7 @@ namespace Delver.CamelCup.Web.Services.Test
         [TestMethod]
         public void Unit_RevertState_DiceThrow_Trap4()
         {
-            // 1: blue, green, orange | trap | 3: red, yellow
+            // 1: blue, green, white | trap | 3: red, yellow
             var startString = "1,0 1,1 1,2 3,3 3,4";
             var startingPositions = TestHelper.ConvertToStartingPositions(startString);
             var gamestate = new ImplementedGameState(2, startingPositions, 16, 3);
@@ -83,7 +83,7 @@ namespace Delver.CamelCup.Web.Services.Test
             gamestate.Traps[1].Move = -1;
             var change = new DiceThrowStateChange(0, CamelColor.Green, 1);
             
-            // 1: green, orange, BLUE | trap | 3: red, yellow
+            // 1: green, white, BLUE | trap | 3: red, yellow
             gamestate.Apply(change).Revert(change);
 
             AssertBaseState(gamestate, startString);
