@@ -59,7 +59,7 @@ namespace Delver.CamelCup
                 freeLocations.Remove(camel.Location);
             }
 
-            int expectedMove = positive ? 1 : -1;
+            var expectedMove = positive ? 1 : -1;
             foreach (var playerTrapPair in gameState.Traps.Where(x => x.Value.Location > -1))
             {
                 if (playerTrapPair.Key == player && expectedMove != playerTrapPair.Value.Move)
@@ -84,7 +84,7 @@ namespace Delver.CamelCup
         public static List<List<Camel>> GetAllGameEndStates(this GameState gameState, int depth = 5, bool includeAllStates = false) 
         {
             var positions = GetCamelEndPositions(gameState, depth, includeAll: includeAllStates);
-            return positions.Select(x => ConvertCamelPositionToCamels(x)).ToList();
+            return positions.Select(ConvertCamelPositionToCamels).ToList();
         }
 
         public static Dictionary<CamelColor, int> GetCamelWins(this GameState gameState, out int[] money, int depth = 5) 
@@ -92,7 +92,7 @@ namespace Delver.CamelCup
             var positions = GetCamelEndPositions(gameState, depth, includeAll: false);
 
             var result = new Dictionary<CamelColor, int>();
-            foreach (var camel in CamelHelper.GetAllCamelColors())
+            foreach (var camel in GetAllCamelColors())
                 result.Add(camel, 0);
 
             money = new int[16];
@@ -101,7 +101,7 @@ namespace Delver.CamelCup
             {
                 var winner = (CamelColor)Array.IndexOf(pos.Height, 4);
 
-                for (int i = 1; i < 16; i++)
+                for (var i = 1; i < 16; i++)
                     money[i] += pos.Money[i];
 
                 result[winner]++;
@@ -114,7 +114,7 @@ namespace Delver.CamelCup
         {
             var positions = GetCamelEndPositions(gameState, depth, includeAll: true);
             var result = new Dictionary<int, int>();
-            for (int i = 0; i < gameState.BoardSize + 3; i++)
+            for (var i = 0; i < gameState.BoardSize + 3; i++)
             {
                 result[i] = 0;
             }
@@ -151,9 +151,9 @@ namespace Delver.CamelCup
 
         private static List<Camel> ConvertCamelPositionToCamels(CamelPositions positions)
         {
-            var camels = CamelHelper.GetAllCamelColors().Select(x => new Camel() { CamelColor = x }).ToList();
+            var camels = GetAllCamelColors().Select(x => new Camel() { CamelColor = x }).ToList();
 
-            for (int i = 0; i < positions.Location.Length; i++)
+            for (var i = 0; i < positions.Location.Length; i++)
             {
                 camels[i].Location = positions.Location[i];
                 camels[i].Height = positions.Height[i];
@@ -168,7 +168,7 @@ namespace Delver.CamelCup
 
             foreach (var dice in colors)
             {
-                for (int i = 1; i <= 3; i++)
+                for (var i = 1; i <= 3; i++)
                 {
                     var pos = FastCamelMove(initialPosition, (int)dice, i, traps);
 
@@ -216,36 +216,36 @@ namespace Delver.CamelCup
                 toSpace += move;
             }
 
-            var N = 0;
-            var M = 0;
-            for (int i = 0; i < 5; i++) 
+            var n = 0;
+            var m = 0;
+            for (var i = 0; i < 5; i++) 
                 if (pos.Location[i] == from && pos.Height[i] >= fromHeight) 
-                    N++;
+                    n++;
 
-            for (int x = from + 1; x < toSpace; x++)
+            for (var x = from + 1; x < toSpace; x++)
             {
-                for (int i = 0; i < 5; i++)
+                for (var i = 0; i < 5; i++)
                     if (pos.Location[i] == x) 
                     {
-                        pos.Height[i] -= N;
-                        M++;
+                        pos.Height[i] -= n;
+                        m++;
                     }
             }
 
             if (move == 1)
             {
-                for (int i = 0; i < 5; i++)
+                for (var i = 0; i < 5; i++)
                     if (pos.Location[i] == toSpace) 
                     {
-                        pos.Height[i] -= N;
-                        M++;
+                        pos.Height[i] -= n;
+                        m++;
                     }
             }
 
-            for (int i = 0; i < 5; i++) {
+            for (var i = 0; i < 5; i++) {
                 if (pos.Location[i] == from  && pos.Height[i] >= fromHeight) {
                     pos.Location[i] = toSpace;
-                    pos.Height[i] += M;
+                    pos.Height[i] += m;
                 }
             }
 

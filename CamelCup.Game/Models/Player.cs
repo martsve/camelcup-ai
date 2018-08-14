@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-
-using Newtonsoft.Json;
-
 using Delver.CamelCup.External;
 
 namespace Delver.CamelCup
@@ -36,7 +31,7 @@ namespace Delver.CamelCup
 
         public void Reset(int playerId) 
         {
-            this.PlayerId = playerId;
+            PlayerId = playerId;
             Disqualified = false;
             ComputationTime = TimeSpan.FromMilliseconds(0);
         }

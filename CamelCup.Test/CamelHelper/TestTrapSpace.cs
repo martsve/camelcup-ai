@@ -1,10 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Delver.CamelCup;
-using Delver.CamelCup.MartinBots;
 using System.Linq;
-using Delver.CamelCup.External;
-using System.IO;
-using System.Collections.Generic;
 
 namespace Delver.CamelCup.Web.Services.Test
 {
@@ -25,7 +20,7 @@ namespace Delver.CamelCup.Web.Services.Test
             var startingPositions = TestHelper.ConvertToStartingPositions("1,0 2,1 2,2 3,3 3,4");
             var gamestate = new ImplementedGameState(4, startingPositions);
             
-            for (int i = 4; i < 16; i++)
+            for (var i = 4; i < 16; i++)
                 Assert.AreEqual(true,  CamelHelper.IsValidTrapSpace(gamestate, 0, i), $"valid at pos {i}");
         }
 

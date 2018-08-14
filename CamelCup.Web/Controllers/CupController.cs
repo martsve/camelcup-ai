@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Delver.CamelCup.Web.Services;
-using Delver.CamelCup;
 using Delver.CamelCup.MartinBots;
 using Delver.CamelCup.External;
 using Delver.CamelCup.Web.Models;
-using Microsoft.AspNetCore.Http;
 using System.IO;
 using System.Runtime.Loader;
 using System.Text.RegularExpressions;
@@ -28,7 +25,7 @@ namespace Delver.CamelCup.Web.Controllers
         {
             CamelService?.Stop();
 
-            Guid? guid = id != null ? (Guid?)Guid.Parse(id) : null;
+            var guid = id != null ? (Guid?)Guid.Parse(id) : null;
             CamelService = new CamelService(guid);
             return CamelService.CupId;
         }
@@ -176,7 +173,7 @@ namespace Delver.CamelCup.Web.Controllers
         private static string GetValidFileName(string fileName) 
         {
             // remove any invalid character from the filename.
-            String ret = Regex.Replace(fileName.Trim(), "[^A-Za-z0-9_. ]+", "");
+            var ret = Regex.Replace(fileName.Trim(), "[^A-Za-z0-9_. ]+", "");
             return ret.Replace(" ", String.Empty);
         }
 
@@ -189,7 +186,7 @@ namespace Delver.CamelCup.Web.Controllers
         {
             try {
                 var lib = AssemblyLoadContext.Default.LoadFromAssemblyPath(filename);
-                foreach (Type type in lib.GetTypes())
+                foreach (var type in lib.GetTypes())
                 {
                     if (type.GetInterfaces().Contains(typeof(ICamelCupPlayer)))
                     {

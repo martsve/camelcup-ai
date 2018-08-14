@@ -1,9 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Delver.CamelCup;
-using Delver.CamelCup.MartinBots;
-using System.Linq;
 using Delver.CamelCup.External;
-using System.IO;
 
 namespace Delver.CamelCup.Web.Services.Test
 {
@@ -20,7 +16,7 @@ namespace Delver.CamelCup.Web.Services.Test
 
             gamestate.RemainingDice.RemoveAll(x => x != CamelColor.Red);
 
-            var wins = CamelHelper.GetCamelWins(gamestate, out int[] money);
+            var wins = CamelHelper.GetCamelWins(gamestate, out var money);
             
             Assert.AreEqual(0, wins[CamelColor.Blue], "blue");
             Assert.AreEqual(0, wins[CamelColor.Green], "green");
@@ -39,7 +35,7 @@ namespace Delver.CamelCup.Web.Services.Test
 
             gamestate.RemainingDice.RemoveAll(x => x != CamelColor.Yellow);
 
-            var wins = CamelHelper.GetCamelWins(gamestate, out int[] money);
+            var wins = CamelHelper.GetCamelWins(gamestate, out var money);
             
             Assert.AreEqual(0, wins[CamelColor.Blue], "blue");
             Assert.AreEqual(0, wins[CamelColor.Green], "green");
@@ -60,7 +56,7 @@ namespace Delver.CamelCup.Web.Services.Test
 
             gamestate.RemainingDice.RemoveAll(x => x != CamelColor.Green);
 
-            var wins = CamelHelper.GetCamelWins(gamestate, out int[] money);
+            var wins = CamelHelper.GetCamelWins(gamestate, out var money);
             
             Assert.AreEqual(0, wins[CamelColor.Blue], "blue");
             Assert.AreEqual(0, wins[CamelColor.Green], "green");
@@ -83,7 +79,7 @@ namespace Delver.CamelCup.Web.Services.Test
 
             gamestate.RemainingDice.RemoveAll(x => x != CamelColor.Green);
 
-            var wins = CamelHelper.GetCamelWins(gamestate, out int[] money);
+            var wins = CamelHelper.GetCamelWins(gamestate, out var money);
             
             Assert.AreEqual(0, wins[CamelColor.Blue], "blue");
             Assert.AreEqual(0, wins[CamelColor.Green], "green");
@@ -101,7 +97,7 @@ namespace Delver.CamelCup.Web.Services.Test
             var startString = "1,0 1,1 1,2 2,3 2,4";
             var startingPositions = TestHelper.ConvertToStartingPositions(startString);
             var gamestate = new ImplementedGameState(1, startingPositions);
-            var wins = CamelHelper.GetCamelWins(gamestate, out int[] money);
+            var wins = CamelHelper.GetCamelWins(gamestate, out var money);
             
             Assert.AreEqual(3107, wins[CamelColor.Blue], "blue");
             Assert.AreEqual(6226, wins[CamelColor.Green], "green");
@@ -121,7 +117,7 @@ namespace Delver.CamelCup.Web.Services.Test
             gamestate.Traps[0].Location = 3;
             gamestate.Traps[0].Move = 1;
 
-            var wins = CamelHelper.GetCamelWins(gamestate, out int[] money);
+            var wins = CamelHelper.GetCamelWins(gamestate, out var money);
             
             Assert.AreEqual(4239, wins[CamelColor.Blue], "blue");
             Assert.AreEqual(6215, wins[CamelColor.Green], "green");
@@ -143,7 +139,7 @@ namespace Delver.CamelCup.Web.Services.Test
             gamestate.Traps[0].Location = 3;
             gamestate.Traps[0].Move = -1;
 
-            var wins = CamelHelper.GetCamelWins(gamestate, out int[] money);
+            var wins = CamelHelper.GetCamelWins(gamestate, out var money);
             
             Assert.AreEqual(3086, wins[CamelColor.Blue], "blue");
             Assert.AreEqual(5240, wins[CamelColor.Green], "green");

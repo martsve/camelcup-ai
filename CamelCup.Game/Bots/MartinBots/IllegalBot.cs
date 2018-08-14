@@ -7,18 +7,18 @@ namespace Delver.CamelCup.MartinBots
 {
     public class IllegalBot : ICamelCupPlayer
     {
-        private string name;
+        private readonly string _name;
 
-        private bool usePlusTrap;
-        private bool useMinusTrap;
-        private bool betOnWinner;
-        private bool betOnLoser;
+        private readonly bool _usePlusTrap;
+        private readonly bool _useMinusTrap;
+        private readonly bool _betOnWinner;
+        private readonly bool _betOnLoser;
 
-        private int Me;
+        private int _me;
 
         public List<CamelColor> BetCardsRemaining = CamelHelper.GetAllCamelColors();
 
-        private static Random rnd = new Random();
+        private static readonly Random Rnd = new Random();
 
         public IllegalBot() : this(1)
         {
@@ -26,22 +26,22 @@ namespace Delver.CamelCup.MartinBots
 
         public IllegalBot(int num = 1, bool usePlusTrap = true, bool useMinusTrap = true, bool betOnWinner = true, bool betOnLoser = true)
         {
-            name = $"IllegalBot #{num}";
+            _name = $"IllegalBot #{num}";
 
-            this.usePlusTrap = usePlusTrap;
-            this.useMinusTrap = useMinusTrap;
-            this.betOnWinner = betOnWinner;
-            this.betOnLoser = betOnLoser;
+            _usePlusTrap = usePlusTrap;
+            _useMinusTrap = useMinusTrap;
+            _betOnWinner = betOnWinner;
+            _betOnLoser = betOnLoser;
         }
 
         public string GetPlayerName()
         {
-            return name;
+            return _name;
         }
 
         public void StartNewGame(int playerId, GameInfo info, GameState gameState)
         {
-            Me = playerId;
+            _me = playerId;
         }
 
         public void InformAboutAction(int player, PlayerAction action, GameState gameState)
@@ -60,7 +60,7 @@ namespace Delver.CamelCup.MartinBots
             {
                 case CamelAction.PickCard:
 
-                    var bestBets = gameState.BettingCards.OrderByDescending(x => rnd.Next());
+                    var bestBets = gameState.BettingCards.OrderByDescending(x => Rnd.Next());
                     return new PlayerAction() { CamelAction = CamelAction.PickCard, Color = bestBets.First().CamelColor };
 
                 case CamelAction.SecretBetOnLoser:
@@ -80,12 +80,12 @@ namespace Delver.CamelCup.MartinBots
                     break;
 
                 case CamelAction.PlaceMinusTrap:
-                    return new PlayerAction() { CamelAction = CamelAction.PlaceMinusTrap, Value = rnd.Next(0, gameState.BoardSize) };
+                    return new PlayerAction() { CamelAction = CamelAction.PlaceMinusTrap, Value = Rnd.Next(0, gameState.BoardSize) };
 
                 case CamelAction.PlacePlussTrap:
                     var plussLoc = GetRandomTrapPlace(gameState, true);
                     if (plussLoc > -1) {
-                        return new PlayerAction() { CamelAction = CamelAction.PlacePlussTrap, Value = rnd.Next(0, gameState.BoardSize) };
+                        return new PlayerAction() { CamelAction = CamelAction.PlacePlussTrap, Value = Rnd.Next(0, gameState.BoardSize) };
                     }
                     break;
 
@@ -99,30 +99,30 @@ namespace Delver.CamelCup.MartinBots
 
         private int GetRandomTrapPlace(GameState gameState, bool positive) 
         {
-            var freeLocations = gameState.GetFreeTrapSpaces(Me, positive);
+            var freeLocations = gameState.GetFreeTrapSpaces(_me, positive);
             if (!freeLocations.Any()) {
                 return -1;
             }
-            var loc = rnd.Next(0, freeLocations.Count);
+            var loc = Rnd.Next(0, freeLocations.Count);
             return freeLocations[loc];
         }
 
         private CamelAction GetRandomAction()
         {    
-            Dictionary<CamelAction, double> ActionChance = new Dictionary<CamelAction, double>()
+            var actionChance = new Dictionary<CamelAction, double>()
             {
                 { CamelAction.ThrowDice, 3 },
                 { CamelAction.PickCard, 5 },
-                { CamelAction.PlaceMinusTrap, useMinusTrap ? 1 : 0 },
-                { CamelAction.PlacePlussTrap, usePlusTrap ? 1 : 0 },
-                { CamelAction.SecretBetOnLoser, betOnLoser ? 1 : 0 },
-                { CamelAction.SecretBetOnWinner, betOnWinner ? 1 : 0 },
+                { CamelAction.PlaceMinusTrap, _useMinusTrap ? 1 : 0 },
+                { CamelAction.PlacePlussTrap, _usePlusTrap ? 1 : 0 },
+                { CamelAction.SecretBetOnLoser, _betOnLoser ? 1 : 0 },
+                { CamelAction.SecretBetOnWinner, _betOnWinner ? 1 : 0 },
             };
             
-            var totalSum = ActionChance.Select(x => x.Value).Sum();
+            var totalSum = actionChance.Select(x => x.Value).Sum();
             var rnd = new Random().NextDouble() * totalSum;
             var current = 0.0;
-            foreach (var pair in ActionChance)
+            foreach (var pair in actionChance)
             {
                 current += pair.Value;
 

@@ -1,6 +1,4 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Delver.CamelCup;
-using Delver.CamelCup.MartinBots;
 using System.Linq;
 using Delver.CamelCup.External;
 using System.IO;
@@ -11,11 +9,11 @@ namespace Delver.CamelCup.Web.Services.Test
     [TestClass]
     public class TestGetAllGameStates
     {
-        private static string[] depth0positions = File.ReadAllLines("ExpectedResults/Positions_Depth_0.txt").Select(x => x.Trim()).ToArray(); 
-        private static string[] depth1positions  = File.ReadAllLines("ExpectedResults/Positions_Depth_1.txt").Select(x => x.Trim()).ToArray(); 
-        private static string[] depth2positions  = File.ReadAllLines("ExpectedResults/Positions_Depth_2.txt").Select(x => x.Trim()).ToArray(); 
-        private static string[] depth3positions  = File.ReadAllLines("ExpectedResults/Positions_Depth_3.txt").Select(x => x.Trim()).ToArray(); 
-        private static string[] depth4positions  = File.ReadAllLines("ExpectedResults/Positions_Depth_4.txt").Select(x => x.Trim()).ToArray(); 
+        private static readonly string[] _depth0Positions = File.ReadAllLines("ExpectedResults/Positions_Depth_0.txt").Select(x => x.Trim()).ToArray(); 
+        private static readonly string[] _depth1Positions  = File.ReadAllLines("ExpectedResults/Positions_Depth_1.txt").Select(x => x.Trim()).ToArray(); 
+        private static readonly string[] _depth2Positions  = File.ReadAllLines("ExpectedResults/Positions_Depth_2.txt").Select(x => x.Trim()).ToArray(); 
+        private static readonly string[] _depth3Positions  = File.ReadAllLines("ExpectedResults/Positions_Depth_3.txt").Select(x => x.Trim()).ToArray(); 
+        private static readonly string[] _depth4Positions  = File.ReadAllLines("ExpectedResults/Positions_Depth_4.txt").Select(x => x.Trim()).ToArray(); 
 
         private string CamelsToString(List<Camel> camels)
         {
@@ -29,13 +27,13 @@ namespace Delver.CamelCup.Web.Services.Test
             var startString = "1,0 1,1 1,2 2,3 2,4";
             var startingPositions = TestHelper.ConvertToStartingPositions(startString);
             var gamestate = new ImplementedGameState(1, startingPositions);
-            var states = CamelHelper.GetAllGameEndStates(gamestate, 0);
+            var states = gamestate.GetAllGameEndStates(0);
 
             Assert.AreEqual(15, states.Count, "final states");
 
-            var positions = states.Select(x => CamelsToString(x)).ToList();
+            var positions = states.Select(CamelsToString).ToList();
 
-            foreach (var pos in depth0positions)
+            foreach (var pos in _depth0Positions)
                 Assert.IsTrue(positions.Contains(pos), "Can't find state: " + pos);
         }
 
@@ -46,16 +44,16 @@ namespace Delver.CamelCup.Web.Services.Test
             var startString = "1,0 1,1 1,2 2,3 2,4";
             var startingPositions = TestHelper.ConvertToStartingPositions(startString);
             var gamestate = new ImplementedGameState(1, startingPositions);
-            var states = CamelHelper.GetAllGameEndStates(gamestate, 1);
+            var states = gamestate.GetAllGameEndStates(1);
 
             Assert.AreEqual(15*12, states.Count, "final states");
 
-            var positions = states.Select(x => CamelsToString(x)).ToList();
+            var positions = states.Select(CamelsToString).ToList();
 
-            foreach (var pos in depth0positions)
+            foreach (var pos in _depth0Positions)
                 Assert.IsTrue(!positions.Contains(pos), "Found state: " + pos);
 
-            foreach (var pos in depth1positions)
+            foreach (var pos in _depth1Positions)
                 Assert.IsTrue(positions.Contains(pos), "Can't find state: " + pos);
         }
                 
@@ -66,16 +64,16 @@ namespace Delver.CamelCup.Web.Services.Test
             var startString = "1,0 1,1 1,2 2,3 2,4";
             var startingPositions = TestHelper.ConvertToStartingPositions(startString);
             var gamestate = new ImplementedGameState(1, startingPositions);
-            var states = CamelHelper.GetAllGameEndStates(gamestate, 1, includeAllStates: true);
+            var states = gamestate.GetAllGameEndStates(1, includeAllStates: true);
 
             Assert.AreEqual(15*12 + 15, states.Count, "final states");
 
-            var positions = states.Select(x => CamelsToString(x)).ToList();
+            var positions = states.Select(CamelsToString).ToList();
 
-            foreach (var pos in depth0positions)
+            foreach (var pos in _depth0Positions)
                 Assert.IsTrue(positions.Contains(pos), "Can't find state: " + pos);
 
-            foreach (var pos in depth1positions)
+            foreach (var pos in _depth1Positions)
                 Assert.IsTrue(positions.Contains(pos), "Can't find state: " + pos);
         }
 
@@ -86,16 +84,16 @@ namespace Delver.CamelCup.Web.Services.Test
             var startString = "1,0 1,1 1,2 2,3 2,4";
             var startingPositions = TestHelper.ConvertToStartingPositions(startString);
             var gamestate = new ImplementedGameState(1, startingPositions);
-            var states = CamelHelper.GetAllGameEndStates(gamestate, 2);
+            var states = gamestate.GetAllGameEndStates(2);
 
             Assert.AreEqual(15*12*9, states.Count, "final states");
 
-            var positions = states.Select(x => CamelsToString(x)).ToList();
+            var positions = states.Select(CamelsToString).ToList();
 
-            foreach (var pos in depth1positions)
+            foreach (var pos in _depth1Positions)
                 Assert.IsTrue(!positions.Contains(pos), "Found depth 1 state: " + pos);
 
-            foreach (var pos in depth2positions)
+            foreach (var pos in _depth2Positions)
                 Assert.IsTrue(positions.Contains(pos), "Can't find state: " + pos);
         }
                 
@@ -106,13 +104,13 @@ namespace Delver.CamelCup.Web.Services.Test
             var startString = "1,0 1,1 1,2 2,3 2,4";
             var startingPositions = TestHelper.ConvertToStartingPositions(startString);
             var gamestate = new ImplementedGameState(1, startingPositions);
-            var states = CamelHelper.GetAllGameEndStates(gamestate, 3);
+            var states = gamestate.GetAllGameEndStates(3);
 
             Assert.AreEqual(15*12*9*6, states.Count, "final states");
 
-            var positions = states.Select(x => CamelsToString(x)).ToList();
+            var positions = states.Select(CamelsToString).ToList();
 
-            foreach (var pos in depth3positions)
+            foreach (var pos in _depth3Positions)
                 Assert.IsTrue(positions.Contains(pos), "Can't find state: " + pos);
         }
                 
@@ -123,13 +121,13 @@ namespace Delver.CamelCup.Web.Services.Test
             var startString = "1,0 1,1 1,2 2,3 2,4";
             var startingPositions = TestHelper.ConvertToStartingPositions(startString);
             var gamestate = new ImplementedGameState(1, startingPositions);
-            var states = CamelHelper.GetAllGameEndStates(gamestate, 4);
+            var states = gamestate.GetAllGameEndStates(4);
 
             Assert.AreEqual(15*12*9*6*3, states.Count, "final states");
 
-            var positions = states.Select(x => CamelsToString(x)).ToList();
+            var positions = states.Select(CamelsToString).ToList();
 
-            foreach (var pos in depth4positions)
+            foreach (var pos in _depth4Positions)
                 Assert.IsTrue(positions.Contains(pos), "Can't find state: " + pos);
         }
 
@@ -141,13 +139,13 @@ namespace Delver.CamelCup.Web.Services.Test
             var startString = "1,0 1,1 1,2 2,3 2,4";
             var startingPositions = TestHelper.ConvertToStartingPositions(startString);
             var gamestate = new ImplementedGameState(1, startingPositions);
-            var states = CamelHelper.GetAllGameEndStates(gamestate, 5);
+            var states = gamestate.GetAllGameEndStates(5);
 
             Assert.AreEqual(15*12*9*6*3, states.Count, "final states");
 
-            var positions = states.Select(x => CamelsToString(x)).ToList();
+            var positions = states.Select(CamelsToString).ToList();
 
-            foreach (var pos in depth4positions)
+            foreach (var pos in _depth4Positions)
                 Assert.IsTrue(positions.Contains(pos), "Can't find state: " + pos);
         }
     }

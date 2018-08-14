@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-
 using Newtonsoft.Json;
 
 using Delver.CamelCup.External;
@@ -25,7 +21,7 @@ namespace Delver.CamelCup
             BoardSize = boardSize;
             Round = 0;
 
-            for (int i = 0; i < players; i++)
+            for (var i = 0; i < players; i++)
             {
                 Money[i] = startingMoney;
                 Traps[i] = new Trap();

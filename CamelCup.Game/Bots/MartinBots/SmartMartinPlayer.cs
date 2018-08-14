@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using Delver.CamelCup.External;
 
 namespace Delver.CamelCup.MartinBots
@@ -27,7 +25,7 @@ namespace Delver.CamelCup.MartinBots
 
         public PlayerAction GetAction(GameState gameState)
         {
-            var camelWins = CamelHelper.GetCamelWins(gameState, out int[] money, 5);
+            var camelWins = CamelHelper.GetCamelWins(gameState, out var money, 5);
             var sum = (double)camelWins.Sum(x => x.Value);
             var probability = camelWins.ToDictionary(x => x.Key, x => x.Value / sum);
             var bettingCards = gameState.BettingCards

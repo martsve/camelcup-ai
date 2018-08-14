@@ -1,18 +1,14 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-
 using Delver.CamelCup.External;
 
 namespace Delver.CamelCup
 {
     public class DiceThrowStateChange : StateChange 
     {
-        private List<CamelColor> movedStack;
-        private int oldLocation;
-        private int trapPlayer = -1;
+        private List<CamelColor> _movedStack;
+        private int _oldLocation;
+        private int _trapPlayer = -1;
 
         public DiceThrowStateChange(int player, CamelColor color, int value) : base(StateAction.ThrowDice, player, color, value)
         {
@@ -29,24 +25,24 @@ namespace Delver.CamelCup
 
             var mainCamel = gameState.Camels.First(x => x.CamelColor == Color);
             var camelStack = gameState.Camels.Where(x => x.Location == mainCamel.Location && x.Height >= mainCamel.Height).ToList();
-            movedStack = camelStack.OrderBy(x => x.Height).Select(x => x.CamelColor).ToList();
+            _movedStack = camelStack.OrderBy(x => x.Height).Select(x => x.CamelColor).ToList();
 
-            oldLocation = mainCamel.Location;
+            _oldLocation = mainCamel.Location;
 
-            var newLocation = oldLocation + Value;
+            var newLocation = _oldLocation + Value;
             var onTop = true;
             var trap = gameState.Traps.FirstOrDefault(x => x.Value.Location == newLocation);
             if (trap.Value != null) 
             {
-                trapPlayer = trap.Key;
-                gameState.Money[trapPlayer] += 1;
-                ChildChanges.Add(new MoveStackStateChange(movedStack, oldLocation, newLocation, onTop));
-                ChildChanges.Add(new StateChange(StateAction.GetMoney, trapPlayer, Color, 1));
+                _trapPlayer = trap.Key;
+                gameState.Money[_trapPlayer] += 1;
+                ChildChanges.Add(new MoveStackStateChange(_movedStack, _oldLocation, newLocation, onTop));
+                ChildChanges.Add(new StateChange(StateAction.GetMoney, _trapPlayer, Color, 1));
                 newLocation += trap.Value.Move;
                 onTop = trap.Value.Move > 0;
             }
 
-            ChildChanges.Add(new MoveStackStateChange(movedStack, oldLocation, newLocation, onTop));
+            ChildChanges.Add(new MoveStackStateChange(_movedStack, _oldLocation, newLocation, onTop));
 
             MoveStack(gameState.Camels, camelStack, newLocation, onTop);
         }
@@ -74,14 +70,14 @@ namespace Delver.CamelCup
 
             gameState.RemainingDice.Add(Color);
 
-            if (trapPlayer >= 0)
+            if (_trapPlayer >= 0)
             {
-                gameState.Money[trapPlayer] -= 1;
+                gameState.Money[_trapPlayer] -= 1;
             }
 
-            var movedCamels = movedStack.Select(x => gameState.Camels.First(y => y.CamelColor == x)).ToList();
+            var movedCamels = _movedStack.Select(x => gameState.Camels.First(y => y.CamelColor == x)).ToList();
 
-            MoveStack(gameState.Camels, movedCamels, oldLocation, true);
+            MoveStack(gameState.Camels, movedCamels, _oldLocation, true);
         }
     }
 }

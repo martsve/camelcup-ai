@@ -1,9 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Delver.CamelCup;
 using Delver.CamelCup.MartinBots;
-using System.Linq;
-using Delver.CamelCup.External;
-using System.IO;
 using System.Collections.Generic;
 using System;
 
@@ -75,8 +71,10 @@ namespace Delver.CamelCup.Web.Services.Test
         private Player GetTestBot(int id)
         {
             var bot = new RandomBot(id);
-            var player = new Player(bot, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1));
-            player.Name = bot.GetPlayerName();
+            var player = new Player(bot, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1))
+            {
+                Name = bot.GetPlayerName()
+            };
             return player;
         }
     }

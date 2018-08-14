@@ -1,7 +1,4 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Delver.CamelCup;
-using Delver.CamelCup.MartinBots;
-using System.Linq;
 using Delver.CamelCup.External;
 
 namespace Delver.CamelCup.Web.Services.Test

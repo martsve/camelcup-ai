@@ -1,7 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Delver.CamelCup;
 using Delver.CamelCup.MartinBots;
-using System.Linq;
 using Delver.CamelCup.External;
 using System.Collections.Generic;
 using System;
@@ -150,11 +148,11 @@ namespace Delver.CamelCup.Web.Services.Test
 
         class TestBot : ICamelCupPlayer
         {
-            Func<GameState, PlayerAction> func;
+            Func<GameState, PlayerAction> _func;
 
             public TestBot(Func<GameState, PlayerAction> func)
             {
-                this.func = func;
+                _func = func;
             }
 
             public int CalledPlayerName;
@@ -171,7 +169,7 @@ namespace Delver.CamelCup.Web.Services.Test
             public PlayerAction GetAction(GameState gameState)
             {
                 CalledAction++;
-                return func.Invoke(gameState);
+                return _func.Invoke(gameState);
             }
 
             public string GetPlayerName()

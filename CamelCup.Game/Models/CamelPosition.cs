@@ -1,5 +1,3 @@
-using System;
-
 namespace Delver.CamelCup
 {
     public struct Position 
@@ -20,30 +18,29 @@ namespace Delver.CamelCup
 
         public override bool Equals(object obj)
         {
-            if (obj is Position)
+            if (obj is Position pos)
             {
-                var pos = (Position)obj;
                 return pos.Height == Height && pos.Location == Location;
             }
 
             return false;
         }
 
-        public static bool operator ==(Position A, Position B)
+        public static bool operator ==(Position a, Position b)
         {
-            return A.Equals(B);
+            return a.Equals(b);
         }
 
-        public static bool operator !=(Position A, Position B)
+        public static bool operator !=(Position a, Position b)
         {
-            return !A.Equals(B);
+            return !a.Equals(b);
         }
 
         public override int GetHashCode()
         {
             unchecked
             {
-                int hashCode = Location.GetHashCode();
+                var hashCode = Location.GetHashCode();
                 hashCode = (hashCode * 397) ^ Height.GetHashCode();
                 return hashCode;
             }

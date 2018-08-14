@@ -1,11 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using Delver.CamelCup.External;
 
 namespace Delver.CamelCup
@@ -52,7 +49,7 @@ namespace Delver.CamelCup
 
             var seedString = $"{gameSeed};{playerString};{startPosString}";
 
-            MD5 md5Hasher = MD5.Create();
+            var md5Hasher = MD5.Create();
             var hashed = md5Hasher.ComputeHash(Encoding.UTF8.GetBytes(seedString));
             var seed = BitConverter.ToInt32(hashed, 0);
 
@@ -73,7 +70,7 @@ namespace Delver.CamelCup
                 Players = playerNames
             };
             
-            for (int i = 0; i < Players.Count; i++) 
+            for (var i = 0; i < Players.Count; i++) 
             {
                 var player = Players[i];
                 player.Reset(i);
@@ -99,7 +96,7 @@ namespace Delver.CamelCup
 
         public void MoveNextPlayer()
         {
-            ImplementedPlayerAction action = new ImplementedPlayerAction();
+            var action = new ImplementedPlayerAction();
 
             if (!Players[CurrentPlayer].Disqualified) {
                 Attempt(() => {

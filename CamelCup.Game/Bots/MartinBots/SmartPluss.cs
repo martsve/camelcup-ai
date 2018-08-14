@@ -1,14 +1,12 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using Delver.CamelCup.External;
 
 namespace Delver.CamelCup.MartinBots
 {
     public class SmartPluss : ICamelCupPlayer
     {
-        private int Me;
+        private int _me;
 
         public SmartPluss()
         {
@@ -22,7 +20,7 @@ namespace Delver.CamelCup.MartinBots
 
         public void StartNewGame(int playerId, GameInfo info, GameState gameState)
         {
-            Me = playerId;
+            _me = playerId;
         }
 
         public void InformAboutAction(int player, PlayerAction action, GameState gameState)
@@ -36,15 +34,15 @@ namespace Delver.CamelCup.MartinBots
         public PlayerAction GetAction(GameState gameState)
         {
             var bestAction = new PlayerAction() { CamelAction = CamelAction.ThrowDice };
-            var myTrap = gameState.Traps.FirstOrDefault(x => x.Key == Me && x.Value.Location > -1);
+            var myTrap = gameState.Traps.FirstOrDefault(x => x.Key == _me && x.Value.Location > -1);
             if (myTrap.Value == null) 
             {
-                var freeLocations = gameState.GetFreeTrapSpaces(Me, true);
+                var freeLocations = gameState.GetFreeTrapSpaces(_me, true);
                 var bestSum = 1;
                 foreach (var location in freeLocations) {
-                    gameState.Traps[Me].Location = location;
-                    gameState.Traps[Me].Move = 1;
-                    CamelHelper.GetCamelWins(gameState, out int[] money, depth: 2);
+                    gameState.Traps[_me].Location = location;
+                    gameState.Traps[_me].Move = 1;
+                    CamelHelper.GetCamelWins(gameState, out var money, depth: 2);
                     if (money[location] > bestSum) {
                         bestSum = money[location];
                         bestAction = new PlayerAction() { CamelAction = CamelAction.PlacePlussTrap, Value = location };

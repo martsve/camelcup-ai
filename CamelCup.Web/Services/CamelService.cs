@@ -1,4 +1,3 @@
-using Delver.CamelCup;
 using Delver.CamelCup.MartinBots;
 using System.Linq;
 using Delver.CamelCup.External;
@@ -19,7 +18,7 @@ namespace Delver.CamelCup.Web.Services
         public List<Guid> GameIdHistory { get; set; }
 
         private Task GameTask { get; set; }
-        private CancellationTokenSource cts;
+        private CancellationTokenSource _cts;
 
         public CamelService(Guid? cupId = null)
         {
@@ -45,15 +44,15 @@ namespace Delver.CamelCup.Web.Services
         public void Run()
         {
             Stop();
-            cts = new CancellationTokenSource();
-            GameTask = Task.Run(() => ComputeGame(cts.Token));
+            _cts = new CancellationTokenSource();
+            GameTask = Task.Run(() => ComputeGame(_cts.Token));
         }
 
         public void Stop()
         {
             if (GameTask != null && GameTask.Status == TaskStatus.Running)
             {
-                cts.Cancel();
+                _cts.Cancel();
                 while (!GameTask.IsCompleted) {
                     Thread.Sleep(100);
                 }

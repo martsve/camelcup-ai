@@ -2,24 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using Delver.CamelCup;
-using Delver.CamelCup.External;
 
 namespace MyTestProgram
 {
     class Program
     {
-        const double timeScalingFactor = 1.0;
+        const double TimeScalingFactor = 1.0;
 
         static void Main(string[] args)
         {
             var filename = args.FirstOrDefault(x => !x.StartsWith("-")) ?? "players.txt";
 
-            var runner = new CamelRunner(TimeScalingFactor: timeScalingFactor);
+            var runner = new CamelRunner(timeScalingFactor: TimeScalingFactor);
             runner.LoadPlayers(filename);
 
             var history = runner.GetPlayers().ToDictionary(x => x, x => new List<TimeSpan>());
 
-            for (int i = 0; i < 250; i++)
+            for (var i = 0; i < 250; i++)
             {
                 runner.ComputeNewGame();
                 Console.WriteLine($"Game #{i} finished");

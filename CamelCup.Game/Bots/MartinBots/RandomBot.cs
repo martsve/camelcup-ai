@@ -7,14 +7,14 @@ namespace Delver.CamelCup.MartinBots
 {
     public class RandomBot : ICamelCupPlayer
     {
-        private string name;
+        private readonly string _name;
 
-        private bool usePlusTrap;
-        private bool useMinusTrap;
-        private bool betOnWinner;
-        private bool betOnLoser;
+        private readonly bool _usePlusTrap;
+        private readonly bool _useMinusTrap;
+        private readonly bool _betOnWinner;
+        private readonly bool _betOnLoser;
 
-        private int Me;
+        private int _me;
 
         public List<CamelColor> BetCardsRemaining = CamelHelper.GetAllCamelColors();
 
@@ -22,36 +22,36 @@ namespace Delver.CamelCup.MartinBots
 
         public RandomBot()
         {
-            name = $"RandomBot #{0}";
+            _name = $"RandomBot #{0}";
 
-            usePlusTrap = true;
-            useMinusTrap = true;
-            betOnWinner = true;
-            betOnLoser = true;
+            _usePlusTrap = true;
+            _useMinusTrap = true;
+            _betOnWinner = true;
+            _betOnLoser = true;
 
             Rnd = new Random();
         }
 
         public RandomBot(int num = 1, bool usePlusTrap = true, bool useMinusTrap = true, bool betOnWinner = true, bool betOnLoser = true, int? seed = null)
         {
-            name = $"RandomBot #{num}";
+            _name = $"RandomBot #{num}";
 
-            this.usePlusTrap = usePlusTrap;
-            this.useMinusTrap = useMinusTrap;
-            this.betOnWinner = betOnWinner;
-            this.betOnLoser = betOnLoser;
+            _usePlusTrap = usePlusTrap;
+            _useMinusTrap = useMinusTrap;
+            _betOnWinner = betOnWinner;
+            _betOnLoser = betOnLoser;
 
             Rnd = new Random(seed ?? Guid.NewGuid().GetHashCode());
         }
 
         public string GetPlayerName()
         {
-            return name;
+            return _name;
         }
 
         public void StartNewGame(int playerId, GameInfo info, GameState gameState)
         {
-            Me = playerId;
+            _me = playerId;
         }
 
         public void InformAboutAction(int player, PlayerAction action, GameState gameState)
@@ -121,7 +121,7 @@ namespace Delver.CamelCup.MartinBots
 
         private int GetRandomTrapPlace(GameState gameState, bool positive) 
         {
-            var freeLocations = gameState.GetFreeTrapSpaces(Me, positive);
+            var freeLocations = gameState.GetFreeTrapSpaces(_me, positive);
             if (!freeLocations.Any()) {
                 return -1;
             }
@@ -132,20 +132,20 @@ namespace Delver.CamelCup.MartinBots
 
         private CamelAction GetRandomAction()
         {    
-            Dictionary<CamelAction, double> ActionChance = new Dictionary<CamelAction, double>()
+            var actionChance = new Dictionary<CamelAction, double>()
             {
                 { CamelAction.ThrowDice, 3 },
                 { CamelAction.PickCard, 5 },
-                { CamelAction.PlaceMinusTrap, useMinusTrap ? 1 : 0 },
-                { CamelAction.PlacePlussTrap, usePlusTrap ? 1 : 0 },
-                { CamelAction.SecretBetOnLoser, betOnLoser ? 1 : 0 },
-                { CamelAction.SecretBetOnWinner, betOnWinner ? 1 : 0 },
+                { CamelAction.PlaceMinusTrap, _useMinusTrap ? 1 : 0 },
+                { CamelAction.PlacePlussTrap, _usePlusTrap ? 1 : 0 },
+                { CamelAction.SecretBetOnLoser, _betOnLoser ? 1 : 0 },
+                { CamelAction.SecretBetOnWinner, _betOnWinner ? 1 : 0 },
             };
             
-            var totalSum = ActionChance.Select(x => x.Value).Sum();
+            var totalSum = actionChance.Select(x => x.Value).Sum();
             var rnd = Rnd.NextDouble() * totalSum;
             var current = 0.0;
-            foreach (var pair in ActionChance)
+            foreach (var pair in actionChance)
             {
                 current += pair.Value;
 
