@@ -24,6 +24,8 @@ namespace Delver.CamelCup
 
         public List<StateChange> History { get; set; }
 
+        private Random Rnd { get; set; }
+
         public CamelCupGame(List<Player> players, Dictionary<CamelColor, Position> startingPositions, int seed = -1) 
         {
             Players = players;
@@ -54,10 +56,10 @@ namespace Delver.CamelCup
             var hashed = md5Hasher.ComputeHash(Encoding.UTF8.GetBytes(seedString));
             var seed = BitConverter.ToInt32(hashed, 0);
 
-            var r = new Random(seed);
+            Rnd = new Random(seed);
 
             var guid = new byte[16];
-            r.NextBytes(guid);
+            Rnd.NextBytes(guid);
             return new Guid(guid);
         }
 
@@ -83,6 +85,13 @@ namespace Delver.CamelCup
                 Attempt(() => {
                     player.PerformAction(x => x.StartNewGame(i, gameInfo, gameStateClone));
                 });
+
+                if (player.PlayerInterface is ISeeded)
+                {
+                    Attempt(() => {
+                        player.PerformAction(x => ((ISeeded)x).SetRandomSeed(Rnd.Next()));
+                    });                    
+                }
             }
         }
 

@@ -12,12 +12,13 @@ namespace MyTestProgram
 
         static void Main(string[] args)
         {
-            var runner = new CamelRunner(2061097081);
-            runner.AddPlayer(new DiceThrower());
-            runner.AddPlayer(new IllegalBot());
+            var runner = new CamelRunner(seed: -639947146);
             runner.AddPlayer(new RandomBot());
-
-            var game = runner.ComputeSeededGame(1808123255, 92884888, 1278662542);
+            runner.AddPlayer(new SmartMartinPlayer());
+            runner.AddPlayer(new DiceThrower());
+            var game = runner.ComputeSeededGame(startPosSeed: 1159066037, playerOrderSeed: 1561971233, gameSeed: 778305510);    
+            var players = runner.GetPlayers().ToList();
+            var gameState = game.GameState;
             Console.ReadLine();       
         }
 

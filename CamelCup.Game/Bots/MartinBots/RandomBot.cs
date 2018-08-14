@@ -5,7 +5,7 @@ using Delver.CamelCup.External;
 
 namespace Delver.CamelCup.MartinBots
 {
-    public class RandomBot : ICamelCupPlayer
+    public class RandomBot : ICamelCupPlayer, ISeeded
     {
         private readonly string _name;
 
@@ -28,8 +28,6 @@ namespace Delver.CamelCup.MartinBots
             _useMinusTrap = true;
             _betOnWinner = true;
             _betOnLoser = true;
-
-            Rnd = new Random();
         }
 
         public RandomBot(int num = 1, bool usePlusTrap = true, bool useMinusTrap = true, bool betOnWinner = true, bool betOnLoser = true, int? seed = null)
@@ -42,6 +40,11 @@ namespace Delver.CamelCup.MartinBots
             _betOnLoser = betOnLoser;
 
             Rnd = new Random(seed ?? Guid.NewGuid().GetHashCode());
+        }
+
+        public void SetRandomSeed(int seed)
+        {
+            Rnd = Rnd ?? new Random(seed);
         }
 
         public string GetPlayerName()
