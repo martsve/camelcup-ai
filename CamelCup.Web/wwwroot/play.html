@@ -3,9 +3,12 @@
     <title>CamelCup History Player</title>
     <script src='jquery-3.3.1.min.js'></script>
     <style>
+        * {
+            box-sizing: border-box;
+        }
 
         ul, li { margin: 0px; padding: 0px; list-style: none; }
-        #board { width: 1280px; height: 635px; background: url(bg.jpg) no-repeat; background-size: contain; position: relative; }
+        #board { width: 1280px; height: 635px; background: url(img/bg.jpg) no-repeat; background-size: contain; position: relative; }
         #loc0 { width: 135px; height: 125px; position: absolute; left:615px; top: 263px; }
         #loc1 { width: 135px; height: 125px; position: absolute; left:615px; top: 400px; }
         #loc2 { width: 135px; height: 100px; position: absolute; left:615px; top: 534px; }
@@ -23,24 +26,26 @@
         #loc14 { width: 135px; height: 115px; position: absolute; left:615px; top: 0px; }
         #loc15 { width: 135px; height: 125px; position: absolute; left:615px; top: 125px; }
 
-        .loc { justify-content: center; align-items: center; display: flex; flex-direction: column; }
+        .loc { justify-content: center;  align-items: center; display: flex; flex-direction: column; }
 
-        .camel { width: 100%; height: 50px; }
+        .camel { width: 100%; height: 50px; margin-bottom: -15px; }
 
-        #camelBlue { background: url(blue.png) center no-repeat;  background-size: contain;}
-        #camelGreen { background: url(green.png) center no-repeat;  background-size: contain;}
-        #camelWhite { background: url(white.png) center no-repeat;  background-size: contain;}
-        #camelRed { background: url(red.png) center no-repeat;  background-size: contain;}
-        #camelYellow { background: url(yellow.png) center no-repeat;  background-size: contain;}
+        #camelBlue { background: url(img/blue.png) center no-repeat;  background-size: contain;}
+        #camelGreen { background: url(img/green.png) center no-repeat;  background-size: contain;}
+        #camelWhite { background: url(img/white.png) center no-repeat;  background-size: contain;}
+        #camelRed { background: url(img/red.png) center no-repeat;  background-size: contain;}
+        #camelYellow { background: url(img/yellow.png) center no-repeat;  background-size: contain;}
 
-        #players { position: absolute; left: 750px; top: 0px; }
-        .name { font-weight: bold; }
-        .money { font-size: 200%; }
+        #players { position: absolute; left: 830px; top: 20px; width: 240px; }
+        #players .card { width: 50px; height: 30px; margin-right: 5px; text-align: center; margin-bottom: 5px; }
+        .player { height: 150px; }
+        .name { font-weight: bold; display: block; }
+        .money { font-size: 200%; background: url(img/coin.png) no-repeat; background-size: contain; padding-left: 40px; width: 50px; height: 40px; display: inline-block; }
 
         .card { display: inline-block; font-size: 150%; }
         .card.Blue { background-color: blue; }
         .card.Green { background-color: green; }
-        .card.White { background-color: orange; }
+        .card.White { background-color: white; }
         .card.Red { background-color: red; }
         .card.Yellow { background-color: yellow; }
 
@@ -51,13 +56,14 @@
         #dice li { display: inline-block; margin-right: 10px; margin-bottom: 10px; }
         #dice .card { width: 60px; height: 60px; font-size: 200%; }
 
-        .trap { display: inline-block; font-size: 75%; }
-        .trap .value { font-size: 150%; }
-        .trap.pluss { background: greenyellow; }
-        .trap.minus { background: pink; }
+        .player .trap { display: none; }
+        .loc .trap { width: 100px; height: 100px; font-size: 75%; }
+        .loc .trap .value { font-size: 150%; }
+        .loc .trap.pluss { background: url(img/trap_pluss.jpg) no-repeat; background-size: contain; }
+        .loc .trap.minus { background: url(img/trap_back.jpg) no-repeat; background-size: contain; }
 
         .player.disqualified { text-decoration: line-through; }
-        .player.winner { font-size: 150%; background: lightgreen; border: 3px dotted green; }
+        .player.winner { background: lightgreen; border: 3px dotted green; }
     </style>
 </head>
 <body>
@@ -80,7 +86,7 @@
     <script>
         function UpdateMoney(player, money)
         {
-            $('#player' + player + ' .money').html(money);
+            $('#player' + player + ' .money').html('x' + money);
         }
 
         function ThrowDice(color, value) {
