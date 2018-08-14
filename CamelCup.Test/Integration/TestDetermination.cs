@@ -4,7 +4,7 @@ using Delver.CamelCup.MartinBots;
 using System.Linq;
 using Delver.CamelCup.External;
 
-namespace CamelCup.Test
+namespace Delver.CamelCup.Web.Services.Test
 {
     [TestClass]
     public class TestDetermination

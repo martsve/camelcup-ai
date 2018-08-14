@@ -6,7 +6,7 @@ using Delver.CamelCup.External;
 using System.IO;
 using System.Collections.Generic;
 
-namespace CamelCup.Test
+namespace Delver.CamelCup.Web.Services.Test
 {
     [TestClass]
     public class TestGetChange

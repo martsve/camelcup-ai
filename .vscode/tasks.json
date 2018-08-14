@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/CamelCup/camelup.csproj"
+                "${workspaceFolder}/CamelCup.Web/CamelCup.Web.csproj"
             ],
             "problemMatcher": "$msCompile"
         }

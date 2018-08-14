@@ -5,7 +5,7 @@ using System.Linq;
 using Delver.CamelCup.External;
 using System.IO;
 
-namespace CamelCup.Test
+namespace Delver.CamelCup.Web.Services.Test
 {
     [TestClass]
     public class TestGetCamelWins

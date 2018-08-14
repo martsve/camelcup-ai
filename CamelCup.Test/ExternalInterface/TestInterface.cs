@@ -6,7 +6,7 @@ using Delver.CamelCup.External;
 using System.Collections.Generic;
 using System;
 
-namespace CamelCup.Test
+namespace Delver.CamelCup.Web.Services.Test
 {
     [TestClass]
     public class TestInterface

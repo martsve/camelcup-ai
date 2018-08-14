@@ -5,7 +5,7 @@ using System.Linq;
 using Delver.CamelCup.External;
 using System.Collections.Generic;
 
-namespace CamelCup.Test
+namespace Delver.CamelCup.Web.Services.Test
 {
     [TestClass]
     public class TestRevertThrowDiceStateChange

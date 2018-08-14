@@ -10,9 +10,9 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/CamelCup/bin/Debug/netcoreapp2.0/camelup.dll",
+            "program": "${workspaceFolder}/CamelCup.Player/bin/Debug/netcoreapp2.0/CamelCup.Player.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/CamelCup",
+            "cwd": "${workspaceFolder}/CamelCup.Player",
             // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
             "console": "internalConsole",
             "stopAtEntry": false,
@@ -38,9 +38,9 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/Web/bin/Debug/netcoreapp2.0/Web.dll",
+            "program": "${workspaceFolder}/CamelCup.Web/bin/Debug/netcoreapp2.0/CamelCup.Web.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/Web",
+            "cwd": "${workspaceFolder}/CamelCup.Web",
             "stopAtEntry": false,
             "internalConsoleOptions": "openOnSessionStart",
             "launchBrowser": {
@@ -61,7 +61,7 @@
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },
             "sourceFileMap": {
-                "/Views": "${workspaceFolder}/Web/Views"
+                "/Views": "${workspaceFolder}/CamelCup.Web/Views"
             }
         },
         {
