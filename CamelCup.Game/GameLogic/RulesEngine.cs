@@ -91,6 +91,9 @@ namespace Delver.CamelCup
 
             foreach (var bet in Gamestate.BettingCards.Where(x => !x.IsFree && !Gamestate.Disqualified[x.Owner]))
             {
+                if (Gamestate.Disqualified[bet.Owner])
+                    continue;
+                    
                 if (bet.CamelColor == first)
                 {
                     Gamestate.Money[bet.Owner] += bet.Value;

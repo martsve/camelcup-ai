@@ -39,16 +39,16 @@ namespace Delver.CamelCup
             }
         }
 
-        public GameState Clone(bool sanitizeBets = true) 
+        public GameState Clone(int player) 
         {
             var serialized = JsonConvert.SerializeObject(this);
             var clone = JsonConvert.DeserializeObject<GameState>(serialized);
 
-            if (sanitizeBets)
-            {
-                clone.WinnerBets.ForEach(x => x.CamelColor = null);
-                clone.LoserBets.ForEach(x => x.CamelColor = null);
-            }
+            foreach (var bet in clone.WinnerBets.Where(x => x.Player != player))
+                bet.CamelColor = null;
+
+            foreach (var bet in clone.LoserBets.Where(x => x.Player != player))
+                bet.CamelColor = null;
 
             return clone;
         }

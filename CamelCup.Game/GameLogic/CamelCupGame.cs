@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -65,7 +66,7 @@ namespace Delver.CamelCup
             foreach (var camel in GameState.Camels)
                 History.Add(new StartPositionStateChange(camel));
 
-            var gameStateClone = GameState.Clone(true);
+            var gameStateClone = GameState.Clone(-1);
             var playerNames = Players.Select(x => x.Name).ToArray();
 
             var gameInfo = new GameInfo() { 
@@ -88,7 +89,7 @@ namespace Delver.CamelCup
         public bool IsComplete() 
         {
             // one or less players remaining
-            if (Players.Count(x => x.Disqualified) >= Players.Count - 1)
+            if (GameState.Disqualified.Count(x => x.Value) >= Players.Count - 1)
                 return true;
 
             // somebody passed start
@@ -102,9 +103,9 @@ namespace Delver.CamelCup
         {
             var action = new ImplementedPlayerAction();
 
-            if (!Players[CurrentPlayer].Disqualified) {
+            if (!GameState.Disqualified[CurrentPlayer]) {
                 Attempt(() => {
-                    var gameStateClone = GameState.Clone(true);
+                    var gameStateClone = GameState.Clone(CurrentPlayer);
                     Players[CurrentPlayer].PerformAction(x => action = new ImplementedPlayerAction(x.GetAction(gameStateClone)));
                 });
             }
@@ -114,7 +115,7 @@ namespace Delver.CamelCup
             foreach (var player in Players) 
             {
                 Attempt(() => {
-                    var gameStateClone = GameState.Clone(true);
+                    var gameStateClone = GameState.Clone(player.PlayerId);
                     var actionClone = action.Clone();
                     player.PerformAction(x => x.InformAboutAction(CurrentPlayer, actionClone, gameStateClone));
                 });
@@ -132,7 +133,7 @@ namespace Delver.CamelCup
                 foreach (var player in Players) 
                 {
                     Attempt(() => {
-                        var gameStateClone = GameState.Clone(true);
+                        var gameStateClone = GameState.Clone(player.PlayerId);
                         player.PerformAction(x => x.Winners(winners.ToList(), gameStateClone));
                     });
                 }
@@ -203,6 +204,7 @@ namespace Delver.CamelCup
             GameState.Money[player] = 0;
             GameState.Disqualified[player] = true;
             History.Add(new DisqualifiedStateChange(player, action));
+            Trace.WriteLine($"Disqualified player {player} for action {action.CamelAction}");
         }
     }
 }

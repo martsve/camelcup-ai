@@ -86,7 +86,7 @@ namespace Delver.CamelCup
             var positions = GetCamelEndPositions(gameState, depth, includeAll: includeAllStates);
             return positions.Select(ConvertCamelPositionToCamels).ToList();
         }
-
+        
         public static Dictionary<CamelColor, int> GetCamelWins(this GameState gameState, out int[] money, int depth = 5) 
         {
             var positions = GetCamelEndPositions(gameState, depth, includeAll: false);

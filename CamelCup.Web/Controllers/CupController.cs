@@ -69,18 +69,7 @@ namespace Delver.CamelCup.Web.Controllers
         {
             if (CamelBots == null)
             {
-                CamelBots = new List<CamelBot>();
-                foreach (var line in System.IO.File.ReadAllLines("InternalBots.txt").Where(x => x.Trim().Length > 0))
-                {
-                    var w = line.Trim().Split(';');
-                    var type = GetTypeByName(w[0], w[1]);
-                    if (type == null)
-                    {
-                        throw new Exception("Unable to create type: " + line);
-                    }
-
-                    CamelBots.Add(CreateCamelBot(type));
-                }
+                CamelBots = GetDefaultBots();
 
                 if (!Directory.Exists(BotPath))
                 {
@@ -106,6 +95,26 @@ namespace Delver.CamelCup.Web.Controllers
 
             return CamelBots;
         }       
+
+        private List<CamelBot> GetDefaultBots()
+        {
+            var bots = new List<CamelBot>();
+            foreach (var line in System.IO.File.ReadAllLines("InternalBots.txt").Where(x => x.Trim().Length > 0))
+            {
+                if (line.StartsWith("//") || line.StartsWith("#"))
+                    continue;
+
+                var w = line.Trim().Split(';');
+                var type = GetTypeByName(w[0], w[1]);
+                if (type == null)
+                {
+                    throw new Exception("Unable to create type: " + line);
+                }
+
+                bots.Add(CreateCamelBot(type));
+            }
+            return bots;
+        }
 
         private CamelBot CreateCamelBot(Type type)
         {
