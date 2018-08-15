@@ -12,6 +12,8 @@ namespace Delver.CamelCup.External
         private int inextp;
         private int[] SeedArray = new int[56];
 
+        private string Name;
+
         public ConsistantRandom()
             : this(Environment.TickCount)
         {
@@ -19,6 +21,7 @@ namespace Delver.CamelCup.External
 
         public ConsistantRandom(int seed)
         {
+            Name = $"ConsistantRandom[seed={seed}]";
             int ii;
             int mj, mk;
 
@@ -45,6 +48,12 @@ namespace Delver.CamelCup.External
             inext = 0;
             inextp = 21;
         }
+
+        public override string ToString()
+        {
+            return Name;
+        }
+
         protected override double Sample()
         {
             return (InternalSample() * (1.0 / MBIG));

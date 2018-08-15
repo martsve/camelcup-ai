@@ -55,5 +55,22 @@ namespace Delver.CamelCup.Web.Services.Test
             Assert.AreEqual("38 0 19 4", game.GameState.MoneyToString(), "player money");
             Assert.AreEqual("10,0 15,3 10,1 13,2 16,4", game.GameState.CamelPositionToString(), "camel positions");
         }
+
+        [TestMethod]
+        public void Integration_Determination_4()
+        {
+            var runner = new CamelRunner(seed: 562290022);
+            runner.AddPlayer(new RandomBot());
+            runner.AddPlayer(new SmartMartinPlayer());
+            runner.AddPlayer(new DiceThrower());
+            runner.AddPlayer(new IllegalBot());
+
+            var game = runner.ComputeSeededGame(startPosSeed: 170684020, playerOrderSeed: 120670140, gameSeed: 49615644);
+
+            Assert.AreEqual("3ea7c534-6bf5-f038-4e21-3bcd88c5ff81", game.GameId.ToString(), "game id");
+            Assert.AreEqual("22 18 0 27", game.GameState.MoneyToString(), "player money");
+            Assert.AreEqual("10,0 15,3 10,1 13,2 16,4", game.GameState.CamelPositionToString(), "camel positions");
+        }
+
     }
 }

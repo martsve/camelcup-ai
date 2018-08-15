@@ -103,6 +103,17 @@ namespace Delver.CamelCup.MartinBots
             return freeLocations[loc];
         }
 
+        private int GetOrder(CamelAction action)
+        {
+            if (action == CamelAction.ThrowDice) return 0;
+            if (action == CamelAction.PickCard) return 1;
+            if (action == CamelAction.PlaceMinusTrap) return 2;
+            if (action == CamelAction.PlacePlussTrap) return 3;
+            if (action == CamelAction.SecretBetOnLoser) return 4;
+            if (action == CamelAction.SecretBetOnWinner) return 5;
+            return 6;
+        }
+
         private CamelAction GetRandomAction()
         {    
             var actionChance = new Dictionary<CamelAction, double>()
@@ -113,7 +124,7 @@ namespace Delver.CamelCup.MartinBots
                 { CamelAction.PlacePlussTrap, _usePlusTrap ? 1 : 0 },
                 { CamelAction.SecretBetOnLoser, _betOnLoser ? 1 : 0 },
                 { CamelAction.SecretBetOnWinner, _betOnWinner ? 1 : 0 },
-            };
+            }.OrderBy(x => GetOrder(x.Key));
             
             var totalSum = actionChance.Select(x => x.Value).Sum();
             var rnd = Rnd.NextDouble() * totalSum;

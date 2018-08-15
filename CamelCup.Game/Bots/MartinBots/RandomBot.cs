@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Delver.CamelCup.External;
 
@@ -19,7 +20,7 @@ namespace Delver.CamelCup.MartinBots
         public List<CamelColor> BetCardsRemaining = CamelHelper.GetAllCamelColors();
 
         private bool seeded = false;
-        private Random Rnd { get; set; }
+        public Random Rnd { get; set; }
 
         public RandomBot()
         {
@@ -39,7 +40,7 @@ namespace Delver.CamelCup.MartinBots
             _useMinusTrap = useMinusTrap;
             _betOnWinner = betOnWinner;
             _betOnLoser = betOnLoser;
-            seeded = true;
+            seeded = seed != null;
             Rnd = new ConsistantRandom(seed ?? Guid.NewGuid().GetHashCode());
         }
 
@@ -49,6 +50,8 @@ namespace Delver.CamelCup.MartinBots
             {
                 Rnd = new ConsistantRandom(seed);
             }
+
+            Trace.WriteLine($"{seed}, {Rnd}");
         }
 
         public string GetPlayerName()
@@ -162,6 +165,7 @@ namespace Delver.CamelCup.MartinBots
             
             var totalSum = actionChance.Select(x => x.Value).Sum();
             var rnd = Rnd.NextDouble() * totalSum;
+            Trace.WriteLine($"{Rnd}:{rnd}");
             var current = 0.0;
             foreach (var pair in actionChance)
             {
