@@ -50,7 +50,7 @@ namespace Delver.CamelCup
             }
         }
 
-        public IEnumerable<Player> GetPlayers() 
+        public List<Player> GetPlayers() 
         {
             return _players.ToList();
         }

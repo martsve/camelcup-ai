@@ -18,6 +18,7 @@ namespace Delver.CamelCup.MartinBots
 
         public List<CamelColor> BetCardsRemaining = CamelHelper.GetAllCamelColors();
 
+        private bool seeded = false;
         private Random Rnd { get; set; }
 
         public RandomBot()
@@ -38,13 +39,16 @@ namespace Delver.CamelCup.MartinBots
             _useMinusTrap = useMinusTrap;
             _betOnWinner = betOnWinner;
             _betOnLoser = betOnLoser;
-
+            seeded = true;
             Rnd = new ConsistantRandom(seed ?? Guid.NewGuid().GetHashCode());
         }
 
         public void SetRandomSeed(int seed)
         {
-            Rnd = Rnd ?? new ConsistantRandom(seed);
+            if (!seeded)
+            {
+                Rnd = new ConsistantRandom(seed);
+            }
         }
 
         public string GetPlayerName()
@@ -68,8 +72,8 @@ namespace Delver.CamelCup.MartinBots
         public PlayerAction GetAction(GameState gameState)
         {
             var leaders = gameState.GetLeadingOrder();
-
-            switch (GetRandomAction())
+            var action = GetRandomAction();
+            switch (action)
             {
                 case CamelAction.PickCard:
 
@@ -133,6 +137,17 @@ namespace Delver.CamelCup.MartinBots
             return freeLocations[loc];
         }
 
+        private int GetOrder(CamelAction action)
+        {
+            if (action == CamelAction.ThrowDice) return 0;
+            if (action == CamelAction.PickCard) return 1;
+            if (action == CamelAction.PlaceMinusTrap) return 2;
+            if (action == CamelAction.PlacePlussTrap) return 3;
+            if (action == CamelAction.SecretBetOnLoser) return 4;
+            if (action == CamelAction.SecretBetOnWinner) return 5;
+            return 6;
+        }
+
         private CamelAction GetRandomAction()
         {    
             var actionChance = new Dictionary<CamelAction, double>()
@@ -143,7 +158,7 @@ namespace Delver.CamelCup.MartinBots
                 { CamelAction.PlacePlussTrap, _usePlusTrap ? 1 : 0 },
                 { CamelAction.SecretBetOnLoser, _betOnLoser ? 1 : 0 },
                 { CamelAction.SecretBetOnWinner, _betOnWinner ? 1 : 0 },
-            };
+            }.OrderBy(x => GetOrder(x.Key));
             
             var totalSum = actionChance.Select(x => x.Value).Sum();
             var rnd = Rnd.NextDouble() * totalSum;

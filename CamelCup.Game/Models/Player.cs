@@ -63,5 +63,10 @@ namespace Delver.CamelCup
                 throw new PlayerLoseesException(PlayerId);
             }
         }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

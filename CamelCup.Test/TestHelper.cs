@@ -16,5 +16,10 @@ namespace Delver.CamelCup.Web.Services.Test
         {
             return string.Join(" ", state.Camels.Select(x => new Position(x.Location, x.Height)));
         }
+
+        public static string MoneyToString(this GameState state)
+        {
+            return string.Join(" ", state.Money.Select(x => x.Value));
+        }
     }
 }

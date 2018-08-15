@@ -15,7 +15,7 @@ namespace Delver.CamelCup.Web.Services.Test
             runner.AddPlayer(new RandomBot(1, seed: 2));
             runner.AddPlayer(new RandomBot(2, seed: 3));
             var game = runner.ComputeNewGame(steps: 0);    
-            var players = runner.GetPlayers().ToList();
+            var players = runner.GetPlayers();
             var gameState = game.GameState;
 
             Assert.AreEqual(2, runner.GetPlayers().Count(), "players");

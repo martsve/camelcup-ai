@@ -146,7 +146,7 @@ namespace Delver.CamelCup.Web.Controllers
 
             var result = new RunnerState()
             {
-                Players = runner.GetPlayers().ToList(),
+                Players = runner.GetPlayers(),
                 CupId = CamelService.CupId
             };
 

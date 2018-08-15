@@ -14,7 +14,7 @@ namespace Delver.CamelCup.Web.Services.Test
             runner.AddPlayer(new RandomBot(1, seed: 2));
             runner.AddPlayer(new RandomBot(2, seed: 3));
             var game = runner.ComputeSeededGame(1, 2, 3, steps: 1);    
-            var players = runner.GetPlayers().ToList();
+            var players = runner.GetPlayers();
 
             var gameState = game.GameState;
             Assert.AreEqual(0, game.StartingPlayer, "starting player");
@@ -37,7 +37,7 @@ namespace Delver.CamelCup.Web.Services.Test
             runner.AddPlayer(new RandomBot(1, seed: 2));
             runner.AddPlayer(new RandomBot(2, seed: 3));
             var game = runner.ComputeSeededGame(1, 2, 3, steps: 5);    
-            var players = runner.GetPlayers().ToList();
+            var players = runner.GetPlayers();
 
             var gameState = game.GameState;
 
@@ -61,7 +61,7 @@ namespace Delver.CamelCup.Web.Services.Test
             runner.AddPlayer(new RandomBot(1, seed: 2));
             runner.AddPlayer(new RandomBot(2, seed: 3));
             var game = runner.ComputeSeededGame(1, 2, 3, steps: 15);    
-            var players = runner.GetPlayers().ToList();
+            var players = runner.GetPlayers();
 
             var gameState = game.GameState;
 
@@ -85,7 +85,7 @@ namespace Delver.CamelCup.Web.Services.Test
             runner.AddPlayer(new RandomBot(1, seed: 2));
             runner.AddPlayer(new RandomBot(2, seed: 3));
             var game = runner.ComputeSeededGame(1, 2, 3, steps: 50);    
-            var players = runner.GetPlayers().ToList();
+            var players = runner.GetPlayers();
 
             var gameState = game.GameState;
 
@@ -109,7 +109,7 @@ namespace Delver.CamelCup.Web.Services.Test
             runner.AddPlayer(new RandomBot(1, seed: 2));
             runner.AddPlayer(new RandomBot(2, seed: 3));
             var game = runner.ComputeSeededGame(1, 2, 3);    
-            var players = runner.GetPlayers().ToList();
+            var players = runner.GetPlayers();
 
             var gameState = game.GameState;
             

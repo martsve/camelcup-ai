@@ -82,6 +82,7 @@
     </div>
 
     <div id='current'></div>
+    <div id='history'></div>
 
     <script>
         function UpdateMoney(player, money)
@@ -229,7 +230,7 @@
         $('#loc15').append('<div class="camel" id="camelWhite"></div>');
         $('#loc15').append('<div class="camel" id="camelRed"></div>');
         $('#loc15').append('<div class="camel" id="camelYellow"></div>');
-        $('#current').html("<pre>" + JSON.stringify(gameHistory, null, 2) + "</pre>");
+        $('#history').html("<pre>" + JSON.stringify(gameHistory, null, 2) + "</pre>");
 
 
         for (key in gameHistory.players)
