@@ -5,7 +5,7 @@ using Delver.CamelCup.External;
 
 namespace Delver.CamelCup.MartinBots
 {
-    public class IllegalBot : ICamelCupPlayer
+    public class IllegalBot : ICamelCupPlayer, ISeeded
     {
         private readonly string _name;
 
@@ -18,7 +18,7 @@ namespace Delver.CamelCup.MartinBots
 
         public List<CamelColor> BetCardsRemaining = CamelHelper.GetAllCamelColors();
 
-        private static readonly Random Rnd = new Random();
+        private Random Rnd = new ConsistantRandom();
 
         public IllegalBot() : this(1)
         {
@@ -116,7 +116,7 @@ namespace Delver.CamelCup.MartinBots
             };
             
             var totalSum = actionChance.Select(x => x.Value).Sum();
-            var rnd = new Random().NextDouble() * totalSum;
+            var rnd = Rnd.NextDouble() * totalSum;
             var current = 0.0;
             foreach (var pair in actionChance)
             {
@@ -139,6 +139,11 @@ namespace Delver.CamelCup.MartinBots
 
         public void Load()
         {
+        }
+
+        public void SetRandomSeed(int seed)
+        {
+            Rnd = new ConsistantRandom(seed);
         }
     }
 }

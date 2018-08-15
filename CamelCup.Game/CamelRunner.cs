@@ -31,7 +31,7 @@ namespace Delver.CamelCup
                 seed = unchecked((int)DateTime.Now.Ticks);
             }
 
-            _rnd = new Random(seed);
+            _rnd = new ConsistantRandom(seed);
         }
 
         public void AddPlayer(ICamelCupPlayer playerInterface) 
@@ -89,14 +89,14 @@ namespace Delver.CamelCup
 
         private Dictionary<CamelColor, Position> GetRandomStartingPositions(int seed) 
         {
-            var rnd = new Random(seed);
+            var rnd = new ConsistantRandom(seed);
             var i = 0;
             return CamelHelper.GetAllCamelColors().ToDictionary(x => x, x => new Position { Location = rnd.Next(0, 2), Height = i++ });
         }
 
         private List<Player> GetRandomPlayerOrder(List<Player> players, int seed)
         {
-            var rnd = new Random(seed);
+            var rnd = new ConsistantRandom(seed);
 
             // make original order not matter for determination
             players = players.OrderBy(x => x.Name).ToList();

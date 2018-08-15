@@ -20,7 +20,7 @@ namespace Delver.CamelCup
                 seed = unchecked((int)DateTime.Now.Ticks);
             }
 
-            Rnd = new Random(seed);
+            Rnd = new ConsistantRandom(seed);
         }
 
         public StateChange Getchange(int playerId, PlayerAction action) 

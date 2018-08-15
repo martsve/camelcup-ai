@@ -8,6 +8,18 @@ namespace Delver.CamelCup.Web.Services.Test
     public class TestDetermination2
     {
         [TestMethod]
+        public void Integration_Determination_FromMain()
+        {
+            var gameState = MyTestProgram.Program.GetGameState();
+
+            Assert.AreEqual(34, gameState.Money[0], "player 0 money");
+            Assert.AreEqual(3, gameState.Money[1], "player 1 money");
+            Assert.AreEqual(17, gameState.Money[2], "player 2 money");
+
+            Assert.AreEqual("17,3 12,1 17,4 17,2 11,0", gameState.CamelPositionToString(), "camel positions");
+        }
+
+        [TestMethod]
         public void Integration_Determination_1()
         {
             var runner = new CamelRunner(seed: -639947146);

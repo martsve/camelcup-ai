@@ -39,12 +39,12 @@ namespace Delver.CamelCup.MartinBots
             _betOnWinner = betOnWinner;
             _betOnLoser = betOnLoser;
 
-            Rnd = new Random(seed ?? Guid.NewGuid().GetHashCode());
+            Rnd = new ConsistantRandom(seed ?? Guid.NewGuid().GetHashCode());
         }
 
         public void SetRandomSeed(int seed)
         {
-            Rnd = Rnd ?? new Random(seed);
+            Rnd = Rnd ?? new ConsistantRandom(seed);
         }
 
         public string GetPlayerName()

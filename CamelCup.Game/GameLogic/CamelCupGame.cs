@@ -56,7 +56,7 @@ namespace Delver.CamelCup
             var hashed = md5Hasher.ComputeHash(Encoding.UTF8.GetBytes(seedString));
             var seed = BitConverter.ToInt32(hashed, 0);
 
-            Rnd = new Random(seed);
+            Rnd = new ConsistantRandom(seed);
 
             var guid = new byte[16];
             Rnd.NextBytes(guid);

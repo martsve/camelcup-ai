@@ -106,9 +106,9 @@
             });
 
             if (!smallest)
-                $('#loc' + location).append(camel);
+                $('#loc' + location).prepend(camel);
             else 
-                smallest.after(camel);
+                smallest.before(camel);
         }
         
         function MoveStack(stack, from, to, top)
@@ -120,9 +120,9 @@
                 var color = stack[j];
                 var camel = $('#camel' + color).remove();
                 if (top)
-                    $('#loc' + to).append(camel);
-                else 
                     $('#loc' + to).prepend(camel);
+                else 
+                    $('#loc' + to).append(camel);
             }
         }
 
@@ -170,11 +170,11 @@
             } 
             else if (event.action == "SecretBetOnWinner")
             {
-                $('#player' + event.player + ' .winnerbets').append('<span class="card '+event.color+'">Winner</span>');
+                $('#player' + event.player + ' .winnerbets').append('<span class="card '+event.color+'">First</span>');
             } 
             else if (event.action == "SecretBetOnLoser")
             {
-                $('#player' + event.player + ' .loserbets').append('<span class="card '+event.color+'">Loser</span>');
+                $('#player' + event.player + ' .loserbets').append('<span class="card '+event.color+'">Last</span>');
             } 
             else if (event.action == "ThrowDice")
             {

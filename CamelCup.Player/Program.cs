@@ -6,11 +6,17 @@ using Delver.CamelCup.MartinBots;
 
 namespace MyTestProgram
 {
-    class Program
+    public class Program
     {
         const double TimeScalingFactor = 1.0;
 
         static void Main(string[] args)
+        {
+            var state = GetGameState();
+            Console.ReadLine();       
+        }
+
+        public static ImplementedGameState GetGameState()
         {
             var runner = new CamelRunner(seed: -639947146);
             runner.AddPlayer(new RandomBot());
@@ -19,7 +25,7 @@ namespace MyTestProgram
             var game = runner.ComputeSeededGame(startPosSeed: 1159066037, playerOrderSeed: 1561971233, gameSeed: 778305510);    
             var players = runner.GetPlayers().ToList();
             var gameState = game.GameState;
-            Console.ReadLine();       
+            return gameState;
         }
 
         private static void RunBenchmark(string[] args)
