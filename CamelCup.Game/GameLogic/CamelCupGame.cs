@@ -38,29 +38,11 @@ namespace Delver.CamelCup
                 seed = unchecked((int)DateTime.Now.Ticks);
             }
 
-            GameId = GenerateSeededGuid(seed, players, GameState.Camels);
+            Rnd = SetRandomSeed(seed, players, GameState.Camels);
+            GameId = GenerateSeededGuid();
 
             RulesEngine = new RulesEngine(GameState, seed);
             History = new List<StateChange>();
-        }
-
-        private Guid GenerateSeededGuid(int gameSeed, List<Player> players, List<Camel> camels)
-        {
-            var playerString = string.Join(";", players.Select(x => x.Name));
-            var startingPositions = camels.OrderBy(x => x.CamelColor).Select(x => $"{x.Location},{x.Height}").ToList();
-            var startPosString = string.Join(";", startingPositions);
-
-            var seedString = $"{gameSeed};{playerString};{startPosString}";
-
-            var md5Hasher = MD5.Create();
-            var hashed = md5Hasher.ComputeHash(Encoding.UTF8.GetBytes(seedString));
-            var seed = BitConverter.ToInt32(hashed, 0);
-
-            Rnd = new ConsistantRandom(seed);
-
-            var guid = new byte[16];
-            Rnd.NextBytes(guid);
-            return new Guid(guid);
         }
 
         public void StartGame() 
@@ -214,6 +196,28 @@ namespace Delver.CamelCup
             GameState.Disqualified[player] = true;
             History.Add(new DisqualifiedStateChange(player, action));
             Trace.WriteLine($"Disqualified player {player} for action {action.CamelAction}");
+        }
+        
+        private Guid GenerateSeededGuid()
+        {
+            var guid = new byte[16];
+            Rnd.NextBytes(guid);
+            return new Guid(guid);
+        }
+
+        private Random SetRandomSeed(int gameSeed, List<Player> players, List<Camel> camels)
+        {
+            var playerString = string.Join(";", players.Select(x => x.Name));
+            var startingPositions = camels.OrderBy(x => x.CamelColor).Select(x => $"{x.Location},{x.Height}").ToList();
+            var startPosString = string.Join(";", startingPositions);
+
+            var seedString = $"{gameSeed};{playerString};{startPosString}";
+
+            var md5Hasher = MD5.Create();
+            var hashed = md5Hasher.ComputeHash(Encoding.UTF8.GetBytes(seedString));
+            var seed = BitConverter.ToInt32(hashed, 0);
+
+            return new ConsistantRandom(seed);
         }
     }
 }

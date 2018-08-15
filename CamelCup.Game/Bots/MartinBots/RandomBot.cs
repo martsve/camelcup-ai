@@ -18,7 +18,7 @@ namespace Delver.CamelCup.MartinBots
 
         public List<CamelColor> BetCardsRemaining = CamelHelper.GetAllCamelColors();
 
-        private static Random Rnd { get; set; }
+        private Random Rnd { get; set; }
 
         public RandomBot()
         {

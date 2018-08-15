@@ -29,14 +29,6 @@ namespace Delver.CamelCup.Web.Services
             GameIdHistory = new List<Guid>();
         }
 
-        public void Load()
-        {
-            Runner.AddPlayer(new DiceThrower());
-            Runner.AddPlayer(new RandomBot(1, seed: 1));
-            Runner.AddPlayer(new MartinPlayer());
-            Runner.AddPlayer(new SmartMartinPlayer());
-        }
-
         public void Load(ICamelCupPlayer player)
         {
             Runner.AddPlayer(player);

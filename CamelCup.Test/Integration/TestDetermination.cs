@@ -45,13 +45,13 @@ namespace Delver.CamelCup.Web.Services.Test
             Assert.AreEqual(1, game.CurrentPlayer, "current player");
             Assert.AreEqual(0, gameState.Round, "round");
 
-            Assert.AreEqual(5, gameState.Money[0], "player 0 money");
-            Assert.AreEqual(3, gameState.Money[1], "player 1 money");
+            Assert.AreEqual(4, gameState.Money[0], "player 0 money");
+            Assert.AreEqual(5, gameState.Money[1], "player 1 money");
 
-            Assert.AreEqual(1, players[0].Wins, "player 0 wins");
-            Assert.AreEqual(0, players[1].Wins, "player 1 wins");
+            Assert.AreEqual(0, players[0].Wins, "player 0 wins");
+            Assert.AreEqual(1, players[1].Wins, "player 1 wins");
 
-            Assert.AreEqual("0,0 3,3 3,4 1,1 2,2", gameState.CamelPositionToString(), "camel positions");
+            Assert.AreEqual("0,0 4,3 4,4 1,1 2,2", gameState.CamelPositionToString(), "camel positions");
         }
 
         [TestMethod]
@@ -69,13 +69,13 @@ namespace Delver.CamelCup.Web.Services.Test
             Assert.AreEqual(1, game.CurrentPlayer, "current player");
             Assert.AreEqual(1, gameState.Round, "round");
 
-            Assert.AreEqual(7, gameState.Money[0], "player 0 money");
-            Assert.AreEqual(7, gameState.Money[1], "player 1 money");
+            Assert.AreEqual(10, gameState.Money[0], "player 0 money");
+            Assert.AreEqual(8, gameState.Money[1], "player 1 money");
 
             Assert.AreEqual(1, players[0].Wins, "player 0 wins");
-            Assert.AreEqual(1, players[1].Wins, "player 1 wins");
+            Assert.AreEqual(0, players[1].Wins, "player 1 wins");
 
-            Assert.AreEqual("3,3 3,2 3,1 3,4 2,0", gameState.CamelPositionToString(), "camel positions");
+            Assert.AreEqual("4,2 4,1 8,4 4,3 2,0", gameState.CamelPositionToString(), "camel positions");
         }
 
         [TestMethod]
@@ -89,17 +89,17 @@ namespace Delver.CamelCup.Web.Services.Test
 
             var gameState = game.GameState;
 
-            Assert.AreEqual(0, game.StartingPlayer, "starting player");
+            Assert.AreEqual(1, game.StartingPlayer, "starting player");
             Assert.AreEqual(0, game.CurrentPlayer, "current player");
-            Assert.AreEqual(2, gameState.Round, "round");
+            Assert.AreEqual(3, gameState.Round, "round");
 
-            Assert.AreEqual(12, gameState.Money[0], "player 0 money");
-            Assert.AreEqual(12, gameState.Money[1], "player 1 money");
+            Assert.AreEqual(19, gameState.Money[0], "player 0 money");
+            Assert.AreEqual(14, gameState.Money[1], "player 1 money");
 
             Assert.AreEqual(1, players[0].Wins, "player 0 wins");
-            Assert.AreEqual(1, players[1].Wins, "player 1 wins");
+            Assert.AreEqual(0, players[1].Wins, "player 1 wins");
 
-            Assert.AreEqual("9,3 11,4 6,1 7,2 4,0", gameState.CamelPositionToString(), "camel positions");
+            Assert.AreEqual("10,3 10,1 10,2 10,4 6,0", gameState.CamelPositionToString(), "camel positions");
         }
 
         [TestMethod]
@@ -113,19 +113,19 @@ namespace Delver.CamelCup.Web.Services.Test
 
             var gameState = game.GameState;
             
-            Assert.AreEqual(84, runner.Step, "game step");
+            Assert.AreEqual(87, runner.Step, "game step");
 
-            Assert.AreEqual(0, game.StartingPlayer, "starting player");
+            Assert.AreEqual(1, game.StartingPlayer, "starting player");
             Assert.AreEqual(0, game.CurrentPlayer, "current player");
-            Assert.AreEqual(4, gameState.Round, "round");
+            Assert.AreEqual(5, gameState.Round, "round");
 
-            Assert.AreEqual(24, gameState.Money[0], "player 0 money");
+            Assert.AreEqual(29, gameState.Money[0], "player 0 money");
             Assert.AreEqual(24, gameState.Money[1], "player 1 money");
 
             Assert.AreEqual(1, players[0].Wins, "player 0 wins");
-            Assert.AreEqual(1, players[1].Wins, "player 1 wins");
+            Assert.AreEqual(0, players[1].Wins, "player 1 wins");
 
-            Assert.AreEqual("17,1 17,2 13,0 17,3 17,4", gameState.CamelPositionToString(), "camel positions");
+            Assert.AreEqual("16,4 12,0 13,1 16,3 13,2", gameState.CamelPositionToString(), "camel positions");
         }
     }
 }

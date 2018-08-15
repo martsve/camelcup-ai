@@ -12,20 +12,8 @@ namespace MyTestProgram
 
         static void Main(string[] args)
         {
-            var state = GetGameState();
+            RunBenchmark(args);
             Console.ReadLine();       
-        }
-
-        public static ImplementedGameState GetGameState()
-        {
-            var runner = new CamelRunner(seed: -639947146);
-            runner.AddPlayer(new RandomBot());
-            runner.AddPlayer(new SmartMartinPlayer());
-            runner.AddPlayer(new DiceThrower());
-            var game = runner.ComputeSeededGame(startPosSeed: 1159066037, playerOrderSeed: 1561971233, gameSeed: 778305510);    
-            var players = runner.GetPlayers().ToList();
-            var gameState = game.GameState;
-            return gameState;
         }
 
         private static void RunBenchmark(string[] args)
