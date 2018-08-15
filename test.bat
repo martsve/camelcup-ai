@@ -1,2 +1,2 @@
-dotnet build .\CamelCup.Test\CamelCup.Test.csproj
+@echo off
 dotnet test .\CamelCup.Test\

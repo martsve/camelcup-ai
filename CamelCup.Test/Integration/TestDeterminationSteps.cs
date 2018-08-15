@@ -5,7 +5,7 @@ using System.Linq;
 namespace Delver.CamelCup.Web.Services.Test
 {
     [TestClass]
-    public class TestDetermination
+    public class TestDeterminationSteps
     {
         [TestMethod]
         public void Integration_CamelRunner_Step_1()

@@ -17,7 +17,7 @@ namespace Delver.CamelCup.MartinBots
 
         private int _me;
 
-        public List<CamelColor> BetCardsRemaining = CamelHelper.GetAllCamelColors();
+        public List<CamelColor> BetCardsRemaining;
 
         private bool seeded = false;
         public Random Rnd { get; set; }
@@ -50,8 +50,6 @@ namespace Delver.CamelCup.MartinBots
             {
                 Rnd = new ConsistantRandom(seed);
             }
-
-            Trace.WriteLine($"{seed}, {Rnd}");
         }
 
         public string GetPlayerName()
@@ -62,6 +60,7 @@ namespace Delver.CamelCup.MartinBots
         public void StartNewGame(int playerId, GameInfo info, GameState gameState)
         {
             _me = playerId;
+            BetCardsRemaining = CamelHelper.GetAllCamelColors();
         }
 
         public void InformAboutAction(int player, PlayerAction action, GameState gameState)
@@ -76,6 +75,7 @@ namespace Delver.CamelCup.MartinBots
         {
             var leaders = gameState.GetLeadingOrder();
             var action = GetRandomAction();
+
             switch (action)
             {
                 case CamelAction.PickCard:
@@ -165,7 +165,7 @@ namespace Delver.CamelCup.MartinBots
             
             var totalSum = actionChance.Select(x => x.Value).Sum();
             var rnd = Rnd.NextDouble() * totalSum;
-            Trace.WriteLine($"{Rnd}:{rnd}");
+
             var current = 0.0;
             foreach (var pair in actionChance)
             {
