@@ -31,12 +31,12 @@ namespace Delver.CamelCup.Web.Controllers
         }
 
         [HttpGet("new")]
-        public Guid New(string id = null)
+        public Guid New(string id = null, bool ignore = false)
         {
             CamelService?.Stop();
 
             var guid = id != null ? (Guid?)Guid.Parse(id) : null;
-            CamelService = new CamelService(guid);
+            CamelService = new CamelService(guid, ignore);
             return CamelService.CupId;
         }
 

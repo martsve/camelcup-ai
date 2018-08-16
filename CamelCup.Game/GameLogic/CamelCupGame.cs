@@ -128,6 +128,8 @@ namespace Delver.CamelCup
                         player.PerformAction(x => x.Winners(winners.ToList(), gameStateClone));
                     });
                 }
+                
+                return;
             }
 
             if (GameState.RemainingDice.Any()) 

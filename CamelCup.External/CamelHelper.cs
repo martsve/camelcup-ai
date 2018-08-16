@@ -166,6 +166,12 @@ namespace Delver.CamelCup
         {
             var positions = new List<CamelPositions>();
 
+            if (initialPosition.Location.Any(x => x > 15))
+            {
+                positions.Add(initialPosition);
+                return positions;
+            }
+
             foreach (var dice in colors)
             {
                 for (var i = 1; i <= 3; i++)

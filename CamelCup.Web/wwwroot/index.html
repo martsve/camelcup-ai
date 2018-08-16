@@ -4,7 +4,7 @@
     <script src='jquery-3.3.1.min.js'></script>
 </head>
 <body>
-    <input type="button" value='New' id='new'>
+    <input type="button" value='New' id='new'> <input type='checkbox' id='ignoretime'> No disqualify
     <input type="button" value='Run' id='run'>
     <input type="button" value='Stop' id='stop'>
     <input type="button" value='Get one' id='single'>
@@ -76,7 +76,7 @@
         $('#add').on('click', function() { $.get("/api/cup/add/" + $('#players').val()); });
         $('#add_all').on('click', function() { $.get("/api/cup/add_all"); });
 
-        $('#new').on('click', function() {  $.get("/api/cup/new"); });
+        $('#new').on('click', function() {  $.get("/api/cup/new?ignore=" + $('#ignoretime').prop('checked')); });
         $('#run').on('click', function() {  $.get("/api/cup/run"); });
         $('#stop').on('click', function() {  $.get("/api/cup/stop"); });
         $('#single').on('click', function() {  

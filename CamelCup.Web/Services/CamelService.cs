@@ -21,11 +21,11 @@ namespace Delver.CamelCup.Web.Services
         private Task GameTask { get; set; }
         private CancellationTokenSource _cts;
 
-        public CamelService(Guid? cupId = null)
+        public CamelService(Guid? cupId = null, bool ignoreTime = false)
         {
             CupId = cupId ?? Guid.NewGuid();
             var seed = CupId.GetHashCode();
-            Runner = new CamelRunner(seed: seed);
+            Runner = new CamelRunner(seed: seed, timeScalingFactor: ignoreTime ? 1000 : 1);
             GameIdHistory = new List<Guid>();
         }
 
