@@ -161,6 +161,23 @@ namespace Delver.CamelCup.Web.Services.Test
                 Assert.AreEqual("5,0 14,3 12,1 16,4 14,2", game.GameState.CamelPositionToString(), "camel positions");
             }
         }
+
+        [TestMethod]
+        public void Integration_Determination_10()
+        {
+            var runner = new CamelRunner();
+            runner.AddPlayer(new RandomBot());
+            runner.AddPlayer(new DiceThrower());
+            runner.AddPlayer(new HeatmapMinus());
+            runner.AddPlayer(new HeatmapPluss());
+
+            for (int i = 0; i < 3; i++) {
+                var game = runner.ComputeSeededGame(startPosSeed: 1349774550, playerOrderSeed: 673427446, gameSeed: 67328921);    
+
+                Assert.AreEqual("11 10 12 11", game.GameState.MoneyToString(), "player money");
+                Assert.AreEqual("16,4 9,0 14,1 16,3 14,2", game.GameState.CamelPositionToString(), "camel positions");
+            }
+        }
     }
 }
 

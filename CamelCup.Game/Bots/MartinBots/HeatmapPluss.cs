@@ -29,7 +29,7 @@ namespace Delver.CamelCup.MartinBots
 
         public PlayerAction GetAction(GameState gameState)
         {
-            if (gameState.Traps[_me].Location > -1) 
+            if (gameState.Traps[_me].Location == -1) 
             {
                 var heatmap = CamelHelper.GetLocationHeatmap(gameState, 4);
 
