@@ -40,8 +40,11 @@ namespace Delver.CamelCup.MartinBots
             _useMinusTrap = useMinusTrap;
             _betOnWinner = betOnWinner;
             _betOnLoser = betOnLoser;
-            seeded = seed != null;
-            Rnd = new ConsistantRandom(seed ?? Guid.NewGuid().GetHashCode());
+            if (seed != null) 
+            {
+                seeded = true;
+                Rnd = new ConsistantRandom(seed.Value);
+            }
         }
 
         public void SetRandomSeed(int seed)

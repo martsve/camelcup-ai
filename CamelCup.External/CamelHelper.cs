@@ -123,8 +123,8 @@ namespace Delver.CamelCup
                 foreach (var loc in pos.Location)
                     result[loc]++;
 
-            var sum = result.Sum(x => x.Value);
-            return result.ToDictionary(x => x.Key, x => x.Value / (double)sum);
+            double N = result.Count();
+            return result.ToDictionary(x => x.Key, x => x.Value / N);
         }
 
         private static List<CamelPositions> GetCamelEndPositions(GameState gameState, int depth = 5, bool includeAll = false) 

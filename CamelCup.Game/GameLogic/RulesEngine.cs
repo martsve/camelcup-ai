@@ -165,7 +165,7 @@ namespace Delver.CamelCup
         
         public List<int> GetWinners()
         {
-            var max = Gamestate.Money.OrderByDescending(x => x.Value).First().Value;
+            var max = Gamestate.Money.Max(x => x.Value);
             return Gamestate.Money.Where(x => x.Value == max).Select(x => x.Key).ToList();
         }
     }

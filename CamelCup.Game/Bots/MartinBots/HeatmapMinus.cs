@@ -29,13 +29,11 @@ namespace Delver.CamelCup.MartinBots
 
         public PlayerAction GetAction(GameState gameState)
         {
-            var myTrap = gameState.Traps.FirstOrDefault(x => x.Key == _me && x.Value.Location > -1);
-
-            if (myTrap.Value == null) 
+            if (gameState.Traps[_me].Location > -1) 
             {
                 var heatmap = CamelHelper.GetLocationHeatmap(gameState, 4);
 
-                foreach (var location in heatmap.Where(x => x.Value > 0.5).OrderByDescending(x => x.Value).Select(x => x.Key))
+                foreach (var location in heatmap.Where(x => x.Value > 1).OrderByDescending(x => x.Value).Select(x => x.Key))
                 {
                     if (gameState.IsValidTrapSpace(_me, location))
                     {
