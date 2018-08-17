@@ -116,7 +116,7 @@ namespace Delver.CamelCup.Web.Services.Test
             Assert.AreEqual(87, runner.Step, "game step");
 
             Assert.AreEqual(1, game.StartingPlayer, "starting player");
-            Assert.AreEqual(0, game.CurrentPlayer, "current player");
+            Assert.AreEqual(1, game.CurrentPlayer, "current player");
             Assert.AreEqual(5, gameState.Round, "round");
 
             Assert.AreEqual(29, gameState.Money[0], "player 0 money");
