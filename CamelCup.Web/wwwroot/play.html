@@ -49,6 +49,7 @@
         .card.Red { background-color: red; }
         .card.Yellow { background-color: yellow; }
 
+        .winnerbets, .loserbets { display: inline-block; }
         .winnerbets .card { display: inline-block; font-size: 75%; border: 2px solid black; }
         .loserbets .card { display: inline-block; font-size: 75%; border: 2px solid black; }
 
@@ -67,8 +68,6 @@
     </style>
 </head>
 <body>
-    <input type="button" value='Next' id='next'>
-
     <div id='board'>
 
             <ul id="players">
@@ -80,6 +79,10 @@
             </ul>
 
     </div>
+
+    <br />
+
+    <input type="button" value='Next' id='next'>
 
     <div id='current'></div>
     <div id='history'></div>
@@ -244,16 +247,46 @@
             return new Promise(resolve => setTimeout(resolve, ms));
         }
 
-        async function play(iterations = -1, pause = 50)
+        async function playLast(iterations = -1, pause = 50, cont = false)
         {
             var goto = iterations > -1 ? iterations : gameHistory.history.length;
             for (var i = 0; i < goto; i++) {
                 await sleep(pause);
                 Next();
             }
+
+            if (cont) 
+            {
+                $.get("/api/cup/last", function (data) {
+                    window.localStorage.setItem('history', JSON.stringify(data));
+                });
+
+                setTimeout(function() { 
+                    window.location.reload(); 
+                }, 2000);
+            }
         }
 
-        play();
+        function getParameterByName(name, url) {
+            if (!url) url = window.location.href;
+            name = name.replace(/[\[\]]/g, '\\$&');
+            var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, ' '));
+        }
+
+        var speed = 20;
+        if (getParameterByName("continue"))
+        {
+            playLast(-1, speed, true);
+        }
+        else 
+        {
+            playLast(-1, speed);
+        }
+
     </script>
 </body>
 </html> 

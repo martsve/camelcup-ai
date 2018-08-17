@@ -17,9 +17,12 @@ namespace Delver.CamelCup.Web.Services
         public Guid CupId { get; set; }
 
         public List<Guid> GameIdHistory { get; set; }
+        
+        public GameResult LastGameResult { get; set; }
 
         private Task GameTask { get; set; }
         private CancellationTokenSource _cts;
+        private object LockObject = new Object();
 
         public CamelService(Guid? cupId = null, bool ignoreTime = false)
         {
@@ -51,12 +54,17 @@ namespace Delver.CamelCup.Web.Services
                 }
             }
         }
-        
+
         public GameResult GetGame()
         {
             var game = Runner.ComputeNewGame();
             GameIdHistory.Add(game.GameId);
+            SetLastGame(game);
+            return LastGameResult;
+        }
         
+        private GameResult CamelCupGameToResult(CamelCupGame game)
+        {
             return new GameResult()
             {
                  RunnerSeed = CupId.GetHashCode(),
@@ -70,13 +78,21 @@ namespace Delver.CamelCup.Web.Services
                  Winners = game.Winners().Select(x => x.PlayerId).ToList()
             };
         }
-
         private void ComputeGame(CancellationToken cancelToken)
         {
             while (!cancelToken.IsCancellationRequested)
             {
                 var game = Runner.ComputeNewGame();
+                SetLastGame(game);
                 GameIdHistory.Add(game.GameId);
+            }
+        }
+
+        private void SetLastGame(CamelCupGame game)
+        {
+            lock (LockObject)
+            {
+                LastGameResult = CamelCupGameToResult(game);
             }
         }
     }

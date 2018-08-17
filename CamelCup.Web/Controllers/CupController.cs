@@ -171,6 +171,12 @@ namespace Delver.CamelCup.Web.Controllers
             return CamelService?.GetGame();
         }
         
+        [HttpGet("last")]
+        public GameResult Last()
+        {
+            return CamelService?.LastGameResult;
+        }
+
         [HttpGet("stop")]
         public void Stop()
         {
