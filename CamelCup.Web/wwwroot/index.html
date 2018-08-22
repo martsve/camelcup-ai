@@ -2,6 +2,8 @@
 <head>
     <title>CamelCup-Ai-Cup</title>
     <script src='jquery-3.3.1.min.js'></script>
+    <script src='data.js'></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
     <input type="button" value='New' id='new'> <input type='checkbox' id='ignoretime'> No disqualify
@@ -12,7 +14,7 @@
     <a href='play.html?continue=1'>Watch</a><br />
 
     <form id='uploadForm' method='post' enctype="multipart/form-data">
-        <input type="file" id="browse" name="fileupload" multiple style="display: none" onChange="Handlechange();"/>
+        <input type="file" id="browse" name="fileupload" multiple style="display: none" onChange="UploadForm('/api/cup/upload', UpdateBotList);"/>
     </form>
     
     <input type="button" value='Upload new player' id='upload'>
@@ -25,54 +27,8 @@
     <div id='last'></div>
 
     <script>
-        
-    function Handlechange()
-    {
-        var fd = new FormData($("#uploadForm")[0]);
-        $.ajax({
-            url: "/api/cup/upload",
-            type: 'POST',
-            data: fd,
-            cache: false,
-            processData: false,
-            contentType: false,
-            success: function(data)
-            {
-                console.log(data);
-                UpdateBotList();
-            }
-        });
-    }
-    
+
     $(function() {
-        function update()
-        {
-            $.get("/api/cup", function (data) { 
-                if (data)
-                    showGameData(data);
-            });
-            setTimeout(update, 1000);
-        }
-
-        function showGameData(data)
-        {
-            var content = "CupId: " + data.cupId + "<ul>";
-            var players = data.players;
-            players.sort(function (x, y) {
-                return x.wins < y.wins;
-            });
-
-            for (var key in players)
-            {
-                var player = data.players[key]; 
-                content += "<li>" + player.name + ": " + player.wins+ "</li>";    
-            }
-
-            content += "</ul>";
-
-            $('#data').html(content); 
-        }
-        
         $('#upload').on('click', function() { $('#browse').click(); });
         $('#add').on('click', function() { $.get("/api/cup/add/" + $('#players').val()); });
         $('#add_all').on('click', function() { $.get("/api/cup/add_all"); });
@@ -87,7 +43,7 @@
             });
         });
 
-        setTimeout(update, 1000);
+        SetPlayerInfo("#data", 1000);
 
         UpdateBotList();
     });
@@ -99,17 +55,11 @@
             $select.find('option').remove();
             for (var key in data) 
             {
-                var name = htmlEncode(data[key].botName);
+                var name = HtmlEncode(data[key].botName);
                 $select.append('<option value="' + data[key].id + '">' + name + '</option>');
             }
         });
     }
-    function htmlEncode(value){
-    //create a in-memory div, set it's inner text(which jQuery automatically encodes)
-    //then grab the encoded contents back out.  The div never exists on the page.
-    return $('<div/>').text(value).html();
-    }
-
     </script>
 </body>
 </html> 
