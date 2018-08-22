@@ -31,8 +31,8 @@ ul, li { margin: 0px; padding: 0px; list-style: none; }
 #camelRed { background: url(img/red.png) center no-repeat;  background-size: contain;}
 #camelYellow { background: url(img/yellow.png) center no-repeat;  background-size: contain;}
 
-#players { position: absolute; left: 830px; top: 20px; width: 240px; }
-#players .card { width: 50px; height: 30px; margin-right: 5px; text-align: center; margin-bottom: 5px; }
+.players { position: absolute; left: 830px; top: 20px; width: 240px; }
+.players .card { width: 50px; height: 30px; margin-right: 5px; text-align: center; margin-bottom: 5px; }
 .player { height: 150px; }
 .name { font-weight: bold; display: block; }
 .money { font-size: 200%; background: url(img/coin.png) no-repeat; background-size: contain; padding-left: 40px; width: 50px; height: 40px; display: inline-block; }

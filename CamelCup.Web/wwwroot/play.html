@@ -3,21 +3,12 @@
     <title>CamelCup History Player</title>
     <script src='jquery-3.3.1.min.js'></script>
     <script src='data.js'></script>
+    <script src='game.js'></script>
     <script src='Chart.bundle.min.js'></script>    
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-    <div id='board'>
-        <ul id="players">
-
-        </ul>
-
-        <ul id="dice">
-
-        </ul>
-
-        <div id="locations"></div>
-    </div>
+    <div id='board'></div>
 
     <div id='debug'>
         <input type="button" value='Next' id='next'>
@@ -31,197 +22,27 @@
     </div>
 
     <script>
-        function ResetBoard(gameHistory) 
-        {
-            $('#players').empty();
-            $('#dice').empty();
-            $('#locations').empty();
-
-            current = -1;
-
-            var board = $('#locations');
-            for (var i = 0; i < 16; i++)
-            {
-                board.append('<div class="loc" id="loc'+i+'"></div>');
-            }
-
-            $('#loc15').append('<div class="camel" id="camelBlue"></div>');
-            $('#loc15').append('<div class="camel" id="camelGreen"></div>');
-            $('#loc15').append('<div class="camel" id="camelWhite"></div>');
-            $('#loc15').append('<div class="camel" id="camelRed"></div>');
-            $('#loc15').append('<div class="camel" id="camelYellow"></div>');
-
-            $('#history').html("<pre>" + JSON.stringify(gameHistory, null, 2) + "</pre>");
-
-            ResetTraps();
-
-            for (key in gameHistory.players)
-            {
-                $('#players').append('<li class="player" id="player'+key+'"><span class="name"></span> <span class="money"></span><div class="cards"></div><div class="winnerbets"></div><div class="loserbets"></div><div class="trap" id="trap'+key+'"><span class="value"></span><span class="owner">'+gameHistory.players[key]+'</span></div></li>');
-                $('#player' + key + ' .name').html(gameHistory.players[key]);
-                UpdateMoney(key, 0);
-            }
-        }
-
-        function UpdateMoney(player, money)
-        {
-            $('#player' + player + ' .money').html('x' + money);
-        }
-
-        function ThrowDice(color, value) {
-            $('#dice').append("<li><span class='card "+color+"'>"+value+"</span></li>");
-        }
-
-        function StartCamel(color, location, height)
-        {
-            var camel = $('#camel' + color).remove();
-            camel.data('height', height)
-
-            var smallest = null;
-            $('#loc' + location + ' .camel').each(function() {
-                var ch = $(this);
-                if (ch.data('height') > height && (!smallest || ch.data('height') < smallest.data('height')))
-                    smallest = ch;
-            });
-
-            if (!smallest)
-                $('#loc' + location).prepend(camel);
-            else 
-                smallest.before(camel);
-        }
-        
-        function MoveStack(stack, from, to, top)
-        {
-            if (to > 15) to = to - 16;
-            for (var i = 0; i < stack.length; i++)
-            {
-                var j = top ? i : (stack.length - i - 1);
-                var color = stack[j];
-                var camel = $('#camel' + color).remove();
-                if (top)
-                    $('#loc' + to).prepend(camel);
-                else 
-                    $('#loc' + to).append(camel);
-            }
-        }
-
-        function PlaceTrap(player, location, move) {
-            var trap = $('#trap' + player).remove();
-            trap.removeClass('pluss');
-            trap.removeClass('minus');
-            trap.addClass(move > 0 ? 'pluss' : 'minus');
-            trap.find('.value').html(move);
-            $('#loc' + location).append(trap);
-        }
-
-        function ResetTraps() {
-            for (player in gameHistory.players)
-            {
-                var trap = $('#trap' + player).remove();
-                $('#player' + player).append(trap);
-            }
-        }
-
-        function showWinner()
-        {
-            for (key in gameHistory.winners)
-            {
-                $("#player" + gameHistory.winners[key]).addClass("winner");
-            }
-        }
-
-        function Next() 
-        {
-            current++;
-            var event = gameHistory.history[current];
-            $('#current').html('<pre>'+current+ ': ' + JSON.stringify(event, null, 2) + '</pre>');
-            if (event.action == "StartPosition")
-            {
-                StartCamel(event.color, event.value, event.height);
-            } 
-            else if (event.action == "GetMoney")
-            {
-                UpdateMoney(event.player, event.value);
-            } 
-            else if (event.action == "PickCard")
-            {
-                $('#player' + event.player + ' .cards').append('<span class="card '+event.color+'">'+event.value+'</span>');
-            } 
-            else if (event.action == "SecretBetOnWinner")
-            {
-                $('#player' + event.player + ' .winnerbets').append('<span class="card '+event.color+'">First</span>');
-            } 
-            else if (event.action == "SecretBetOnLoser")
-            {
-                $('#player' + event.player + ' .loserbets').append('<span class="card '+event.color+'">Last</span>');
-            } 
-            else if (event.action == "ThrowDice")
-            {
-                ThrowDice(event.color, event.value);
-            } 
-            else if (event.action == "Move")
-            {
-                MoveStack(event.stack, event.from, event.to, event.landOnTop);
-            } 
-            else if (event.action == "PlacePlussTrap")
-            {
-                PlaceTrap(event.player, event.value, 1);
-            }
-            else if (event.action == "PlaceMinusTrap")
-            {
-                PlaceTrap(event.player, event.value, -1);
-            }
-            else if (event.action == "NewRound")
-            {
-                $('#dice').empty();  
-                $('.player .cards').empty(); 
-                ResetTraps();
-            }            
-            else if (event.action == "Disqualified")
-            {
-                $('#player' + event.player).addClass("disqualified");
-                $('#player' + event.player + ' .money').html(0);
-            }
-
-            if (current >= gameHistory.history.length -1) 
-            {
-                showWinner();   
-            }
-        }
-
-        $('#next').on('click', function() {
-            Next();
-        });
-
-
-        gameHistory = JSON.parse(window.localStorage.getItem('history'));
-
-        ResetBoard(gameHistory);
-
-        function sleep(ms) {
-            return new Promise(resolve => setTimeout(resolve, ms));
-        }
-
         async function playLast(iterations = -1, pause = 50, cont = false)
         {
-            var goto = iterations > -1 ? iterations : gameHistory.history.length;
+            var goto = iterations > -1 ? iterations : game.GetLength();
             for (var i = 0; i < goto; i++) {
                 await sleep(pause);
-                Next();
+                game.Iterate();
             }
 
             if (cont) 
             {
-                $.get("/api/cup/last", function (data) {
-                    gameHistory = data;
-                    window.localStorage.setItem('history', JSON.stringify(gameHistory));
+                game.UpdateGamedata(function(self) {
+                    setTimeout(function() {
+                        self.Reset();
+                        playLast(iterations, pause, cont);
+                    }, 2000);
                 });
-
-                setTimeout(function() { 
-                    ResetBoard(gameHistory);
-                    playLast(iterations, pause, cont);
-                }, 2000);
             }
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
         }
 
         function getParameterByName(name, url) {
@@ -234,14 +55,19 @@
             return decodeURIComponent(results[2].replace(/\+/g, ' '));
         }
 
-        var speed = 20;
+        game = new CamelGame('#board');
+
         if (getParameterByName("continue"))
         {
+            var speed = 75;
             playLast(-1, speed, true);
         }
         else 
         {
-            playLast(-1, speed);
+            $('#debug').show();
+            $('#next').on('click', function() {
+                game.Iterate();
+            });
         }
 
         SetPlayerInfo('#totalscore', 1000, true);

@@ -64,7 +64,9 @@ function MakeChart(div)
             scales: {
                 yAxes: [{
                     ticks: {
-                        beginAtZero:true
+                        max : 1000,    
+                        min : 0
+                        //beginAtZero:true
                     }
                 }]
             }
