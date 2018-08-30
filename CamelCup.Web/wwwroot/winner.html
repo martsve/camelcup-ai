@@ -6,12 +6,28 @@
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-    <div id='winner'>
-        ..
+
+  <div id='body'>
+    <div id='header' class='small'>
+      <img src='img/camelcup.png'>
     </div>
 
-    <button onClick='location.href="/"'>Back to start</button>
+      <div class='menu'>
+        <div class='option'>
+          <h1>The winner is...</h1>
+        </div>
+        
+        <center><img src="img/crown.png" width=300></center>
 
+        <div id='winner'>
+            ..
+        </div>
+
+        <div class='option'>
+          <button onClick='location.href="/"'>Back to start</button>
+        </div>
+    </div>
+    
     <script>
         $(function() {
             stopAutoUpdate = true;

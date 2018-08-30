@@ -30,7 +30,7 @@ function SetPlayerInfo(div, interval = 1000, graph = false)
 function DisplayWinner(div)
 {    
     $.get("/api/cup", function (data) {     
-        var html = '<center><h2>The winner is</h2><h1>' + HtmlEncode(data.winner.name) + '</h1><img src="img/crown.png"></center>';
+        var html = '<h1>' + HtmlEncode(data.winner.name) + '</h1>';
 
         var players = [];
         for (key in data.players)
@@ -43,14 +43,14 @@ function DisplayWinner(div)
         });
 
         
-        html += "<ul>"
+        html += "<ul class='standings'>"
 
         for (var key in players)
         {
             if (key == 0)
-                html += "<li><b>"+HtmlEncode(players[key].Name)+": " + players[key].Wins + "</b></li>"
+                html += "<li class='winner'><span class='name'>"+HtmlEncode(players[key].Name)+"</span><span class='wins'> " + players[key].Wins + "</span></li>"
             else 
-                html += "<li>"+HtmlEncode(players[key].Name)+": " + players[key].Wins + "</li>"
+                html += "<li><span class='name'>"+HtmlEncode(players[key].Name)+"</span><span class='wins'> " + players[key].Wins + "</span></li>"
         }
 
         html += "</ul>"

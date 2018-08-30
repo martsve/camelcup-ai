@@ -1,0 +1,133 @@
+<html>
+<head>
+    <title>CamelCup-Ai-Cup</title>
+    <script src='jquery-3.3.1.min.js'></script>
+    <script src='data.js'></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+
+  <div id='body'>
+    
+    <div id='header' class='small'>
+      <img src='img/camelcup.png'>
+    </div>
+
+    <div class='menu'>
+    
+       <div class='option'>
+        <h2>Start a new cup</h2>
+       </div>
+       
+       <div class='option'>
+           <input type="button" value='Start with default settings' id='add_all'>
+        </div>
+        
+       <div class='option'>
+          <label>
+              <input type='checkbox' id='ignoretime'>
+              <span> No disqualify for high computation time</span>
+          </label>
+        </div>
+       
+       <div class='option'>
+            <input value='1000' type='number' id='numberOfGames'> games total
+        </div>
+       
+       <div class='option'>
+            <input type="button" value='New' id='new'>
+        </div>
+        
+        <div class='option'>
+          <h2>Add players</h2>
+         </div>
+
+        <div class='option'>
+          <select id='players'>
+          </select>
+         </div>
+
+        <div class='option'>
+            <input type="button" value='Add' id='add'>
+         </div>
+
+        <div class='option'>
+          <h2>Running games continously</h2>
+         </div>
+         
+        <div class='option'>
+          <input type="button" value='Run' id='run'>
+         </div>
+         
+        <div class='option'>
+          <input type="button" value='Stop' id='stop'>
+         </div>
+        
+        <div class='option'>
+          <input type="button" value='Run a single game' id='single'>
+         </div>
+         
+         
+        <div class='option'>
+          <h2>Watch the latest game</h2>
+         </div>
+         
+        <div class='option'>
+          <button onClick='location.href="play.html"'>Debug the last game</button>
+         </div>
+
+        <div class='option'>
+          <button onClick='location.href="play.html?continue=1"'>Watch the cup</button>
+         </div>
+
+        <hr />
+
+       <div class='option'>
+          <button onClick='location.href="/"'>Back</button>
+        </div>
+        
+    </div>
+        
+  </div>
+  
+
+  <div id='data'></div>
+  <div id='last'></div>
+
+  <script>
+
+  $(function() {
+      $('#upload').on('click', function() { $('#browse').click(); });
+      $('#add').on('click', function() { $.get("/api/cup/add/" + $('#players').val()); });
+      $('#add_all').on('click', function() { $.get("/api/cup/add_all"); });
+
+      $('#new').on('click', function() {  $.get("/api/cup/new?ignore=" + $('#ignoretime').prop('checked') + "&games=" + $('#numberOfGames').val()); });
+      $('#run').on('click', function() {  $.get("/api/cup/run"); });
+      $('#stop').on('click', function() {  $.get("/api/cup/stop"); });
+      $('#single').on('click', function() {  
+          $.get("/api/cup/single", function (data) {
+              $('#last').html("<pre>"+JSON.stringify(data)+"</pre>"); 
+              window.localStorage.setItem('history', JSON.stringify(data));
+          });
+      });
+
+      SetPlayerInfo("#data", 1000);
+
+      UpdateBotList();
+  });
+
+  function UpdateBotList()
+  {
+      $.get('/api/cup/bots', function (data) {
+          var $select = $('#players');
+          $select.find('option').remove();
+          for (var key in data) 
+          {
+              var name = HtmlEncode(data[key].botName);
+              $select.append('<option value="' + data[key].id + '">' + name + '</option>');
+          }
+      });
+  }
+  </script>
+</body>
+</html> 

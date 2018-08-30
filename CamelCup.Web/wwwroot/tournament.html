@@ -1,0 +1,81 @@
+<html>
+<head>
+    <title>CamelCup-Ai-Cup</title>
+    <script src='jquery-3.3.1.min.js'></script>
+    <script src='data.js'></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+  <div id='body'>
+    <div id='header' class='small'>
+      <img src='img/camelcup.png'>
+    </div>
+
+      <div class='menu'>
+        <div class='option'>
+          <h1>Start a new tournament</h1>
+        </div>
+
+        <div class='option'>
+          <h2>Select players</h2>
+        </div>
+        
+        <div class='option'>
+          <ul class='selector'>
+            <li>MyBot #1</li>
+            <li>Your bot #1</li>
+            <li>Some random #1</li>
+            
+            <li>MyBot #2</li>
+            <li>Your bot #2</li>
+            <li>Some random #2</li>
+            
+            <li>Some random #3</li>
+          </ul>
+          <script>
+            $(function() { 
+                $('.selector li').on('click', function() { 
+                    $(this).toggleClass('on');
+                });
+             });
+           </script>
+        </div>
+
+        
+        <div class='option'>
+          <h2>Number of games to play</h2>
+        </div>
+        
+        <div class='option'>
+            <input type='number' id='numberOfGames' value='1000'>
+            <button class='alternative' onClick='$("#numberOfGames").val(100)'>100</button>
+            <button class='alternative' onClick='$("#numberOfGames").val(500)'>500</button>
+            <button class='alternative' onClick='$("#numberOfGames").val(1000)'>1000</button>
+        </div>
+        
+        
+        <div class='option'>
+          <h2>Other settings</h2>
+        </div>
+        
+        <div class='option'>
+          <label>
+            <input type='checkbox' id='ignoretime'> 
+            <span>Turn off max computation time</span>
+          </label>
+        </div>
+        
+        <div class='option'>
+          <button onClick='location.href="manage.html"'>Start the tournament</button>
+        </div>
+        
+        <hr />
+
+       <div class='option'>
+          <button onClick='location.href="/"'>Back</button>
+        </div>
+
+    </div>
+  </div>
+</body>
+</html> 

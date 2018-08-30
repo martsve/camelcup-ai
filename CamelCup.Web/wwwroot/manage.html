@@ -1,0 +1,90 @@
+<html>
+<head>
+    <title>CamelCup-Ai-Cup</title>
+    <script src='jquery-3.3.1.min.js'></script>
+    <script src='data.js'></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+
+  <div id='body'>
+    
+    <div id='header' class='small'>
+      <img src='img/camelcup.png'>
+    </div>
+
+      <div class='menu'>
+        
+        <div class='option'>
+          <h2>Upload new players</h2>
+        </div>
+        
+        <div class='option'>
+          <form id='uploadForm' method='post' enctype="multipart/form-data">
+              <input type="file" id="browse" name="fileupload" multiple style="display: none" onChange="UploadForm('/api/cup/upload', UpdateBotList);"/>
+          </form>
+          
+          <input type="button" value='Upload new player' id='upload'>
+        </div>
+        
+        <div class='option'>
+          <h2>Availible players</h2>
+        </div>
+        
+        <div class='option'>
+            <select id='players'>
+              <option>-- loading players --</option>
+            </select>
+        </div>
+        
+        <hr />
+
+       <div class='option'>
+          <button onClick='location.href="/"'>Back</button>
+        </div>
+        
+    </div>
+        
+  </div>
+  
+
+  <div id='data'></div>
+  <div id='last'></div>
+
+  <script>
+
+  $(function() {
+      $('#upload').on('click', function() { $('#browse').click(); });
+      $('#add').on('click', function() { $.get("/api/cup/add/" + $('#players').val()); });
+      $('#add_all').on('click', function() { $.get("/api/cup/add_all"); });
+
+      $('#new').on('click', function() {  $.get("/api/cup/new?ignore=" + $('#ignoretime').prop('checked') + "&games=" + $('#numberOfGames').val()); });
+      $('#run').on('click', function() {  $.get("/api/cup/run"); });
+      $('#stop').on('click', function() {  $.get("/api/cup/stop"); });
+      $('#single').on('click', function() {  
+          $.get("/api/cup/single", function (data) {
+              $('#last').html("<pre>"+JSON.stringify(data)+"</pre>"); 
+              window.localStorage.setItem('history', JSON.stringify(data));
+          });
+      });
+
+      SetPlayerInfo("#data", 1000);
+
+      UpdateBotList();
+  });
+
+  function UpdateBotList()
+  {
+      $.get('/api/cup/bots', function (data) {
+          var $select = $('#players');
+          $select.find('option').remove();
+          for (var key in data) 
+          {
+              var name = HtmlEncode(data[key].botName);
+              $select.append('<option value="' + data[key].id + '">' + name + '</option>');
+          }
+      });
+  }
+  </script>
+</body>
+</html> 

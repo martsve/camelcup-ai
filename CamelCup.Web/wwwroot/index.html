@@ -6,65 +6,25 @@
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-    <div class='menu'>
-        <input type="button" value='New' id='new'>
-             <input type='checkbox' id='ignoretime'> No disqualify
-             <input value='1000' id='numberOfGames'> games total
-        <input type="button" value='Run' id='run'>
-        <input type="button" value='Stop' id='stop'>
-        <input type="button" value='Get one' id='single'>
-        <a href='play.html'>Play</a> 
-        <a href='play.html?continue=1'>Watch</a><br />
-
-        <form id='uploadForm' method='post' enctype="multipart/form-data">
-            <input type="file" id="browse" name="fileupload" multiple style="display: none" onChange="UploadForm('/api/cup/upload', UpdateBotList);"/>
-        </form>
-        
-        <input type="button" value='Upload new player' id='upload'>
-        <select id='players'>
-        </select>
-        <input type="button" value='Add' id='add'>
-        <input type="button" value='Use All' id='add_all'>
-
-        <div id='data'></div>
-        <div id='last'></div>
-
+  <div id='body'>
+    <div id='header'>
+      <img src='img/camelcup.png'>
     </div>
 
-    <script>
+      <div class='menu'>
+        <div class='option'>
+          <button onClick='location.href="tournament.html"'>Start a new tournament</button>
+        </div>
+        
+        <div class='option'>
+          <button onClick='location.href="debug.html"'>Start a test game</button>
+        </div>
+        
+        <div class='option'>
+          <button onClick='location.href="manage.html"'>Manage players</button>
+        </div>
 
-    $(function() {
-        $('#upload').on('click', function() { $('#browse').click(); });
-        $('#add').on('click', function() { $.get("/api/cup/add/" + $('#players').val()); });
-        $('#add_all').on('click', function() { $.get("/api/cup/add_all"); });
-
-        $('#new').on('click', function() {  $.get("/api/cup/new?ignore=" + $('#ignoretime').prop('checked') + "&games=" + $('#numberOfGames').val()); });
-        $('#run').on('click', function() {  $.get("/api/cup/run"); });
-        $('#stop').on('click', function() {  $.get("/api/cup/stop"); });
-        $('#single').on('click', function() {  
-            $.get("/api/cup/single", function (data) {
-                $('#last').html("<pre>"+JSON.stringify(data)+"</pre>"); 
-                window.localStorage.setItem('history', JSON.stringify(data));
-            });
-        });
-
-        SetPlayerInfo("#data", 1000);
-
-        UpdateBotList();
-    });
-
-    function UpdateBotList()
-    {
-        $.get('/api/cup/bots', function (data) {
-            var $select = $('#players');
-            $select.find('option').remove();
-            for (var key in data) 
-            {
-                var name = HtmlEncode(data[key].botName);
-                $select.append('<option value="' + data[key].id + '">' + name + '</option>');
-            }
-        });
-    }
-    </script>
+    </div>
+  </div>
 </body>
 </html> 
