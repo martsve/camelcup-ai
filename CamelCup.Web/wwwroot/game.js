@@ -36,7 +36,7 @@ function CamelGame(div)
     {
         $div = self.Div;
         $div.empty();
-
+        $div.append('<div id="boardRatio"></div>');
         $div.append('<ul class="players"></ul>');
         $div.append('<ul id="dice"></ul>');
         $div.append('<div id="locations"></div>');
@@ -86,7 +86,7 @@ function CamelGame(div)
 
     function UpdateMoney(player, money)
     {
-        $('#player' + player + ' .money').html('x' + money);
+        $('#player' + player + ' .money').html(money);
     }
 
     function ThrowDice(color, value) {
@@ -154,6 +154,8 @@ function CamelGame(div)
     function Next() 
     {
         self.current++;
+        if (self.current >= self.GameHistory.history.length)
+            return;
 
         var event = self.GameHistory.history[self.current];
         $('#current').html('<pre>'+self.current+ ': ' + JSON.stringify(event, null, 2) + '</pre>');

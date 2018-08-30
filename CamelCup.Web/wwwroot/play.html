@@ -12,6 +12,10 @@
 
     <div id='debug'>
         <input type="button" value='Next' id='next'>
+        <input type="button" value='Watch' id='all'>
+        <input type="button" value='Reset' id='reset'>
+
+        Speed <input id='speed'>
 
         <div id='current'></div>
         <div id='history'></div>        
@@ -22,11 +26,15 @@
     </div>
 
     <script>
+        var running = false;
         async function playLast(iterations = -1, pause = 50, cont = false)
         {
+            running = true;
             var goto = iterations > -1 ? iterations : game.GetLength();
-            for (var i = 0; i < goto; i++) {
+            for (var i = game.current; i < goto; i++) {
                 await sleep(pause);
+                if (!running)
+                    break;
                 game.Iterate();
             }
 
@@ -56,10 +64,11 @@
         }
 
         game = new CamelGame('#board');
+        var speed = window.localStorage.getItem('speed') || 75;
+        $('#speed').val(speed);
 
         if (getParameterByName("continue"))
         {
-            var speed = 75;
             playLast(-1, speed, true);
         }
         else 
@@ -67,6 +76,19 @@
             $('#debug').show();
             $('#next').on('click', function() {
                 game.Iterate();
+            });
+            $('#all').on('click', function() {
+                playLast(-1, speed, false);
+            });
+            $('#reset').on('click', function() {
+                running = false;
+                game.Reset();
+            });
+            $('#speed').on('input', function() {
+                speed = parseInt($('#speed').val());
+                if (!speed || speed <= 0)
+                    speed = 75;
+                window.localStorage.setItem('speed', speed)
             });
         }
 
