@@ -9,5 +9,6 @@ namespace Delver.CamelCup.Web.Models
         public Guid CupId;
         public int TotalGames;
         public int GamesPlayed;
+        public Player Winner;
     }
 }

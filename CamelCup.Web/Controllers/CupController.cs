@@ -152,7 +152,8 @@ namespace Delver.CamelCup.Web.Controllers
                 Players = runner.GetPlayers(),
                 CupId = CamelService.CupId,
                 TotalGames = CamelService.TotalGames,
-                GamesPlayed = CamelService.GamesPlayed
+                GamesPlayed = CamelService.GamesPlayed,
+                Winner = CamelService.GetWinner(),
             };
 
             return result;

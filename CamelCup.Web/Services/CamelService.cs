@@ -99,9 +99,22 @@ namespace Delver.CamelCup.Web.Services
             }
         }
 
+        public Player GetWinner()
+        {
+            if (GameTask != null && GameTask.Status == TaskStatus.Running)
+            {
+                return null;
+            }
+
+            return Leaders().FirstOrDefault();
+        }
+
         private Player[] Leaders()
         {
             var players = Runner.GetPlayers();
+            if (players.Count == 0)
+                return new Player[] {};
+
             var max = players.Max(x => x.Wins);
             return players.Where(x => x.Wins == max).ToArray();
         }

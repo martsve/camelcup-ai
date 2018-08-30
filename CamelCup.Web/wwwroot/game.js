@@ -19,9 +19,17 @@ function CamelGame(div)
 
     self.UpdateGamedata = function(callback)
     {
+        $.get("/api/cup", function (data) { 
+            if (data.winner)
+            {
+                location.href = 'winner.html';
+            }
+        });       
+
         $.get("/api/cup/last", function (data) {
             self.SetGameData(data);
             window.localStorage.setItem('history', JSON.stringify(data));
+
             if (callback)
                 callback(self);
         });

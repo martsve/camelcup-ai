@@ -24,8 +24,41 @@ function SetPlayerInfo(div, interval = 1000, graph = false)
         }
     });
 
-    setTimeout(function() { SetPlayerInfo(div, interval, graph) }, interval);  
+    setTimeout(function() {  SetPlayerInfo(div, interval, graph) }, interval);  
 }
+
+function DisplayWinner(div)
+{    
+    $.get("/api/cup", function (data) {     
+        var html = '<center><h2>The winner is</h2><h1>' + HtmlEncode(data.winner.name) + '</h1><img src="img/crown.png"></center>';
+
+        var players = [];
+        for (key in data.players)
+        {
+            players.push({ Name: data.players[key].name, Wins: data.players[key].wins });
+        }
+    
+        players.sort(function (x, y) {
+            return x.Wins < y.Wins;
+        });
+
+        
+        html += "<ul>"
+
+        for (var key in players)
+        {
+            if (key == 0)
+                html += "<li><b>"+HtmlEncode(players[key].Name)+": " + players[key].Wins + "</b></li>"
+            else 
+                html += "<li>"+HtmlEncode(players[key].Name)+": " + players[key].Wins + "</li>"
+        }
+
+        html += "</ul>"
+
+        $(div).html(html);
+    });
+}
+
 var lastUsedData;
 function UpdateScore(data)
 {   
