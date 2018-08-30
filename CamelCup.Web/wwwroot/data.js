@@ -1,13 +1,9 @@
-function SetPlayerInfo(div, interval = 1000, graph = false, chart)
+function SetPlayerInfo(div, interval = 1000, graph = false)
 {    
     $.get("/api/cup", function (data) { 
         if (data) {
-            if (graph) {
-                if (!chart) {
-                    chart = MakeChart(div);
-                }
-                
-                UpdateGraph(chart, data);
+            if (graph) {                
+                UpdateScore(data);
             }
             else {
                 var content = "<ul>";
@@ -28,73 +24,30 @@ function SetPlayerInfo(div, interval = 1000, graph = false, chart)
         }
     });
 
-    setTimeout(function() { SetPlayerInfo(div, interval, graph, chart) }, interval);  
+    setTimeout(function() { SetPlayerInfo(div, interval, graph) }, interval);  
 }
-
-function MakeChart(div)
-{
-    var ctx = $(div)[0].getContext('2d');
-    return new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: [],
-            datasets: [{
-                label: '# of Wins',
-                data: [],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255,99,132,1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        max : 1000,    
-                        min : 0
-                        //beginAtZero:true
-                    }
-                }]
-            }
-        }
-    });
-}
-
-function UpdateGraph(chart, data)
+var lastUsedData;
+function UpdateScore(data)
 {   
-    labels = [];
-    values = [];
-
-    var players = data.players;
-    players.sort(function (x, y) {
-        return x.wins < y.wins;
-    });
-
-    for (var key in players)
+    lastUsedData = data;
+    var players = [];
+    for (key in data.players)
     {
-        var player = data.players[key];
-        labels.push(player.name);
-        values.push(player.wins);
+        players.push({ Name: data.players[key].name, Wins: data.players[key].wins });
     }
 
-    chart.data.labels = labels;
-    chart.data.datasets[0].data = values;
+    players.sort(function (x, y) {
+        return x.Name > y.Name;
+    });
 
-    chart.update();
+    var gamesRequired = data.totalGames / 2.0;
+
+    for (var i = 0; i < players.length; i++)
+    {
+        var $p = $($('.player')[i]).find('.progress');
+        var val = players[i].Wins / gamesRequired * 100.0;
+        $p.html('<div class="value" style="width: '+val+'%;"></div>');
+    }
 }
 
 function UploadForm(url, callback)

@@ -16,6 +16,9 @@ namespace Delver.CamelCup.Web.Services
 
         public Guid CupId { get; set; }
 
+        public int TotalGames { get; set; }
+        public int GamesPlayed { get; set; }
+
         public List<Guid> GameIdHistory { get; set; }
         
         public GameResult LastGameResult { get; set; }
@@ -24,8 +27,9 @@ namespace Delver.CamelCup.Web.Services
         private CancellationTokenSource _cts;
         private object LockObject = new Object();
 
-        public CamelService(Guid? cupId = null, bool ignoreTime = false)
+        public CamelService(Guid? cupId = null, bool ignoreTime = false, int totalGames = 1000)
         {
+            TotalGames = totalGames;
             CupId = cupId ?? Guid.NewGuid();
             var seed = CupId.GetHashCode();
             Runner = new CamelRunner(seed: seed, timeScalingFactor: ignoreTime ? 1000 : 1);
@@ -85,7 +89,21 @@ namespace Delver.CamelCup.Web.Services
                 var game = Runner.ComputeNewGame();
                 SetLastGame(game);
                 GameIdHistory.Add(game.GameId);
+                GamesPlayed++;
+
+                if (GamesPlayed >= TotalGames)
+                {
+                    if (Leaders().Length == 1)
+                        break;
+                }
             }
+        }
+
+        private Player[] Leaders()
+        {
+            var players = Runner.GetPlayers();
+            var max = players.Max(x => x.Wins);
+            return players.Where(x => x.Wins == max).ToArray();
         }
 
         private void SetLastGame(CamelCupGame game)

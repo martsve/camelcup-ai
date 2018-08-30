@@ -6,25 +6,30 @@
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-    <input type="button" value='New' id='new'> <input type='checkbox' id='ignoretime'> No disqualify
-    <input type="button" value='Run' id='run'>
-    <input type="button" value='Stop' id='stop'>
-    <input type="button" value='Get one' id='single'>
-    <a href='play.html'>Play</a> 
-    <a href='play.html?continue=1'>Watch</a><br />
+    <div class='menu'>
+        <input type="button" value='New' id='new'>
+             <input type='checkbox' id='ignoretime'> No disqualify
+             <input value='1000' id='numberOfGames'> games total
+        <input type="button" value='Run' id='run'>
+        <input type="button" value='Stop' id='stop'>
+        <input type="button" value='Get one' id='single'>
+        <a href='play.html'>Play</a> 
+        <a href='play.html?continue=1'>Watch</a><br />
 
-    <form id='uploadForm' method='post' enctype="multipart/form-data">
-        <input type="file" id="browse" name="fileupload" multiple style="display: none" onChange="UploadForm('/api/cup/upload', UpdateBotList);"/>
-    </form>
-    
-    <input type="button" value='Upload new player' id='upload'>
-    <select id='players'>
-    </select>
-    <input type="button" value='Add' id='add'>
-    <input type="button" value='Use All' id='add_all'>
+        <form id='uploadForm' method='post' enctype="multipart/form-data">
+            <input type="file" id="browse" name="fileupload" multiple style="display: none" onChange="UploadForm('/api/cup/upload', UpdateBotList);"/>
+        </form>
+        
+        <input type="button" value='Upload new player' id='upload'>
+        <select id='players'>
+        </select>
+        <input type="button" value='Add' id='add'>
+        <input type="button" value='Use All' id='add_all'>
 
-    <div id='data'></div>
-    <div id='last'></div>
+        <div id='data'></div>
+        <div id='last'></div>
+
+    </div>
 
     <script>
 
@@ -33,7 +38,7 @@
         $('#add').on('click', function() { $.get("/api/cup/add/" + $('#players').val()); });
         $('#add_all').on('click', function() { $.get("/api/cup/add_all"); });
 
-        $('#new').on('click', function() {  $.get("/api/cup/new?ignore=" + $('#ignoretime').prop('checked')); });
+        $('#new').on('click', function() {  $.get("/api/cup/new?ignore=" + $('#ignoretime').prop('checked') + "&games=" + $('#numberOfGames').val()); });
         $('#run').on('click', function() {  $.get("/api/cup/run"); });
         $('#stop').on('click', function() {  $.get("/api/cup/stop"); });
         $('#single').on('click', function() {  

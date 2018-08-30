@@ -31,12 +31,15 @@ namespace Delver.CamelCup.Web.Controllers
         }
 
         [HttpGet("new")]
-        public Guid New(string id = null, bool ignore = false)
+        public Guid New(string id = null, bool ignore = false, int games = 1000)
         {
+            if (games == 0)
+                games = 1000;
+
             CamelService?.Stop();
 
             var guid = id != null ? (Guid?)Guid.Parse(id) : null;
-            CamelService = new CamelService(guid, ignore);
+            CamelService = new CamelService(guid, ignore, games);
             return CamelService.CupId;
         }
 
@@ -147,7 +150,9 @@ namespace Delver.CamelCup.Web.Controllers
             var result = new RunnerState()
             {
                 Players = runner.GetPlayers(),
-                CupId = CamelService.CupId
+                CupId = CamelService.CupId,
+                TotalGames = CamelService.TotalGames,
+                GamesPlayed = CamelService.GamesPlayed
             };
 
             return result;

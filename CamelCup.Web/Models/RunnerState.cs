@@ -7,5 +7,7 @@ namespace Delver.CamelCup.Web.Models
     {
         public List<Player> Players;
         public Guid CupId;
+        public int TotalGames;
+        public int GamesPlayed;
     }
 }

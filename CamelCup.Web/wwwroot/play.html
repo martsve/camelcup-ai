@@ -4,11 +4,20 @@
     <script src='jquery-3.3.1.min.js'></script>
     <script src='data.js'></script>
     <script src='game.js'></script>
-    <script src='Chart.bundle.min.js'></script>    
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-    <div id='board'></div>
+    <div id='container'>
+        <div id='board'></div>
+        <script>
+            $(window).resize(function(){
+                $("#container").each(function(){
+                    $(this).css({'font-size': $(this).height()+"px"});
+                });
+            })
+            $(window).trigger('resize');
+        </script>
+    </div>
 
     <div id='debug'>
         <input type="button" value='Next' id='next'>
@@ -19,10 +28,6 @@
 
         <div id='current'></div>
         <div id='history'></div>        
-    </div>
-
-    <div id='graphContainer'> 
-        <canvas id="totalscore"></canvas>
     </div>
 
     <script>
