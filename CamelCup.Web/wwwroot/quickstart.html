@@ -1,0 +1,64 @@
+<html>
+<head>
+    <title>CamelCup-Ai-Cup</title>
+    <script src='jquery-3.3.1.min.js'></script>
+    <script src='data.js'></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+
+  <div id='body'>
+    
+    <div id='header' class='small'>
+      <img src='img/camelcup.png'>
+    </div>
+
+    <div class='menu'>
+    
+       <div class='option'>
+        <h1>Loading...</h1>
+       </div>
+        
+    </div>
+        
+  </div>
+  
+  <script>
+
+  $(function() {
+
+    var ignoreTime = true;
+    var games = 50;
+
+    var WaitForGame = function()
+    {
+      $.get("/api/cup/last", function (data) {
+        if (data) 
+        {
+          window.localStorage.setItem('history', JSON.stringify(data));
+          location.href = 'play.html?continue=1';
+        }
+        else {
+          setTimeout(WaitForGame, 250);
+        }
+      });
+    }
+
+    $('h1').html('Creating new instance..');
+    $.get("/api/cup/new?ignore=" + ignoreTime + "&games=" + games)
+    .done(function() {
+      $('h1').html('Adding all players..');
+        return $.get("/api/cup/add_all");
+    }).done(function() {
+        $('h1').html('Starting tournament..');
+        return $.get("/api/cup/run");
+    }).done(function() {
+      $('h1').html('Computing first game..');
+      WaitForGame();
+    });
+
+  });
+
+  </script>
+</body>
+</html> 

@@ -6,7 +6,7 @@ function SetPlayerInfo(div, interval = 1000, graph = false)
                 UpdateScore(data);
             }
             else {
-                var content = "<ul>";
+                var content = "<b>CupId: "+data.cupId+"</b><ul>";
                 var players = data.players;
                 players.sort(function (x, y) {
                     return x.wins < y.wins;

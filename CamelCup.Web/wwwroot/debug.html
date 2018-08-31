@@ -19,6 +19,10 @@
         <h2>Start a new cup</h2>
        </div>
        
+      <div class='option'>
+          <div id='data'></div>
+       </div>
+
        <div class='option'>
            <input type="button" value='Start with default settings' id='add_all'>
         </div>
@@ -80,6 +84,18 @@
           <button onClick='location.href="play.html?continue=1"'>Watch the cup</button>
          </div>
 
+         <div class='option'>
+            <h2>Debug game from seed</h2>
+        </div>
+               
+        <div class='option'>
+          <input type='text' id='debugSeeds' value='' />
+         </div>
+
+        <div class='option'>
+          <button id='seeded'>Debug seeded game</button>
+         </div>
+
         <hr />
 
        <div class='option'>
@@ -90,44 +106,66 @@
         
   </div>
   
-
-  <div id='data'></div>
   <div id='last'></div>
 
   <script>
 
-  $(function() {
-      $('#upload').on('click', function() { $('#browse').click(); });
-      $('#add').on('click', function() { $.get("/api/cup/add/" + $('#players').val()); });
-      $('#add_all').on('click', function() { $.get("/api/cup/add_all"); });
+    $(function() {
+        $('#upload').on('click', function() { $('#browse').click(); });
+        $('#add').on('click', function() { $.get("/api/cup/add/" + $('#players').val()); });
+        $('#add_all').on('click', function() { $.get("/api/cup/add_all"); });
 
-      $('#new').on('click', function() {  $.get("/api/cup/new?ignore=" + $('#ignoretime').prop('checked') + "&games=" + $('#numberOfGames').val()); });
-      $('#run').on('click', function() {  $.get("/api/cup/run"); });
-      $('#stop').on('click', function() {  $.get("/api/cup/stop"); });
-      $('#single').on('click', function() {  
-          $.get("/api/cup/single", function (data) {
-              $('#last').html("<pre>"+JSON.stringify(data)+"</pre>"); 
-              window.localStorage.setItem('history', JSON.stringify(data));
-          });
-      });
+        $('#new').on('click', function() {  $.get("/api/cup/new?ignore=" + $('#ignoretime').prop('checked') + "&games=" + $('#numberOfGames').val()); });
+        $('#run').on('click', function() {  $.get("/api/cup/run"); });
+        $('#stop').on('click', function() {  $.get("/api/cup/stop"); });
+        $('#single').on('click', function() {  
+            $.get("/api/cup/single", function (data) {
+                $('#last').html("<pre>"+JSON.stringify(data)+"</pre>"); 
+                window.localStorage.setItem('history', JSON.stringify(data));
+            });
+        });
 
-      SetPlayerInfo("#data", 1000);
+        $('#seeded').on('click', function() {  
+            $.get("/api/cup/single?" + $('#debugSeeds').val(), function (data) {
+                window.localStorage.setItem('history', JSON.stringify(data));
+                location.href="play.html";
+            });
+        });
 
-      UpdateBotList();
-  });
 
-  function UpdateBotList()
-  {
-      $.get('/api/cup/bots', function (data) {
-          var $select = $('#players');
-          $select.find('option').remove();
-          for (var key in data) 
-          {
-              var name = HtmlEncode(data[key].botName);
-              $select.append('<option value="' + data[key].id + '">' + name + '</option>');
-          }
-      });
-  }
+        SetPlayerInfo("#data", 1000);
+
+        UpdateBotList();
+
+        GetLastGamesSeed();
+    });
+
+    function GetLastGamesSeed() 
+    {
+        var history = window.localStorage.getItem('history');
+        if (history)
+        {
+            var data = JSON.parse(window.localStorage.getItem('history'));
+            if (data) 
+            {
+                var seeds = 'startPosSeed=' + data.startPositionSeed + '&playerSeed=' + data.playerOrderSeed + '&gameSeed=' + data.gameSeed;
+                $('#debugSeeds').val(seeds);
+            }
+        }
+    }
+
+    function UpdateBotList()
+    {
+        $.get('/api/cup/bots', function (data) {
+            var $select = $('#players');
+            $select.find('option').remove();
+            for (var key in data) 
+            {
+                var name = HtmlEncode(data[key].botName);
+                $select.append('<option value="' + data[key].id + '">' + name + '</option>');
+            }
+        });
+    }
   </script>
 </body>
 </html> 

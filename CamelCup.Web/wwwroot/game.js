@@ -15,6 +15,7 @@ function CamelGame(div)
     self.SetGameData = function(data)
     {
         self.GameHistory = data;
+        console.log('startPosSeed=' + data.startPositionSeed + '&playerSeed=' + data.playerOrderSeed + '&gameSeed=' + data.gameSeed);
     };
 
     self.UpdateGamedata = function(callback)

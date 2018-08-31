@@ -57,8 +57,9 @@ namespace Delver.CamelCup.Web.Controllers
         [HttpGet("add_all")]
         public void AddAll(string id = null)
         {
-            New(id);
-            foreach (var bot in CamelBots) {
+            var camelBots = Bots();
+
+            foreach (var bot in camelBots) {
                 if (bot != null && CamelService != null)
                 {
                     var instance = Activator.CreateInstance(bot.BotType) as ICamelCupPlayer;
@@ -172,9 +173,9 @@ namespace Delver.CamelCup.Web.Controllers
         }
         
         [HttpGet("single")]
-        public GameResult Single()
+        public GameResult Single(int? startPosSeed, int? playerSeed, int? gameSeed)
         {
-            return CamelService?.GetGame();
+            return CamelService?.GetGame(startPosSeed, playerSeed, gameSeed);
         }
         
         [HttpGet("last")]

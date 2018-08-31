@@ -59,9 +59,16 @@ namespace Delver.CamelCup.Web.Services
             }
         }
 
-        public GameResult GetGame()
+        public GameResult GetGame(int? startPosSeed, int? playerSeed, int? gameSeed)
         {
-            var game = Runner.ComputeNewGame();
+            CamelCupGame game;
+            if (startPosSeed.HasValue && playerSeed.HasValue && gameSeed.HasValue) 
+            {
+                game = Runner.ComputeSeededGame(startPosSeed.Value, playerSeed.Value, gameSeed.Value);
+            }
+            else {
+                game = Runner.ComputeNewGame();
+            }
             GameIdHistory.Add(game.GameId);
             SetLastGame(game);
             return LastGameResult;
@@ -91,13 +98,14 @@ namespace Delver.CamelCup.Web.Services
                 GameIdHistory.Add(game.GameId);
                 GamesPlayed++;
 
-                if (GamesPlayed >= TotalGames)
+                if (GamesHasWinner())
                 {
-                    if (Leaders().Length == 1)
-                        break;
+                    break;
                 }
             }
         }
+
+        private Player[] PlayerOrder => Runner.GetPlayers().OrderByDescending(x => x.Wins).ToArray();
 
         public Player GetWinner()
         {
@@ -106,17 +114,30 @@ namespace Delver.CamelCup.Web.Services
                 return null;
             }
 
-            return Leaders().FirstOrDefault();
+            return PlayerOrder.FirstOrDefault();
         }
 
-        private Player[] Leaders()
+        private bool GamesHasWinner() 
         {
-            var players = Runner.GetPlayers();
-            if (players.Count == 0)
-                return new Player[] {};
+            var leaders = PlayerOrder.ToArray();
+            if (leaders.Count(x => x.Wins == PlayerOrder[0].Wins) > 1)
+            {
+                return false;
+            }
 
-            var max = players.Max(x => x.Wins);
-            return players.Where(x => x.Wins == max).ToArray();
+            if (GamesPlayed >= TotalGames)
+            {
+                return true;
+            }
+
+            var remaining = TotalGames - GamesPlayed;
+
+            if (leaders.Count(x => x.Wins + remaining > PlayerOrder[0].Wins) == 1)
+            {
+                return true;
+            }
+                
+            return false;
         }
 
         private void SetLastGame(CamelCupGame game)

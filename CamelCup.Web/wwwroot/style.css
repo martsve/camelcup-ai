@@ -6,13 +6,13 @@
 html, body { margin: 0; padding: 0; background-color: #dfdaab; }
 
 hr {
-    margin: 30px 0px;
+    margin: 3vh 0px;
     border: 0;
     border-bottom: 1px solid #aaa;
 }
 
 #body {
-    width: 800px;
+    width: 100vh;
     margin: 0 auto;
 }
 
@@ -20,52 +20,52 @@ hr {
     text-align: center;
 }
 #header img {
-    width: 600px;
+    width: 50vh;
 }
 
 #header.small img {
-    width: 300px;
+    width: 30vh;
 }
 
 .menu .option {
-    margin-bottom: 15px;
+    margin-bottom: 2vh;
 }
 
 h1 {
-    font: 30px Arial;
+    font: 3vh Arial;
     font-weight: bold;
     text-align: center;
 }
 
 h2 {
-    font: 25px Arial;
+    font: 2vh Arial;
     font-weight: bold;
 }
 
 .menu .option {
-    line-height: 40px;
+    line-height: 2vh;
 }
 
 .menu .option button, .menu .option input[type=button], .menu .option input[type=submit] {
     width: 100%;
-    height: 70px;
+    padding: 1.5vh;
     border: 1px solid #888;
-    border-radius: 5px;
+    border-radius: 1vh;
     background-color: #cca;
-    font: 20px Arial;
+    font-size: 2vh;
 }
 
 .menu .option select {
     width: 100%;
-    padding: 20px;
+    padding: 1.5vh;
     border: 1px solid #888;
     background-color: #eee;
-    font: 20px Arial;
+    font-size: 2vh;
 }
 
 .menu .option button.alternative {
-    margin-left: 30px;
-    width: 150px;
+    margin-left: 4vh;
+    width: 20%;
 }
 
 .menu .option button:hover, .menu .option input[type=button]:hover, .menu .option input[type=submit]:hover {
@@ -73,19 +73,28 @@ h2 {
 }
 
 .menu .option input[type=checkbox] {
-    width: 40px;
-    height: 40px;
+    width: 3vh;
+    height: 3vh;
     border: 1px solid #888;
-    border-radius: 5px;
+    border-radius: 1vh;
     background-color: #cca;
 }
 
 .menu .option input[type=number] {
-    width: 200px;
-    font-size: 20px;
-    padding: 20px;
+    width: 25%;
+    font-size: 2vh;
+    padding: 1.5vh;
     border: 1px solid #888;
-    border-radius: 5px;
+    border-radius: 1vh;
+    background-color: #eee;
+}
+
+.menu .option input[type=text] {
+    width: 100%;
+    font-size: 2vh;
+    padding: 1.5vh;
+    border: 1px solid #888;
+    border-radius: 1vh;
     background-color: #eee;
 }
 
@@ -96,8 +105,8 @@ h2 {
 
 .menu .option label span {
     display: inline-block;
-    font: 25px Arial;
-    height: 60px;
+    font-size: 2vh;
+    height: 4vh;
     vertical-align: middle; 
 }
 
@@ -108,12 +117,12 @@ h2 {
 }
 
 .menu .option ul.selector li { 
-    font-size: 20px;
+    font-size: 2vh;
     list-style: none;
     margin: 0px;
-    padding: 20px;
+    padding: 2vh;
     margin-right: 2%;
-    margin-bottom: 2%;
+    margin-bottom: 2%;  
     width: 47.5%;
     border: 1px solid #999;
     display: inline-block;
@@ -128,24 +137,24 @@ h2 {
     background-color: #dfd;
 }
 
-.menu { margin: 1em; }
+.menu { margin: 1vh; }
 
 .menu ul.standings li {
     list-style: number;
     display: block;
-    padding: 10px 20px;
-    border-left: 10px solid #aaa;
-    margin: 10px;
-    font-size: 20px;
+    padding: 1vh 2vh;
+    border-left: 1.5vh solid #aaa;
+    margin: 1.5vh;
+    font-size: 2vh;
 }
 
-.menu ul.standings li .name { font-weight: normal; font-size: 20px; display: inline-block; line-height: 35px; }
-.menu ul.standings li.winner .name { font-weight: bold; font-size: 30px; }
-.menu ul.standings li .wins { font-size: 20px; display: inline-block; line-height: 35px; text-align: right; float:right; }
+.menu ul.standings li .name { font-weight: normal; font-size: 2vh; display: inline-block; line-height: 3vh; }
+.menu ul.standings li.winner .name { font-weight: bold; font-size: 3vh; }
+.menu ul.standings li .wins { font-size: 2vh; display: block; line-height: 3vh; text-align: right; float: right; }
 
 ul, li { margin: 0px; padding: 0px; list-style: none; }
 #container { height: 100vh; width: 169.5vh; display: inline-block; }
-#board { width: 100%; background: url(img/bg.jpg) no-repeat; background-size: contain; position: relative; font: 0.03em Arial; }
+#board { width: 100%; background: url(img/bg.jpg) no-repeat; background-size: contain; position: relative; font: 0.03em Arial; overflow: hidden; }
 #boardRatio { width: 100%; padding-bottom: 59%; z-index: -10; }
 
 #loc0 { width: 13%; height: 20%; left:56.5%; top: 39%; }
@@ -192,7 +201,6 @@ ul, li { margin: 0px; padding: 0px; list-style: none; }
     height: 25%; 
     position: relative;
     padding: 5%;
-    margin-bottom: -1px;
     border-bottom: 1px solid gray;  
 }
 .name { font-weight: bold; display: block; font-size: 90%; }
