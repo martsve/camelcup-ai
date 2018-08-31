@@ -138,7 +138,7 @@ namespace Delver.CamelCup.Web.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("")]
         public RunnerState GetInfo()
         {
             if (CamelService == null)
@@ -188,6 +188,17 @@ namespace Delver.CamelCup.Web.Controllers
         public void Stop()
         {
             CamelService?.Stop();
+        }
+        
+        [HttpGet("delete/{id}")]
+        public void Delete(Guid id)
+        {
+            var bot = CamelBots.FirstOrDefault(x => x.Id == id);
+            if (bot != null && bot.External)
+            {
+                CamelBots.Remove(bot);
+                System.IO.File.Delete(bot.FileName);
+            }
         }
 
         [HttpPost("upload")]

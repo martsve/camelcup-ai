@@ -83,10 +83,11 @@ function UpdateScore(data)
     }
 }
 
-function UploadForm(url, callback)
+function UploadForm(element, url, callback)
 {
-    var form = $(this).closest('form')[0];
+    var form = $(element).closest('form')[0];
     var fd = new FormData(form);
+
     $.ajax({
         url: url,
         type: 'POST',
@@ -96,9 +97,11 @@ function UploadForm(url, callback)
         contentType: false,
         success: function(data)
         {
-            callback();
+            callback(data);
         }
     });
+
+    form.reset();
 }
 
 function HtmlEncode(value){

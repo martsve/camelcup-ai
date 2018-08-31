@@ -21,27 +21,11 @@
         </div>
         
         <div class='option'>
-          <ul class='selector'>
-            <li>MyBot #1</li>
-            <li>Your bot #1</li>
-            <li>Some random #1</li>
-            
-            <li>MyBot #2</li>
-            <li>Your bot #2</li>
-            <li>Some random #2</li>
-            
-            <li>Some random #3</li>
+          <ul id='bots' class='selector' data-for='#selectedPlayers'>
           </ul>
-          <script>
-            $(function() { 
-                $('.selector li').on('click', function() { 
-                    $(this).toggleClass('on');
-                });
-             });
-           </script>
+          <input type='hidden' id='selectedPlayers'>
         </div>
 
-        
         <div class='option'>
           <h2>Number of games to play</h2>
         </div>
@@ -66,7 +50,7 @@
         </div>
         
         <div class='option'>
-          <button onClick='location.href="manage.html"'>Start the tournament</button>
+          <button id='start'>Start the tournament</button>
         </div>
         
         <hr />
@@ -77,5 +61,87 @@
 
     </div>
   </div>
+
+<script>
+    $(function() { 
+        UpdateBotList();
+
+        $('.selector').on('click', 'li', function() { 
+            $(this).toggleClass('on');
+            UpdateSelectorSelection();
+        });
+
+        $('#selectedPlayers').on('change',function() { 
+            $('#start').attr('disabled', $(this).val().length == 0);
+        });
+
+        $('#start').on('click', function () {
+            var ignoreTime = $('#ignoretime').prop('checked');
+            var games = $('#numberOfGames').val();
+
+            var setup = [];
+            setup.push("/api/cup/new?ignore=" + ignoreTime + "&games=" + games);
+            var players = $('#selectedPlayers').val().split(',');
+            for (var key in players)
+              setup.push("/api/cup/add/" + players[key]);
+            setup.push("/api/cup/run");
+
+            Getall(setup, function() {
+              WaitForGame();
+            });
+        });
+    });
+
+    function Getall(urls, callback)
+    {
+        var url = urls.shift();
+        $.get(url, function() {
+          if (urls.length > 0)
+            Getall(urls, callback);
+          else {
+            callback();
+          }
+        });
+    }
+
+    function WaitForGame()
+    {
+        $.get("/api/cup/last", function (data) {
+            if (data) 
+            {
+              window.localStorage.setItem('history', JSON.stringify(data));
+              location.href = 'play.html?continue=1';
+            }
+            else {
+              setTimeout(WaitForGame, 250);
+            }
+        });
+    }
+
+    function UpdateSelectorSelection()
+    {
+        $('.selector').each(function (){ 
+          var selected = [];
+          $(this).find('li.on').each(function () {
+            selected.push($(this).data('id'));
+          });
+          $($(this).data('for')).val(selected.join(','));
+          $($(this).data('for')).trigger('change');
+        });
+    }
+
+    function UpdateBotList()
+    {
+        $.get('/api/cup/bots', function (data) {
+            var $select = $('#bots');
+            for (var key in data) 
+            {
+                var name = HtmlEncode(data[key].botName);
+                $select.append('<li data-id="' + data[key].id + '">' + name + '</li>');
+            }
+            UpdateSelectorSelection();
+        });
+    }
+</script>
 </body>
 </html> 

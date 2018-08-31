@@ -45,16 +45,19 @@
     }
 
     $('h1').html('Creating new instance..');
-    $.get("/api/cup/new?ignore=" + ignoreTime + "&games=" + games)
-    .done(function() {
-      $('h1').html('Adding all players..');
-        return $.get("/api/cup/add_all");
-    }).done(function() {
-        $('h1').html('Starting tournament..');
-        return $.get("/api/cup/run");
-    }).done(function() {
-      $('h1').html('Computing first game..');
-      WaitForGame();
+    $.get("/api/cup/new?ignore=" + ignoreTime + "&games=" + games,  function() {
+
+        $('h1').html('Adding all players..');
+        $.get("/api/cup/add_all",  function() {
+
+            $('h1').html('Starting tournament..');
+            $.get("/api/cup/run", function() {
+                $('h1').html('Computing first game..');
+                WaitForGame();
+            });
+
+        });
+
     });
 
   });

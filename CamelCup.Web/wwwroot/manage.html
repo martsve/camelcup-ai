@@ -21,12 +21,16 @@
         
         <div class='option'>
           <form id='uploadForm' method='post' enctype="multipart/form-data">
-              <input type="file" id="browse" name="fileupload" multiple style="display: none" onChange="UploadForm('/api/cup/upload', UpdateBotList);"/>
+              <input type="file" id="browse" name="fileupload" multiple style="display: none" onChange="UploadForm(this, '/api/cup/upload', UploadFinished);"/>
           </form>
           
           <input type="button" value='Upload new player' id='upload'>
         </div>
         
+        <div class='option'>
+            <span id='status'></span>
+        </div>
+
         <div class='option'>
           <h2>Availible players</h2>
         </div>
@@ -37,6 +41,10 @@
             </select>
         </div>
         
+        <div class='option'>
+            <button id='delete'>Delete player</button>
+        </div>
+
         <hr />
 
        <div class='option'>
@@ -46,32 +54,37 @@
     </div>
         
   </div>
-  
-
-  <div id='data'></div>
-  <div id='last'></div>
 
   <script>
 
-  $(function() {
-      $('#upload').on('click', function() { $('#browse').click(); });
-      $('#add').on('click', function() { $.get("/api/cup/add/" + $('#players').val()); });
-      $('#add_all').on('click', function() { $.get("/api/cup/add_all"); });
+    $(function() {
+        $('#upload').on('click', function() {
+            $('#status').html('');
+            $('#browse').click();
+    });
 
-      $('#new').on('click', function() {  $.get("/api/cup/new?ignore=" + $('#ignoretime').prop('checked') + "&games=" + $('#numberOfGames').val()); });
-      $('#run').on('click', function() {  $.get("/api/cup/run"); });
-      $('#stop').on('click', function() {  $.get("/api/cup/stop"); });
-      $('#single').on('click', function() {  
-          $.get("/api/cup/single", function (data) {
-              $('#last').html("<pre>"+JSON.stringify(data)+"</pre>"); 
-              window.localStorage.setItem('history', JSON.stringify(data));
-          });
-      });
+    $('#players').on('input, change', function() { 
+        var selected = $('#players').find('option:selected');
+        $('#delete').attr('disabled', !selected.data('external'));
+    });
+    $('#delete').on('click', function() { 
+        var selected = $('#players').find('option:selected');
+        if (selected.data('external'))
+        {
+            $.get('/api/cup/delete/' + selected.val(), function (data) {
+                UpdateBotList();
+            });
+        }
+    });
 
-      SetPlayerInfo("#data", 1000);
-
-      UpdateBotList();
+    UpdateBotList();
   });
+
+  function UploadFinished(data)
+  {
+        $('#status').html('Added ' + data + ' new bots');
+        UpdateBotList();
+  }
 
   function UpdateBotList()
   {
@@ -81,8 +94,14 @@
           for (var key in data) 
           {
               var name = HtmlEncode(data[key].botName);
-              $select.append('<option value="' + data[key].id + '">' + name + '</option>');
+              if (data[key].external)
+              {
+                  name += " [external]";
+              }
+              $select.append('<option value="' + data[key].id + '" data-external="' + data[key].external + '">' + name + '</option>');
           }
+
+          $('#players').trigger('change');
       });
   }
   </script>

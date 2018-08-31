@@ -13,6 +13,14 @@ namespace Delver.CamelCup
             return gameState.Camels.OrderByDescending(x => x.Height).Select(x => x.CamelColor).ToList();
         }
 
+        public static List<CamelColor> RemainingEndGameBets(this GameState gameState, int player) 
+        {
+            var possible = CamelHelper.GetAllCamelColors();
+            var winners = gameState.WinnerBets.Where(x => x.Player == player).Select(x => x.CamelColor).ToList();
+            var losers = gameState.LoserBets.Where(x => x.Player == player).Select(x => x.CamelColor).ToList();
+            return possible.Where(x => !winners.Contains(x) && !losers.Contains(x)).ToList();
+        }
+
         public static List<CamelColor> GetAllCamelColors()
         {
             return Enum.GetValues(typeof(CamelColor)).Cast<CamelColor>().OrderBy(x => (int)x).ToList();
