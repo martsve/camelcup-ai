@@ -197,13 +197,24 @@ ul, li { margin: 0px; padding: 0px; list-style: none; }
     top: 0px; 
     position: absolute; 
 }
+
+.player.p0 { background: url(img/p1.png) no-repeat; } 
+.player.p1 { background: url(img/p2.png) no-repeat; } 
+.player.p2 { background: url(img/p3.png) no-repeat; } 
+.player.p3 { background: url(img/p4.png) no-repeat; } 
+.player.p4 { background: url(img/p5.png) no-repeat; } 
+.player.p5 { background: url(img/p6.png) no-repeat; } 
+
 .player { 
     height: 25%; 
     position: relative;
     padding: 5%;
     border-bottom: 1px solid gray;  
+    background-size: 15% !important; 
+    background-position: 3% 10% !important; 
 }
-.name { font-weight: bold; display: block; font-size: 90%; }
+
+.name { padding-left: 15%; font-weight: bold; display: block; font-size: 90%; }
 .money {
      font-size: 100%; 
      background: url(img/blank_coin.png) no-repeat; 
@@ -257,8 +268,8 @@ ul, li { margin: 0px; padding: 0px; list-style: none; }
 
 .player .trap { display: none; }
 .loc .trap {
-    width: 15vh;
-    height: 100%;
+    width: 18vh;
+    height: 18vh;
     text-align: center; 
     display: inline-block;
     position: absolute;
@@ -268,9 +279,15 @@ ul, li { margin: 0px; padding: 0px; list-style: none; }
     font-size: 75%;
     background-position: center !important; 
 }
-.loc .trap .value { display: none; }
-.loc .trap.pluss { background: url(img/trap_pluss.jpg) no-repeat; background-size: contain; }
-.loc .trap.minus { background: url(img/trap_back.jpg) no-repeat; background-size: contain; }
+.loc .trap .value { font-size: 0px; display: block; width: 100%; height: 100%; position: absolute; z-index: 60; }
+.loc .trap .owner { font-size: 0px; display: block; width: 32%; height: 32%; position: absolute; bottom: 10%; right: 5%; z-index: 55; }
+.loc .trap.pluss .value { background: url(img/trap_pluss.png) no-repeat; background-size: contain; }
+.loc .trap.minus .value { background: url(img/trap_back.png) no-repeat; background-size: contain; }
+
+.loc .trap.p0 .owner { background: url(img/p1.png) no-repeat; background-size: contain;  }
+.loc .trap.p1 .owner { background: url(img/p2.png) no-repeat; background-size: contain;  }
+.loc .trap.p2 .owner { background: url(img/p3.png) no-repeat; background-size: contain;  }
+.loc .trap.p3 .owner { background: url(img/p4.png) no-repeat; background-size: contain;  }
 
 .player.disqualified { text-decoration: line-through; }
 .player.winner { 
@@ -281,8 +298,10 @@ ul, li { margin: 0px; padding: 0px; list-style: none; }
 .player .progress {
     height: 1.5vh;
     background-color: #999999;
-    margin-bottom: 1vh;
     border-radius: 1vh;
+    margin-left: 15%;
+    margin-top: 2%;
+    margin-bottom: 5%;
 }
 .player .progress .value {
     height: 100%;

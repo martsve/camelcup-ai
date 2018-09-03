@@ -82,7 +82,7 @@ function CamelGame(div)
         {
             var name = HtmlEncode(players[key].Name);
             var id = players[key].Id;
-            $div.find('.players').append('<li class="player" id="player'+id+'"><span class="name"></span> <span class="money"></span><div class="progress"></div><div class="winnerbets"></div><div class="loserbets"></div><div class="cards"></div><div class="trap" id="trap'+id+'"><span class="value"></span><span class="owner">'+name+'</span></div></li>');
+            $div.find('.players').append('<li class="player p'+key+'" id="player'+id+'"><span class="name"></span> <span class="money"></span><div class="progress"></div><div class="winnerbets"></div><div class="loserbets"></div><div class="cards"></div><div class="trap p'+key+'" id="trap'+id+'"><span class="value"></span><span class="owner">'+name+'</span></div></li>');
             $('#player' + id + ' .name').html(name);
             UpdateMoney(id, 0);
         }
